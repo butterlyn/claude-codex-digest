@@ -1,7 +1,8 @@
 # claude-codex-digest
 
 A personal digest of changes to the official Claude Code, Codex, Claude and ChatGPT docs,
-changelogs and sites. `PROFILE.md` is the plan (sources, code filters, decision questions,
+changelogs, help center, guides and sites, including new or updated guides and explainers
+for features that already exist. `PROFILE.md` is the plan (sources, code filters, decision questions,
 digest format); the engine in `engine/` follows it.
 
 - Runs on demand from a Claude session with the `digest` skill (`/digest`), never on a

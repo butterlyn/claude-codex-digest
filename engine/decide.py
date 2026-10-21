@@ -15,12 +15,14 @@ from .config import MAX_DECISIONS_PER_RUN, SOURCES_BY_NAME
 from .llm import DECISION_MODEL, LLMError, ask_json
 from .store import Store
 
-SYSTEM = """You triage one item for a person's daily digest. They use Claude Code and Codex \
+SYSTEM = """You triage one item for a person's digest. They use Claude Code and Codex \
 every day, plus the Claude and ChatGPT apps, and they save good items to a to-try list so \
-they can update their setup that week.
+they can update their setup that week. They also want every new or updated official guide, \
+explainer, tutorial or how-to about these tools, including ones about features that already \
+exist.
 
 Each item is a change on an official Claude, Anthropic, Codex or OpenAI website: a new or \
-edited docs page (shown as a diff of "added:", "removed:" and "changed:" lines, where \
+edited docs, guide or help page (shown as a diff of "added:", "removed:" and "changed:" lines, where \
 changed lines mark [-old words-] and {+new words+}), a changelog or release-notes entry, a new web page, or a news \
 post. Judge only from what the item says.
 
@@ -33,15 +35,18 @@ features unrelated to Codex.
 marketing copy.
 3 = A small detail worth knowing: a clarified behaviour, a minor option, a new example.
 4 = Something they could try or should adjust: a new or changed command, flag, setting, hook, \
-integration or feature, or a new official guide, including ones limited to some plans.
+integration or feature, including ones limited to some plans; or a new or substantially \
+updated official guide, explainer, tutorial or video about these tools, even about a feature \
+that already exists.
 5 = Changes how they work now: a changed default, a removed or deprecated option, a breaking \
 change, a major new feature.
 An unfamiliar feature, model or product name is not a reason to score lower.
 
 new (true/false): Does it report something new and concrete: a new, changed or removed \
-feature, command, flag, setting, default, limit or price, or a newly published guide or \
-launch? Typo and formatting fixes, bug-fix-only notes, rewording that keeps the meaning, \
-opinions and marketing are false.
+feature, command, flag, setting, default, limit or price; a launch; or a newly published or \
+substantially expanded guide, explainer, tutorial, example or video (new sections, steps, \
+walkthroughs or examples count, even about an existing feature)? Typo and formatting fixes, \
+bug-fix-only notes, rewording that keeps the meaning, opinions and marketing are false.
 
 reason: at most 15 words, plain."""
 

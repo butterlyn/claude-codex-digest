@@ -1,9 +1,10 @@
 # claude-codex-digest
 
 When you run it, this reads the official Claude Code, Codex, Claude and ChatGPT docs,
-changelogs and sites, keeps only what changed since the last run and would change how you use
-them, and opens a GitHub issue with at most ten one-line items, each a checkbox for your
-to-try list.
+changelogs, help center, guides and sites, keeps only what changed since the last run and
+matters to how you use them (new features and defaults, and new or updated guides and
+explainers), and opens a GitHub issue with at most ten one-line items, each a checkbox for
+your to-try list.
 
 How it decides is written down in [PROFILE.md](PROFILE.md). Change the words there (and in
 `engine/decide.py`) to change what it keeps.
@@ -11,7 +12,7 @@ How it decides is written down in [PROFILE.md](PROFILE.md). Change the words the
 ## How it works
 
 ```
-12 official sources -> store (stable ids, snapshots in data/) -> code filters
+17 official sources -> store (stable ids, snapshots in data/) -> code filters
   -> Claude Haiku 5.5 answers two questions per item -> Claude Sonnet 5.5 writes the digest
   -> digests/YYYY-MM-DD-HHMM.md + a GitHub issue
 ```

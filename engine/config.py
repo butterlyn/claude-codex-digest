@@ -90,6 +90,20 @@ SOURCES: list[Source] = [
         {"host": "https://www.anthropic.com/", "include_prefix": "https://www.anthropic.com/news/"},
     ),
     Source(
+        "anthropic-site", "anthropic.com", "News & guides", "sitemap_new",
+        "https://www.anthropic.com/sitemap.xml",
+        {"host": "https://www.anthropic.com/", "exclude_prefix": ["https://www.anthropic.com/news/"]},
+    ),
+    Source(
+        "claude-help-center", "Claude Help Center", "Claude & ChatGPT apps", "sitemap_docs",
+        "https://support.claude.com/sitemap.xml",
+        {
+            "include_prefix": "https://support.claude.com/en/articles/",
+            "exclude": ["https://support.claude.com/en/articles/12138966-release-notes"],
+            "crawl_delay": 1.0,  # the site's robots.txt asks for one request a second
+        },
+    ),
+    Source(
         "claude-plans", "Claude plans", "Claude & ChatGPT apps", "page_text",
         "https://claude.com/pricing",
     ),
@@ -105,6 +119,38 @@ SOURCES: list[Source] = [
     Source(
         "openai-news", "OpenAI news", "News & guides", "rss",
         "https://openai.com/news/rss.xml",
+    ),
+    Source(
+        "openai-site-codex", "openai.com", "News & guides", "sitemap_new",
+        "https://openai.com/sitemap.xml",
+        {
+            "host": "https://openai.com/",
+            "require_in_url": ["codex"],
+            "exclude_prefix": ["https://openai.com/index/"],  # articles come through the news feed
+            "children": ["/page/", "/product/", "/release/", "/learn-", "/engineering/",
+                         "/openai-academy/", "/webinar/", "/chatgpt/", "/api/"],
+            "fetch_pages": False,  # openai.com pages refuse automated reads; the sitemap does not
+        },
+    ),
+    Source(
+        "openai-dev-blog", "OpenAI developer blog", "News & guides", "docs_site",
+        "https://developers.openai.com/blog/llms.txt",
+        {"include_prefix": "https://developers.openai.com/blog/"},
+    ),
+    Source(
+        "openai-cookbook-codex", "OpenAI Cookbook", "Codex", "docs_site",
+        "https://developers.openai.com/cookbook/llms.txt",
+        {"include_prefix": "https://developers.openai.com/cookbook/", "require_keyword": "codex"},
+    ),
+    Source(
+        "openai-learn-codex", "OpenAI learning resources", "Codex", "docs_site",
+        "https://developers.openai.com/learn/llms.txt",
+        {
+            "include_prefix": "https://developers.openai.com/learn/",
+            "require_keyword": "codex",
+            "track_links": True,  # videos and other non-Markdown entries
+            "links_skip_prefix": "https://developers.openai.com/",  # those pages are watched already
+        },
     ),
 ]
 

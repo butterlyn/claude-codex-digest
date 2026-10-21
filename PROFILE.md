@@ -6,10 +6,10 @@
 ## What I keep up with
 
 Changes to **Claude Code** and **Codex** (features, commands, flags, settings, defaults,
-deprecations), plus the Claude and ChatGPT apps' features and the official guides and
-launch posts about them. When I know on the day, I **save the item to my to-try list** and
-update my setup that week. A silent edit to a docs page counts as much as an announced
-change.
+deprecations), plus the Claude and ChatGPT apps' features, and **every new or updated
+official guide, explainer, tutorial or web page** about them, including guides about
+features that already exist. When I see one, I **save it to my to-try list** and update my
+setup that week. A silent edit to a docs page counts as much as an announced change.
 
 ## Sources
 
@@ -24,10 +24,16 @@ HTTP (Markdown twins, RSS, sitemaps).
 | Claude release notes | support.claude.com release notes | the article's `.md` twin, split on its dated headings | R2.1: Claude apps |
 | claude.com new pages | guides, articles, launch posts, product pages | `sitemap.xml`: new English URLs, with title and date read from the page | R2.3: the Code Review GA article |
 | Anthropic news | anthropic.com/news | `sitemap.xml`: new `/news/` URLs | R2.1: company news and blogs |
+| anthropic.com pages | every other new page (engineering posts, product pages, learning) | `sitemap.xml`: new URLs | Follow-up: any new official web page |
+| Claude Help Center | ~360 English articles on support.claude.com | sitemap `lastmod`: only new or updated articles are fetched (`.md` twins, one request a second as its robots.txt asks) and diffed | Follow-up: new and updated guides, even for existing features |
 | Claude plans | claude.com/pricing | page text, diffed | R2.1: plans and usage limits |
 | Codex docs | ~200 pages on learn.chatgpt.com/docs (developers.openai.com/codex redirects here) | page list from the Codex `llms.txt`, each page's `.md` twin, diffed | R1.2: silent docs changes |
 | ChatGPT & Codex changelog | the official changelog feed | RSS | R2.1: Codex and the ChatGPT apps |
 | OpenAI news | openai.com/news | RSS | R2.1: company news and blogs |
+| openai.com Codex pages | new pages whose address mentions Codex (product pages, guides, academy) | sitemaps; titles come from the address, because openai.com refuses automated page reads | Follow-up: any new official Codex web page |
+| OpenAI developer blog | developers.openai.com/blog | `llms.txt` + `.md` twins, diffed | Follow-up: Codex explainers and how-tos |
+| OpenAI Cookbook (Codex) | cookbook entries that mention Codex | `llms.txt` + `.md` twins, diffed | Follow-up: Codex guides and examples |
+| OpenAI learning resources (Codex) | Codex guides and videos on developers.openai.com/learn | `llms.txt`: `.md` pages diffed, new video links reported | Follow-up: Codex explainers and videos |
 
 Left out, and why:
 - **help.openai.com** (ChatGPT release notes, the Codex changelog article) and **openai.com**
@@ -71,15 +77,19 @@ Left out, and why:
       marketing copy.
    3. A small detail worth knowing: a clarified behaviour, a minor option, a new example.
    4. Something I could try or should adjust: a new or changed command, flag, setting, hook,
-      integration or feature, or a new official guide, including ones limited to some plans.
+      integration or feature, including ones limited to some plans; or a new or
+      substantially updated official guide, explainer, tutorial or video about these tools,
+      even about a feature that already exists.
    5. Changes how I work now: a changed default, a removed or deprecated option, a breaking
       change, a major new feature.
 
    An unfamiliar feature, model or product name is not a reason to score lower.
 2. **Reports something new and concrete (yes/no):** a new, changed or removed feature,
-   command, flag, setting, default, limit or price, or a newly published guide or launch.
-   Typo and formatting fixes, bug-fix-only notes, rewording that keeps the meaning, opinions
-   and marketing are "no".
+   command, flag, setting, default, limit or price; a launch; or a newly published or
+   substantially expanded guide, explainer, tutorial, example or video (new sections, steps,
+   walkthroughs or examples count, even about an existing feature). Typo and formatting
+   fixes, bug-fix-only notes, rewording that keeps the meaning, opinions and marketing are
+   "no".
 
 Routing: drop when relevance is 1, or "new" is no and relevance is 2 or less; keep when
 relevance is 4 or more and "new" is yes; everything else goes to the reading pass.
@@ -91,6 +101,8 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 - A changed default on a Claude Code or Codex docs page, with no announcement
 - A new slash command, CLI flag, hook or setting in a changelog or docs page
 - A post launching a new Claude Code or Codex feature
+- A new or updated guide, explainer or tutorial, even for a feature that already exists
+  (a new walkthrough section in a docs page, a new Help Center article, a Codex how-to)
 - Real: "Code Review is now generally available", claude.com, Oct 15 2026
   (https://claude.com/resources/articles/code-review-is-now-generally-available)
 

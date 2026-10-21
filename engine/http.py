@@ -33,6 +33,8 @@ class Page:
 
 class Fetcher:
     def __init__(self, per_host: int = 4, timeout: float = 30.0, retries: int = 2):
+        self._intervals: dict[str, float] = {}  # host -> seconds between requests
+        self._next_at: dict[str, float] = {}
         self._client = httpx.Client(
             headers={"User-Agent": USER_AGENT},
             timeout=timeout,
@@ -49,12 +51,30 @@ class Fetcher:
         with self._lock:
             return self._sems.setdefault(host, threading.Semaphore(self._per_host))
 
+    def pace(self, host: str, seconds: float) -> None:
+        """At most one request per `seconds` to this host (a robots.txt Crawl-delay)."""
+        with self._lock:
+            self._intervals[host] = seconds
+
+    def _wait_turn(self, url: str) -> None:
+        host = urlsplit(url).hostname or ""
+        with self._lock:
+            interval = self._intervals.get(host)
+            if not interval:
+                return
+            now = time.monotonic()
+            at = max(now, self._next_at.get(host, 0.0))
+            self._next_at[host] = at + interval
+        if at > now:
+            time.sleep(at - now)
+
     def get(self, url: str, headers: dict | None = None) -> Page:
         error = "no attempt"
         for attempt in range(self.retries + 1):
             wait = 2.0**attempt
             try:
                 with self._sem(url):
+                    self._wait_turn(url)
                     resp = self._client.get(url, headers=headers)
                 with self._lock:
                     self.requests += 1

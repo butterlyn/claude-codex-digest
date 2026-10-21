@@ -11,11 +11,22 @@ INDEX = """# Docs
 
 
 def test_parse_index_keeps_english_pages_under_prefix_once():
-    pages, skipped = parse_index(
+    pages, skipped, links = parse_index(
         INDEX, "https://code.claude.com/docs/", ["https://code.claude.com/docs/en/changelog.md"]
     )
     assert pages == {"https://code.claude.com/docs/en/overview.md": "Overview"}
     assert skipped == 1
+    assert links == {}
+
+
+def test_parse_index_keyword_filter_and_other_links():
+    index = """- [Codex prompting guide](https://developers.openai.com/cookbook/examples/codex/guide.md): tips
+- [Image evals](https://developers.openai.com/cookbook/examples/image_evals.md): not about it
+- [Codex in JetBrains IDEs](https://www.youtube.com/watch?v=1): How to use Codex in JetBrains
+"""
+    pages, _, links = parse_index(index, "https://developers.openai.com/cookbook/", [], keyword="codex")
+    assert list(pages) == ["https://developers.openai.com/cookbook/examples/codex/guide.md"]
+    assert links == {"https://www.youtube.com/watch?v=1": ("Codex in JetBrains IDEs", "How to use Codex in JetBrains")}
 
 
 def test_clean_page_drops_the_index_note():

@@ -16,9 +16,10 @@ from .decide import KIND_LABEL
 from .llm import READING_MODEL, ask_json
 from .store import Store
 
-SYSTEM = f"""You write a daily digest for one person. They keep up with changes to Claude Code \
-and Codex (features, commands, flags, settings, defaults, deprecations), plus the Claude and \
-ChatGPT apps and the official guides and launch posts about them. They read the digest to \
+SYSTEM = f"""You write a digest for one person. They keep up with changes to Claude Code and \
+Codex (features, commands, flags, settings, defaults, deprecations), the Claude and ChatGPT \
+apps, and every new or updated official guide, explainer, tutorial or launch post about them, \
+including guides about features that already exist. They read the digest to \
 decide what to save to their to-try list and what to change in their setup this week.
 
 You get every item that passed their filter since their last digest, as JSON. It may cover one \
@@ -32,7 +33,7 @@ would do this week. Leaving items out is expected.
 documents it are one entry. Never list the same change twice.
 - Each entry's text: "**<what changed, at most 10 words>** - <what to try or change>." One or \
 two short sentences after the bold part. For a docs change, give before -> after when the \
-excerpt shows it.
+excerpt shows it. For a new or updated guide, say what it teaches and who should read it.
 - Put each entry under one group: {", ".join(GROUPS)}.
 - Refer to items only by their "id" in the entry's "items" list. Never write a URL, and never \
 state a detail that is not in the items.
