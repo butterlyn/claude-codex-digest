@@ -100,9 +100,9 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 
 ## The digest
 
-- Where I read it: a GitHub issue in `butterlyn/claude-codex-digest`, assigned to me, each
-  time I run it; also committed as `digests/YYYY-MM-DD-HHMM.md` (Perth time). A run with
-  nothing new writes the file but opens no issue.
+- Where I read it: in the Claude app, as the reply to `/digest`, plus a GitHub issue in
+  `butterlyn/claude-codex-digest` assigned to me (the to-try list); also committed as
+  `digests/YYYY-MM-DD-HHMM.md` (Perth time). A run with nothing new opens no issue.
 - Length cap: 10 items
 - Format: grouped as Claude Code, Codex, Claude & ChatGPT apps, News & guides. Each item is
   one checkbox line for my to-try list: `- [ ] **What changed** - what to try. [page](url)`.
@@ -111,15 +111,15 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 
 ## Models
 
-- Claude subscription through Claude Code headless (`claude -p`), authenticated with a
-  token from `claude setup-token`, stored as the repo secret `CLAUDE_CODE_OAUTH_TOKEN`
+- Claude subscription, through Claude Code headless (`claude -p`) inside the Claude session
+  that runs the digest. No token or API key.
 - Decision pass: Claude Haiku 5.5, one call per item, structured output
 - Reading pass: Claude Sonnet 5.5, one call per run
 
 ## Runs
 
-- On demand, no schedule: Actions -> digest -> Run workflow, or a comment starting with
-  `/digest` on any issue in the repo. Each run covers everything since the last run that
-  finished.
-- Shadow week: the first seven runs. I reply on each issue with `missed: ...` or
-  `noise: ...`.
+- On demand from the Claude app: open a Claude Code session on
+  `butterlyn/claude-codex-digest` and type `/digest`. No schedule, no CI. Each run covers
+  everything since the last run that finished.
+- Shadow week: the first seven runs. I tell the session `missed: ...` or `noise: ...`
+  (it goes into `data/feedback.md`), or reply on the issue.

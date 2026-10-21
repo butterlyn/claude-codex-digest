@@ -137,4 +137,5 @@ def run_all(paths: Paths, now: datetime, log: Log, send: bool = False) -> int:
         store.close()
     if failed_sources:
         log(f"sources that failed: {', '.join(failed_sources)}")
+    log(f"DIGEST: {result.path.relative_to(paths.digests.parent)}")
     return code

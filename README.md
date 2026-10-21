@@ -22,26 +22,24 @@ How it decides is written down in [PROFILE.md](PROFILE.md). Change the words the
 - Code drops by fact: older than 7 days, formatting-only edits, bug-fix-only releases,
   non-English pages. The first read of a source only records a starting copy.
 - The LLM calls go through Claude Code in headless mode (`claude -p`) on your Claude
-  subscription, authenticated by the `CLAUDE_CODE_OAUTH_TOKEN` repository secret.
+  subscription, using the login of the Claude session that runs it.
 
-## Setup
+## Running it
 
-1. On your computer, run `claude setup-token` and copy the token it prints.
-2. In this repo on GitHub: Settings -> Secrets and variables -> Actions -> New repository
-   secret. Name `CLAUDE_CODE_OAUTH_TOKEN`, value the token.
-3. Run it: Actions -> digest -> Run workflow. Or comment `/digest` on any issue in this repo
-   (handy from the GitHub mobile app); a rocket reaction means it started.
+In the Claude app, start a Claude Code session on this repo and type `/digest`. The session
+runs the engine, commits `data/` and `digests/`, opens the issue and replies with the digest.
+There is no schedule; each run picks up from the last one.
 
 ## Marking misses and noise
 
-Reply on a digest issue with `missed: <what and where>` or `noise: <which line>`. Misses
-are fixed by adding a source or rewording a decision question; noise by a code filter or a
-sharper question.
+Tell the session `missed: <what and where>` or `noise: <which line>` (saved to
+`data/feedback.md`), or reply on the issue. Misses are fixed by adding a source or rewording
+a decision question; noise by a code filter or a sharper question.
 
 ## Commands
 
 ```sh
-uv run python -m engine run                     # the daily run, without opening an issue
+uv run python -m engine run                     # the live run (what /digest does first)
 uv run python -m engine --data-dir /tmp/x run   # a throwaway test run (never touches data/)
 uv run python -m engine eval                    # score the keep/drop examples
 uv run python -m engine show --body             # list stored items
