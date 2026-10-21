@@ -61,12 +61,13 @@ Left out, and why:
 1. **Relevance (score 1-5):** How much could this change what I do with Claude Code, Codex,
    or the Claude and ChatGPT apps?
    1. Not about these tools: company news, policy, research, funding, customer stories,
-      enterprise- or admin-only features, ChatGPT features unrelated to Codex.
+      enterprise- or admin-only settings (SSO, admin console, compliance, org billing),
+      ChatGPT features unrelated to Codex.
    2. About these tools, but nothing I would do differently: rewording, reorganised pages,
       marketing copy.
    3. A small detail worth knowing: a clarified behaviour, a minor option, a new example.
-   4. Something I could try or should adjust: a new or changed command, flag, setting, hook
-      or integration, or a new official guide.
+   4. Something I could try or should adjust: a new or changed command, flag, setting, hook,
+      integration or feature, or a new official guide, including ones limited to some plans.
    5. Changes how I work now: a changed default, a removed or deprecated option, a breaking
       change, a major new feature.
 

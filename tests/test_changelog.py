@@ -22,15 +22,20 @@ CC = """# Claude Code changelog
 **2.1.303**
 
 Bug fixes and reliability improvements
+
+**2.1.302**
+
+* Bug fixes and reliability improvements
 """
 
 
 def test_versions_split_and_bugfix_only():
     entries = dict(split_entries(CC, VERSION_LINE))
-    assert list(entries) == ["2.1.306", "2.1.305", "2.1.303"]
+    assert list(entries) == ["2.1.306", "2.1.305", "2.1.303", "2.1.302"]
     assert is_bugfix_only(entries["2.1.306"])
     assert not is_bugfix_only(entries["2.1.305"])
     assert is_bugfix_only(entries["2.1.303"])
+    assert is_bugfix_only(entries["2.1.302"])
 
 
 def test_title_skips_section_labels_and_prefers_non_fix_lines():

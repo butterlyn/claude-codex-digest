@@ -58,11 +58,12 @@ GENERIC_FIX_NOTE = re.compile(
 
 def is_bugfix_only(body: str) -> bool:
     """Every bullet is a fix, or the whole entry is a stock 'Bug fixes ...' line."""
+    def is_fix(text: str) -> bool:
+        text = " ".join(re.sub(r"[*_`]", "", text).split())
+        return bool(FIX.match(text) or GENERIC_FIX_NOTE.match(text))
+
     items = bullets(body)
-    if items:
-        return all(FIX.match(b.strip()) for b in items)
-    text = " ".join(re.sub(r"[*_`]", "", body).split())
-    return bool(GENERIC_FIX_NOTE.match(text))
+    return all(is_fix(b) for b in items) if items else is_fix(body)
 
 
 def first_real_sentence(body: str) -> str:

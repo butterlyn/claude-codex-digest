@@ -124,13 +124,13 @@ def describe_change(old: str, new: str, max_chars: int = 3000) -> tuple[str, dic
             last_section = section
         for o, n in _pair(olds, news):
             if o is not None and n is not None:
-                out.append("~ " + inline_diff(o, n))
+                out.append("changed: " + inline_diff(o, n))
                 stats["changed_lines"] += 1
             elif o is not None:
-                out.append("- " + _clip(o))
+                out.append("removed: " + _clip(o))
                 stats["removed_lines"] += 1
             elif n is not None:
-                out.append("+ " + _clip(n))
+                out.append("added: " + _clip(n))
                 stats["added_lines"] += 1
     text = "\n".join(out)
     if len(text) > max_chars:
