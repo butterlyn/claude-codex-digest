@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import decide, filters, pipeline
+from . import decide, digest, filters, pipeline
 from .store import Store, utcnow
 
 
@@ -33,6 +33,8 @@ def main(argv: list[str] | None = None) -> int:
 
     sub.add_parser("filter", help="run the code filters on items not yet looked at")
     sub.add_parser("decide", help="run the decision pass on items that passed the filters")
+    p_digest = sub.add_parser("digest", help="reading pass + write digests/YYYY-MM-DD.md")
+    p_digest.add_argument("--ignore-decisions", action="store_true", help="measure: read every filtered item")
     p_eval = sub.add_parser("eval", help="score the PROFILE keep/drop examples")
     p_eval.add_argument("--examples", type=Path, default=Path(__file__).resolve().parent.parent / "tests" / "decision_examples.jsonl")
 
@@ -65,6 +67,13 @@ def main(argv: list[str] | None = None) -> int:
         counts = decide.run_decisions(store)
         store.close()
         _log("decision pass: " + ", ".join(f"{k}={v}" for k, v in counts.items()))
+        return 0
+
+    if args.cmd == "digest":
+        store = Store(paths.db)
+        result = digest.write_digest(store, paths.digests, now, args.ignore_decisions)
+        store.close()
+        _log(f"digest -> {result.path}: " + ", ".join(f"{k}={v}" for k, v in result.stats.items()))
         return 0
 
     if args.cmd == "eval":

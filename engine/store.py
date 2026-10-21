@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS items (
     filtered_by   TEXT,
     decision      TEXT,
     route         TEXT,
+    read_on       TEXT,
     in_digest     TEXT
 );
 CREATE INDEX IF NOT EXISTS items_source ON items(source);
@@ -60,6 +61,9 @@ class Store:
         self.db = sqlite3.connect(path)
         self.db.row_factory = sqlite3.Row
         self.db.executescript(SCHEMA)
+        columns = {r[1] for r in self.db.execute("PRAGMA table_info(items)")}
+        if "read_on" not in columns:  # stores made before the reading pass existed
+            self.db.execute("ALTER TABLE items ADD COLUMN read_on TEXT")
 
     def close(self) -> None:
         self.db.commit()
@@ -104,6 +108,9 @@ class Store:
                 item_id,
             ),
         )
+
+    def mark_read(self, item_ids: list[str], date: str) -> None:
+        self.db.executemany("UPDATE items SET read_on = ? WHERE id = ?", [(date, i) for i in item_ids])
 
     def mark_in_digest(self, item_ids: list[str], date: str) -> None:
         self.db.executemany(

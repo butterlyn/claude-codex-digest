@@ -33,6 +33,7 @@ class Answer:
     output_tokens: int
     cost_usd: float  # list-price equivalent; on a subscription it counts against plan limits
     seconds: float
+    models: dict | None = None  # every model the call used -> output tokens
 
 
 def ask_json(
@@ -77,9 +78,12 @@ def ask_json(
                 continue
         usage = envelope.get("usage") or {}
         used = envelope.get("modelUsage") or {}
+        # Claude Code can make small helper calls on another model; report the main one.
+        main = max(used, key=lambda m: used[m].get("outputTokens", 0), default=model)
         return Answer(
             data=data,
-            model=next(iter(used), model),
+            model=main,
+            models={m: u.get("outputTokens", 0) for m, u in used.items()},
             input_tokens=int(usage.get("input_tokens", 0))
             + int(usage.get("cache_creation_input_tokens", 0))
             + int(usage.get("cache_read_input_tokens", 0)),

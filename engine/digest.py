@@ -1,0 +1,201 @@
+"""The reading pass and the digest: one Claude Sonnet 5.5 call over what the decision pass
+let through, rendered to Markdown in code so every link is a real item's link.
+"""
+
+from __future__ import annotations
+
+import json
+import time
+from dataclasses import dataclass, field
+from datetime import datetime, timedelta
+from pathlib import Path
+from zoneinfo import ZoneInfo
+
+from .config import DIGEST_CAP, GROUPS, READING_CAP, REPO_URL, SOURCES_BY_NAME, TIMEZONE
+from .decide import KIND_LABEL
+from .llm import READING_MODEL, ask_json
+from .store import Store, iso
+
+SYSTEM = f"""You write a daily digest for one person. They keep up with changes to Claude Code \
+and Codex (features, commands, flags, settings, defaults, deprecations), plus the Claude and \
+ChatGPT apps and the official guides and launch posts about them. They read the digest to \
+decide what to save to their to-try list and what to change in their setup this week.
+
+You get today's items that passed their filter, as JSON. Items with route "unsure" passed only \
+partly: include one only if it clearly reports something new and concrete that matters to them.
+
+Rules:
+- At most {DIGEST_CAP} entries in total, counting "also". Pick the ones that change what they \
+would do this week. Leaving items out is expected.
+- Group items about the same thing into one entry: a changelog line and the docs page that \
+documents it are one entry. Never list the same change twice.
+- Each entry's text: "**<what changed, at most 10 words>** - <what to try or change>." One or \
+two short sentences after the bold part. For a docs change, give before -> after when the \
+excerpt shows it.
+- Put each entry under one group: {", ".join(GROUPS)}.
+- Refer to items only by their "id" in the entry's "items" list. Never write a URL, and never \
+state a detail that is not in the items.
+- Say plainly when something is a minor update, a deprecation or a removal.
+- A changelog entry is a launch only if it says something launched.
+- No hype words, no exclamation marks.
+- "headline": one plain line on what mattered today.
+- For a changelog or release entry, name the version.
+- "also": up to 3 one-line mentions that matter less; each still names the specific change."""
+
+_ENTRY = {
+    "type": "object",
+    "properties": {"text": {"type": "string"}, "items": {"type": "array", "items": {"type": "string"}}},
+    "required": ["text", "items"],
+    "additionalProperties": False,
+}
+SCHEMA = {
+    "type": "object",
+    "properties": {
+        "headline": {"type": "string"},
+        "sections": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {"group": {"type": "string", "enum": list(GROUPS)}, "entries": {"type": "array", "items": _ENTRY}},
+                "required": ["group", "entries"],
+                "additionalProperties": False,
+            },
+        },
+        "also": {"type": "array", "items": _ENTRY},
+    },
+    "required": ["headline", "sections", "also"],
+    "additionalProperties": False,
+}
+
+
+@dataclass
+class DigestResult:
+    date: str
+    path: Path
+    markdown: str
+    included: list[str] = field(default_factory=list)
+    stats: dict = field(default_factory=dict)
+
+
+def local_date(now: datetime) -> str:
+    return now.astimezone(ZoneInfo(TIMEZONE)).date().isoformat()
+
+
+def _rank(row) -> tuple:
+    d = json.loads(row["decision"]) if row["decision"] else {}
+    return (row["route"] != "keep", -(d.get("relevance") or 0), row["published_at"] or "")
+
+
+def candidates(store: Store, now: datetime, ignore_decisions: bool = False) -> list:
+    """Items not yet read, first seen in the last 3 days (so a failed run catches up)."""
+    gate = (
+        "(filtered_by IS NULL OR filtered_by = 'decision:drop')"  # measuring: pretend no decision pass
+        if ignore_decisions else "route IN ('keep', 'unsure')"
+    )
+    rows = store.rows(f"read_on IS NULL AND first_seen_at >= ? AND {gate}", (iso(now - timedelta(days=3)),))
+    return sorted(rows, key=_rank)[:READING_CAP]
+
+
+def _excerpt(row) -> str:
+    limit = 1200 if row["kind"] in ("changed_page", "changed_entry", "rollup") else 600
+    return row["body"][:limit]
+
+
+def reading_input(rows: list, ignore_decisions: bool = False) -> list[dict]:
+    items = []
+    for n, row in enumerate(rows, 1):
+        d = json.loads(row["decision"]) if row["decision"] else {}
+        src = SOURCES_BY_NAME.get(row["source"])
+        items.append({
+            "id": f"i{n}",
+            "group": src.group if src else "News & guides",
+            "source": src.label if src else row["source"],
+            "kind": KIND_LABEL.get(row["kind"], row["kind"]),
+            "title": row["title"],
+            "published": (row["published_at"] or "")[:10] or None,
+            "route": "unsure" if ignore_decisions else (row["route"] or "unsure"),
+            "relevance": None if ignore_decisions else d.get("relevance"),
+            "excerpt": _excerpt(row),
+        })
+    return items
+
+
+def _link_label(row) -> str:
+    meta = json.loads(row["metadata"])
+    if row["kind"] in ("changed_page", "new_page", "removed_page") and meta.get("page_title"):
+        return meta["page_title"]
+    src = SOURCES_BY_NAME.get(row["source"])
+    return src.label if src else row["source"]
+
+
+def _links(ids: list[str], by_id: dict) -> str:
+    parts: list[str] = []
+    for i in ids:
+        row = by_id[i]
+        parts.append(f"[{_link_label(row)}]({row['url']})")
+        snapshot = json.loads(row["metadata"]).get("snapshot")
+        if snapshot and row["kind"] == "changed_page":
+            parts.append(f"[history]({REPO_URL}/commits/main/data/snapshots/{snapshot})")
+    return " · ".join(dict.fromkeys(parts))
+
+
+def render(date: str, data: dict, by_id: dict, read: int) -> tuple[str, list[str]]:
+    lines = [f"# {date} - {data['headline'].strip()}", ""]
+    used: list[str] = []
+    count = 0
+    for group in GROUPS:
+        entries = [e for s in data["sections"] if s["group"] == group for e in s["entries"]]
+        rendered = []
+        for entry in entries:
+            ids = [i for i in entry["items"] if i in by_id]
+            if not ids or count >= DIGEST_CAP:
+                continue  # an entry that points at no real item is never printed
+            rendered.append(f"- [ ] {entry['text'].strip()} {_links(ids, by_id)}")
+            used += ids
+            count += 1
+        if rendered:
+            lines += [f"## {group}", "", *rendered, ""]
+    also = []
+    for entry in data.get("also", []):
+        ids = [i for i in entry["items"] if i in by_id]
+        if ids and count < DIGEST_CAP:
+            text = entry["text"].strip()
+            also.append(f"- {text}{'' if text.endswith(('.', ':')) else '.'} {_links(ids, by_id)}")
+            used += ids
+            count += 1
+    if also:
+        lines += ["## Also worth a look", "", *also, ""]
+    if count == 0:
+        lines += ["Nothing today changes what you would do.", ""]
+    lines.append(f"<sub>{read} items read, {len(dict.fromkeys(used))} used. Reply with `missed: ...` or `noise: ...`.</sub>")
+    return "\n".join(lines) + "\n", list(dict.fromkeys(used))
+
+
+def write_digest(store: Store, digests_dir: Path, now: datetime, ignore_decisions: bool = False) -> DigestResult:
+    date = local_date(now)
+    path = digests_dir / f"{date}.md"
+    rows = candidates(store, now, ignore_decisions)
+    stats = {"read": len(rows), "tokens": 0, "seconds": 0.0, "cost_usd": 0.0}
+    if not rows:
+        markdown = f"# {date} - Nothing new today\n\nNo changes passed the filters.\n"
+        included: list[str] = []
+    else:
+        items = reading_input(rows, ignore_decisions)
+        by_id = {item["id"]: row for item, row in zip(items, rows)}
+        started = time.monotonic()
+        ans = ask_json(
+            "Today's items:\n" + json.dumps(items, ensure_ascii=False, indent=1),
+            system=SYSTEM, schema=SCHEMA, model=READING_MODEL, effort="medium",
+            fallback_model="claude-opus-5-5", timeout=600,
+        )
+        stats.update(tokens=ans.input_tokens + ans.output_tokens, seconds=round(time.monotonic() - started, 1),
+                     cost_usd=round(ans.cost_usd, 4), model=ans.model, models=ans.models)
+        markdown, used_ids = render(date, ans.data, by_id, len(rows))
+        included = [by_id[i]["id"] for i in used_ids]
+        store.mark_read([r["id"] for r in rows], date)
+        store.mark_in_digest(included, date)
+        store.commit()
+    digests_dir.mkdir(parents=True, exist_ok=True)
+    path.write_text(markdown, encoding="utf-8")  # written before any delivery is tried
+    stats["included"] = len(included)
+    return DigestResult(date=date, path=path, markdown=markdown, included=included, stats=stats)

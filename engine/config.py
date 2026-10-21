@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -10,12 +11,20 @@ REPO = Path(__file__).resolve().parent.parent
 LIVE_DATA = REPO / "data"
 LIVE_DIGESTS = REPO / "digests"
 
+TIMEZONE = "Australia/Perth"  # the digest is dated in the reader's time (AWST)
+REPO_URL = (
+    f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}"
+    if os.environ.get("GITHUB_REPOSITORY") and os.environ.get("GITHUB_SERVER_URL")
+    else "https://github.com/butterlyn/claude-codex-digest"
+)
+
 # Code filters and caps (PROFILE.md -> Code filters)
 MAX_AGE_DAYS = 7
 MAX_PAGES_PER_SITE = 400
 MAX_ITEMS_PER_SOURCE = 100
 MAX_DECISIONS_PER_RUN = 150
 DIGEST_CAP = 10
+READING_CAP = 60  # most items the reading pass reads in one run
 
 # A path segment that names a non-English locale: /ja/, /de/, /zh-CN/, /_llms/fr.txt ...
 LOCALE_SEGMENT = re.compile(
