@@ -90,6 +90,16 @@ SOURCES: list[Source] = [
         {"host": "https://www.anthropic.com/", "include_prefix": "https://www.anthropic.com/news/"},
     ),
     Source(
+        "claude-com-guides", "claude.com guides", "News & guides", "page_set_text",
+        "https://claude.com/resources/guides",
+        {"sitemap": "https://claude.com/sitemap.xml", "include_prefix": "https://claude.com/resources/guides/"},
+    ),
+    Source(
+        "anthropic-engineering", "Anthropic engineering blog", "News & guides", "page_set_text",
+        "https://www.anthropic.com/engineering",
+        {"index_page": "https://www.anthropic.com/engineering", "link_prefix": "/research/", "selector": "article"},
+    ),
+    Source(
         "anthropic-site", "anthropic.com", "News & guides", "sitemap_new",
         "https://www.anthropic.com/sitemap.xml",
         {"host": "https://www.anthropic.com/", "exclude_prefix": ["https://www.anthropic.com/news/"]},
@@ -126,7 +136,8 @@ SOURCES: list[Source] = [
         {
             "host": "https://openai.com/",
             "require_in_url": ["codex"],
-            "exclude_prefix": ["https://openai.com/index/"],  # articles come through the news feed
+            "exclude_prefix": ["https://openai.com/index/",  # articles come through the news feed
+                               "https://openai.com/supply/"],  # the merch shop
             "children": ["/page/", "/product/", "/release/", "/learn-", "/engineering/",
                          "/openai-academy/", "/webinar/", "/chatgpt/", "/api/"],
             "fetch_pages": False,  # openai.com pages refuse automated reads; the sitemap does not

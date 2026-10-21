@@ -12,7 +12,7 @@ from ..config import LOCALE_SEGMENT, MAX_AGE_DAYS, MAX_PAGES_PER_SITE, Source
 from ..diffing import content_hash, describe_change, is_format_only
 from ..items import Item, stable_id
 from . import Context, SourceError, SourceResult
-from .docs_site import compare_page, new_stats, page_key, removed_items
+from .docs_site import compare_page, new_stats, page_key, removed_items, title_of
 from .htmltext import page_meta, parse_datetime, soup, to_markdown
 
 BLOCK = re.compile(r"<(url|sitemap)>(.*?)</\1>", re.DOTALL)
@@ -197,4 +197,65 @@ def fetch_page_text(src: Source, ctx: Context) -> SourceResult:
         published_at=ctx.now,
         metadata=dict(counts, format_only=is_format_only(old, new), snapshot=f"{src.name}/page.md"),
     ))
+    return res
+
+
+def index_links(html: str, page_url: str, prefix: str) -> list[str]:
+    """Absolute URLs of the links on a page whose path is `prefix` plus one slug."""
+    parts = urlsplit(page_url)
+    found = re.findall(r'href="(?:https?://[^/"]+)?(' + re.escape(prefix) + r'[a-z0-9-]+)"', html)
+    return sorted({f"{parts.scheme}://{parts.hostname}{path}" for path in found})
+
+
+def fetch_page_set_text(src: Source, ctx: Context) -> SourceResult:
+    """Edits to a set of HTML guide pages, by comparing their article text with the last run's
+    copy. New pages are only recorded: the site's sitemap source reports those.
+    Options: sitemap + include_prefix, or index_page + link_prefix (links found on that page);
+    selector: "article" or "main" (the element holding the page's own text)."""
+    opts = src.options
+    if opts.get("index_page"):
+        index = ctx.fetcher.get(opts["index_page"])
+        if not index.ok:
+            raise SourceError(f"{opts['index_page']}: {index.error}")
+        urls = index_links(index.text, opts["index_page"], opts["link_prefix"])
+    else:
+        urls = sorted(u for u in read_sitemap(ctx, opts["sitemap"])
+                      if u.startswith(opts["include_prefix"]) and not LOCALE_SEGMENT.search(urlsplit(u).path))
+    if not urls:
+        raise SourceError(f"{src.url}: no pages found")
+    urls = urls[:MAX_PAGES_PER_SITE]
+    fetched = ctx.fetcher.get_many(urls)
+
+    res = SourceResult()
+    stats = {"pages": len(urls), "fetched": 0, "errors": 0, "recorded": 0, "changed": 0, "unchanged": 0}
+    for url in urls:
+        page = fetched[url]
+        node = None
+        if page.ok:
+            doc = soup(page.text)
+            node = doc.find(opts.get("selector", "main")) or doc.find("main")
+        if node is None:
+            stats["errors"] += 1
+            continue
+        stats["fetched"] += 1
+        new = to_markdown(node)
+        key = urlsplit(url).path.strip("/") + ".md"
+        old = ctx.snapshots.read(src.name, key)
+        if old == new:
+            stats["unchanged"] += 1
+            continue
+        res.writes[key] = new
+        if old is None:
+            stats["recorded"] += 1
+            continue
+        stats["changed"] += 1
+        title = re.sub(r"[*_]", "", title_of(new, key))
+        diff, counts = describe_change(old, new)
+        res.items.append(Item(
+            id=stable_id("chg", src.name, key, content_hash(old), content_hash(new)), source=src.name,
+            kind="changed_page", title=f'{src.label}: "{title}" changed', url=url, body=diff,
+            published_at=ctx.now,
+            metadata=dict(counts, page_title=title, format_only=is_format_only(old, new), snapshot=f"{src.name}/{key}"),
+        ))
+    res.stats = stats
     return res

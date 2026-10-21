@@ -50,3 +50,13 @@ def test_html_responses_are_not_markdown():
 def test_signed_cdn_query_strings_are_dropped():
     md = "![x](https://mintlify.s3.mintcdn.com/a/b.png?fit=max&s=abc123)\n"
     assert clean_page(md) == "![x](https://mintlify.s3.mintcdn.com/a/b.png)\n"
+
+
+def test_page_set_index_links_skip_nested_paths():
+    from engine.sources.pages import index_links
+    html = '<a href="/research/claude-code-best-practices">x</a><a href="/research/team/alignment">y</a>' \
+           '<a href="https://www.anthropic.com/research/claude-code-sandboxing">z</a>'
+    assert index_links(html, "https://www.anthropic.com/engineering", "/research/") == [
+        "https://www.anthropic.com/research/claude-code-best-practices",
+        "https://www.anthropic.com/research/claude-code-sandboxing",
+    ]

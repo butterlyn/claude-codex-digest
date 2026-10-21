@@ -25,6 +25,8 @@ HTTP (Markdown twins, RSS, sitemaps).
 | claude.com new pages | guides, articles, launch posts, product pages | `sitemap.xml`: new English URLs, with title and date read from the page | R2.3: the Code Review GA article |
 | Anthropic news | anthropic.com/news | `sitemap.xml`: new `/news/` URLs | R2.1: company news and blogs |
 | anthropic.com pages | every other new page (engineering posts, product pages, learning) | `sitemap.xml`: new URLs | Follow-up: any new official web page |
+| Anthropic engineering posts | the explainers listed on anthropic.com/engineering (e.g. Claude Code best practices) | article text, diffed | Follow-up: updated explainers |
+| claude.com guides | ~145 pages under claude.com/resources/guides | page text, diffed (new ones come from the claude.com row) | Follow-up: updated guides |
 | Claude Help Center | ~360 English articles on support.claude.com | sitemap `lastmod`: only new or updated articles are fetched (`.md` twins, one request a second as its robots.txt asks) and diffed | Follow-up: new and updated guides, even for existing features |
 | Claude plans | claude.com/pricing | page text, diffed | R2.1: plans and usage limits |
 | Codex docs | ~200 pages on learn.chatgpt.com/docs (developers.openai.com/codex redirects here) | page list from the Codex `llms.txt`, each page's `.md` twin, diffed | R1.2: silent docs changes |
@@ -36,6 +38,8 @@ HTTP (Markdown twins, RSS, sitemaps).
 | OpenAI learning resources (Codex) | Codex guides and videos on developers.openai.com/learn | `llms.txt`: `.md` pages diffed, new video links reported | Follow-up: Codex explainers and videos |
 
 Left out, and why:
+- **Edits to claude.com blog articles**: new articles are reported, but edits are not, because
+  every article carries "related posts" cards that change whenever anything new is published.
 - **help.openai.com** (ChatGPT release notes, the Codex changelog article) and **openai.com**
   pages refuse automated requests (HTTP 403). The ChatGPT & Codex changelog feed carries the
   same changes.

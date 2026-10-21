@@ -1,0 +1,11 @@
+https://www.youtube.com/watch?v=-l0OqapibAA	Live Demo Showcase: Tools That 10x Your Codebase
+https://www.youtube.com/watch?v=1XkVsE9-ZK4	Codex in JetBrains IDEs
+https://www.youtube.com/watch?v=70ush8Vknx8	Sora, ImageGen, and Codex: The Next Wave of Creative Production
+https://www.youtube.com/watch?v=Gr41tYOzE20	Shipping with Codex
+https://www.youtube.com/watch?v=HFM3se4lNiw	Introducing the Codex app
+https://www.youtube.com/watch?v=HwbSWVg5Ln4	Codex code review
+https://www.youtube.com/watch?v=Lm7-yFZ5fZQ	Codex for (almost) everything
+https://www.youtube.com/watch?v=fK_bm84N7bs	Build beautiful frontends with OpenAI Codex
+https://www.youtube.com/watch?v=hhdpnbfH6NU	Codex intro
+https://www.youtube.com/watch?v=iqNzfK4_meQ	Using OpenAI Codex CLI with GPT-5-Codex
+https://www.youtube.com/watch?v=sd21Igx4HtA	OpenAI Codex in your code editor

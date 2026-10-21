@@ -12,7 +12,7 @@ How it decides is written down in [PROFILE.md](PROFILE.md). Change the words the
 ## How it works
 
 ```
-17 official sources -> store (stable ids, snapshots in data/) -> code filters
+19 official sources -> store (stable ids, snapshots in data/) -> code filters
   -> Claude Haiku 5.5 answers two questions per item -> Claude Sonnet 5.5 writes the digest
   -> digests/YYYY-MM-DD-HHMM.md + a GitHub issue
 ```

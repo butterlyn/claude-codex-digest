@@ -52,6 +52,7 @@ def registry() -> dict[str, Fetch]:
             github_releases=feeds.fetch_github_releases,
             sitemap_new=pages.fetch_sitemap_new,
             sitemap_docs=pages.fetch_sitemap_docs,
+            page_set_text=pages.fetch_page_set_text,
             page_text=pages.fetch_page_text,
         )
     except ImportError:
