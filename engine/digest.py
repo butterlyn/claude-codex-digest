@@ -139,7 +139,16 @@ def _links(ids: list[str], by_id: dict) -> str:
     return " · ".join(dict.fromkeys(parts))
 
 
-def render(date: str, data: dict, by_id: dict, read: int) -> tuple[str, list[str]]:
+def _footer(read: int, used: int, unreadable: list[str]) -> list[str]:
+    lines = []
+    if unreadable:
+        lines.append(f"<sub>Couldn't read today: {'; '.join(unreadable)}.</sub>")
+        lines.append("")
+    lines.append(f"<sub>{read} items read, {used} used. Reply with `missed: ...` or `noise: ...`.</sub>")
+    return lines
+
+
+def render(date: str, data: dict, by_id: dict, read: int, unreadable: list[str] | None = None) -> tuple[str, list[str]]:
     lines = [f"# {date} - {data['headline'].strip()}", ""]
     used: list[str] = []
     count = 0
@@ -167,17 +176,21 @@ def render(date: str, data: dict, by_id: dict, read: int) -> tuple[str, list[str
         lines += ["## Also worth a look", "", *also, ""]
     if count == 0:
         lines += ["Nothing today changes what you would do.", ""]
-    lines.append(f"<sub>{read} items read, {len(dict.fromkeys(used))} used. Reply with `missed: ...` or `noise: ...`.</sub>")
+    lines += _footer(read, len(dict.fromkeys(used)), unreadable or [])
     return "\n".join(lines) + "\n", list(dict.fromkeys(used))
 
 
-def write_digest(store: Store, digests_dir: Path, now: datetime, ignore_decisions: bool = False) -> DigestResult:
+def write_digest(
+    store: Store, digests_dir: Path, now: datetime, ignore_decisions: bool = False,
+    unreadable: list[str] | None = None,
+) -> DigestResult:
     date = local_date(now)
     path = digests_dir / f"{date}.md"
     rows = candidates(store, now, ignore_decisions)
     stats = {"read": len(rows), "tokens": 0, "seconds": 0.0, "cost_usd": 0.0}
     if not rows:
-        markdown = f"# {date} - Nothing new today\n\nNo changes passed the filters.\n"
+        markdown = "\n".join([f"# {date} - Nothing new today", "", "No changes passed the filters.", "",
+                              *_footer(0, 0, unreadable or [])]) + "\n"
         included: list[str] = []
     else:
         items = reading_input(rows, ignore_decisions)
@@ -190,7 +203,7 @@ def write_digest(store: Store, digests_dir: Path, now: datetime, ignore_decision
         )
         stats.update(tokens=ans.input_tokens + ans.output_tokens, seconds=round(time.monotonic() - started, 1),
                      cost_usd=round(ans.cost_usd, 4), model=ans.model, models=ans.models)
-        markdown, used_ids = render(date, ans.data, by_id, len(rows))
+        markdown, used_ids = render(date, ans.data, by_id, len(rows), unreadable)
         included = [by_id[i]["id"] for i in used_ids]
         store.mark_read([r["id"] for r in rows], date)
         store.mark_in_digest(included, date)

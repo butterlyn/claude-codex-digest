@@ -34,3 +34,10 @@ def test_render_links_only_real_items_and_adds_history_for_docs_changes():
     assert "Invented entry" not in md
     assert "- OpenAI posted about X. [OpenAI news](https://openai.com/index/x)" in md
     assert used == ["i1", "i2", "i3"]
+
+
+def test_issue_title_and_body_split_the_digest():
+    from engine.deliver import issue_body, issue_title
+    md = "# 2026-10-22 - One default changed\n\n## Claude Code\n\n- [ ] x\n"
+    assert issue_title(md) == "2026-10-22 - One default changed"
+    assert issue_body(md).startswith("## Claude Code")

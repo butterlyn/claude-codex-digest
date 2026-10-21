@@ -28,6 +28,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--data-dir", type=Path, default=None, help="throwaway data dir for tests")
     sub = parser.add_subparsers(dest="cmd", required=True)
 
+    p_run = sub.add_parser("run", help="the daily run: fetch, filter, decide, digest")
+    p_run.add_argument("--deliver", action="store_true", help="also open the GitHub issue")
+
     p_fetch = sub.add_parser("fetch", help="fetch sources into the store")
     p_fetch.add_argument("--source", action="append", help="only this source (repeatable)")
 
@@ -46,6 +49,10 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     paths = pipeline.paths_for(args.data_dir)
     now = utcnow()
+
+    if args.cmd == "run":
+        _log(f"run -> {paths.data}")
+        return pipeline.run_all(paths, now, _log, send=args.deliver)
 
     if args.cmd == "fetch":
         run_id = now.strftime("%Y%m%dT%H%M%SZ")

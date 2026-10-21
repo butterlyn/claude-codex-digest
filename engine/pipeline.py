@@ -8,6 +8,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Callable
 
+from . import decide, deliver, digest, filters
 from .config import LIVE_DATA, LIVE_DIGESTS, SOURCES, SOURCES_BY_NAME, Source
 from .http import Fetcher
 from .snapshots import Snapshots
@@ -87,3 +88,51 @@ def run_fetch(paths: Paths, sources: list[Source], now: datetime, run_id: str, l
         fetcher.close()
         store.close()
     return report
+
+
+def run_all(paths: Paths, now: datetime, log: Log, send: bool = False) -> int:
+    """The daily run. A source that fails is named at the bottom of the digest and the rest
+    carries on. Returns 2 when the digest could not be delivered, else 0."""
+    run_id = now.strftime("%Y%m%dT%H%M%SZ")
+    started = time.monotonic()
+    store = Store(paths.db)
+    store.start_run(run_id, now)
+    store.close()
+
+    log("fetch:")
+    report = run_fetch(paths, list(SOURCES), now, run_id, log)
+    failed_sources = [name for name, r in report.items() if r.get("status", "ok") != "ok"]
+
+    store = Store(paths.db)
+    try:
+        dropped = filters.run_filters(store, now)
+        log("code filters: " + ", ".join(f"{k}={v}" for k, v in dropped.items()))
+        routes = decide.run_decisions(store)
+        log("decision pass: " + ", ".join(f"{k}={v}" for k, v in routes.items()))
+        notes = [f"{SOURCES_BY_NAME[n].label} ({report[n]['status'].removeprefix('error: ').removeprefix('SourceError: ')[:80]})" for n in failed_sources]
+        result = digest.write_digest(store, paths.digests, now, unreadable=notes)
+        log(f"digest {result.path.name}: " + ", ".join(f"{k}={v}" for k, v in result.stats.items()))
+
+        delivered, code = None, 0
+        if send and result.included:
+            try:
+                delivered = deliver.open_issue(result.markdown)
+                log(f"delivered: {delivered}")
+            except deliver.DeliveryError as exc:
+                log(f"delivery failed (the digest file is saved): {exc}")
+                code = 2
+        elif send:
+            log("nothing new today: no issue opened")
+
+        stats = {
+            "sources": {k: {kk: v for kk, v in r.items() if kk != "status"} | {"status": r.get("status", "ok")}
+                        for k, r in report.items()},
+            "filters": dropped, "decisions": routes, "digest": result.stats,
+            "delivered": delivered, "seconds": round(time.monotonic() - started, 1),
+        }
+        store.finish_run(run_id, now, stats)
+    finally:
+        store.close()
+    if failed_sources:
+        log(f"sources that failed: {', '.join(failed_sources)}")
+    return code
