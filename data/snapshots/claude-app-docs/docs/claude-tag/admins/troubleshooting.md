@@ -1,0 +1,813 @@
+# Troubleshoot Claude Tag setup
+
+> Error messages from Claude Tag setup and what fixes each. Covers permission mismatches, GitHub access gaps, session start failures, and account errors.
+
+> [!NOTE]
+>
+> Claude Tag is in public beta. Features and behavior described here may change before general availability.
+
+This page covers errors you might hit setting up and administering Claude Tag: Slack app permissions, guest and shared channels, console errors, channels and threads where nothing responds, access and connections, and session starts.
+
+> [!NOTE]
+>
+> For problems people can resolve on their own in a channel, like a missing reply or a thread that lost its work, see [Troubleshoot Claude Tag in channels and DMs](/docs/claude-tag/users/troubleshooting).
+
+If someone reports that Claude can't reach a service you connected, check two things before anything else:
+
+* The connector applies to that channel. To check, go to [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag), open the **Channels** tab under **Claude's access**, and select the channel (or its workspace, if the channel isn't listed). The page's **Claude's access** table includes access [inherited from wider scopes](/docs/claude-tag/admins/attach-to-scope#how-scopes-inherit), and its **Inheritance** column names where each bundle, and each item outside a bundle, comes from. If the connector isn't there, add it to the channel, its workspace, or a [bundle that applies there](/docs/claude-tag/admins/attach-to-scope#attach-the-bundle).
+* The test ran in a new thread; an existing thread isn't told about a connector added after it started, though the connector works there if the request names the service.
+
+## Setup errors
+
+What you expected to see while running [setup](/docs/claude-tag/admins/setup-overview), what appeared instead, and what to do.
+
+| You expected | But got | Do this |
+| :- | :- | :- |
+| The setup page at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag) | A page titled **Set up Claude Tag** with **View setup guide** and **Go to chat** buttons | Your signed-in account can't run setup, and **View setup guide** leads back to this guide. On a personal account (Free, Pro, or Max), [start a Team or Enterprise plan](https://claude.com/pricing) first. In a Team or Enterprise organization, ask an Owner to run setup. When the page shows a workspace switcher, your account also belongs to another Team or Enterprise organization; switch to it and retry. |
+| A pairing code from `@Claude connect` | “Only Slack workspace admins (or Enterprise Grid org admins) can link this workspace to a Claude organization…” | The person who sent `@Claude connect` isn't a Slack workspace admin or Grid org admin. See [Only Slack workspace admins or Grid org admins can link this workspace](#only-slack-workspace-admins-or-grid-org-admins-can-link-this-workspace). |
+| A pairing code | “…installation is out of date” | A Slack admin approves the update or reinstalls the app, then sends `@Claude connect` again. See [This workspace's Claude app installation is out of date](#this-workspace%E2%80%99s-claude-app-installation-is-out-of-date). |
+| A pairing code | A message about guests, or about the channel being shared across workspaces | Send `@Claude connect` again in a channel with no guests that belongs to a single workspace. Match the exact message in [Guest and shared channels](#guest-and-shared-channels) for the fix that fits it. |
+| The console to accept your pairing code | "Claim code is invalid, expired, or already used" | Codes are single-use and last 15 minutes. Send `@Claude connect` again and paste the fresh code right away. See [Claim code is invalid, expired, or already used](#claim-code-invalid). |
+| The console to accept your pairing code | "Already connected to a different organization" | The workspace is paired to another Claude organization, often a trial org. See [Already connected to a different organization](#already-connected-to-a-different-organization). |
+| Your Claude account to connect after you select **Connect Claude account** | The browser page refuses the connection, and Claude DMs you "This workspace is connected to a different Claude organization" | The Claude account belongs to a different organization than the one the workspace is paired with. Connect an account from that organization; if the browser is signed in to another Claude account, sign out at claude.ai first. See [This workspace is connected to a different Claude organization](#this-workspace-is-connected-to-a-different-claude-organization). |
+| The spend limit picker on the **Launch Claude Tag** step | A **Buy usage credits** step | Your organization pays by card in US dollars and has no credits loaded. Load credits, or select **Skip** to continue without; nothing runs in channels until the balance is funded. Invoiced organizations and those billing in other currencies see the spend limit picker regardless of balance. |
+| **Launch Claude Tag** to finish | "Couldn't turn on personal connectors in channels. Try again." | Launch didn't finish. Click **Launch Claude Tag** again. |
+| Claude to join the channels you selected on the **Launch Claude Tag** step | "Couldn't add Claude to some channels. Add Claude from Slack instead." | Claude Tag is on, but Claude didn't join every channel you selected. Run `/invite @Claude` in each channel it's missing from. |
+| A reply from Claude while you're still in setup | A notice that starts "Claude isn't on in this channel yet." | Claude Tag isn't turned on until you finish [Launch Claude Tag](/docs/claude-tag/admins/setup-overview#launch-claude-tag). Finish setup, then mention `@Claude` again. A channel that's turned off after launch gets a different notice; see [Claude is disabled in this channel](#claude-is-disabled-in-this-channel). |
+| A connected tool to work in your test | “I can't reach…” | Claude isn't told about a connector added after the thread started. Ask it to use the service by name, or start a fresh thread. |
+| Claude to respond in Slack | "Claude Tag has been turned off for your Claude organization…" | The **Enable Claude Tag in Slack** switch is off. An Owner turns it on at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag). See [the troubleshooting entry](#claude-tag-is-turned-off-for-your-organization). |
+| Claude to respond in Slack | "Claude Tag is unavailable because Routines aren't enabled for your organization…" | Routines isn't enabled for your Claude organization, which Claude Tag requires. An admin turns on [**Admin settings > Capabilities > Remote sessions > Routines**](https://claude.ai/admin-settings/capabilities). Anyone can then mention `@Claude` again. See [the troubleshooting entry](#claude-tag-is-unavailable-because-routines-are-not-enabled). |
+| Claude to respond in Slack | "Claude in Slack is not available for your organization" or "Claude isn't available for organizations with restricted compliance settings." | The paired Claude organization has a restricted compliance configuration, such as Zero Data Retention (ZDR), that Claude Tag can't run under. No setting lifts the restriction; contact your account team. See [the troubleshooting entry](#restricted-compliance-settings-block-claude-tag). |
+| The **Slack** page or a workspace or channel page to load | "Couldn't load Slack scopes. Reload the page to try again." | Reload the page. See [Couldn't load Slack scopes](#couldn%E2%80%99t-load-slack-scopes). |
+| A reply in your test channel | "Couldn't check this channel just now" | Mention `@Claude` again. See [Couldn't check this channel just now](#couldn%E2%80%99t-check-this-channel-just-now). |
+| A reply in your test channel | "Something went wrong starting a session" | Retry first. If it persists, see [the session-start entries](#something-went-wrong-starting-a-session). |
+
+## Slack app permissions
+
+Most errors in this section appear when Claude needs a Slack permission that wasn't part of the app when your workspace approved it. For those, the fix is a Slack workspace admin re-approving the Claude app from [Claude for Slack](https://claude.com/claude-for-slack), which grants the current permission set. Nothing else changes, and existing settings carry over.
+
+### This workspace's Claude app installation is out of date
+
+**What you see**
+
+Claude replies to `@Claude connect`:
+
+> This workspace's Claude app installation is out of date — it hasn't granted the \[permission name] permission(s). I can't create a link code until a Slack admin reinstalls the Claude app or approves its updated permissions. Once that's done, ask me to link again.
+
+On Enterprise Grid the message names "this Slack organization's Claude app installation" and asks a Slack organization admin to reinstall the org-wide app. The org-wide reinstall works from inside one of the Grid's workspaces with **Install to entire organization**, following the steps in [Claude is silent everywhere on Enterprise Grid](#claude-is-silent-everywhere-on-enterprise-grid).
+
+Sometimes the reply issues a code anyway, with a footnote that the install "is out of date". The reinstall steps below clear the footnote too.
+
+**What it means**
+
+Claude needs a Slack permission that wasn't part of the app when your workspace approved it, so the app was never granted it. Claude can't issue a link code until the updated permission set is approved.
+
+**How to resolve**
+
+A Slack workspace admin runs these three steps:
+
+1. Click the **reinstalls the Claude app** link in the reply, or open [Claude for Slack](https://claude.com/claude-for-slack) and click **Add to Slack**. Don't uninstall first; this installs over the existing app, so your settings carry over.
+2. Approve the consent screen Slack shows; it lists each permission being added. If Slack shows **Unapproved permissions requested** instead of completing, see [Unapproved permissions requested](#unapproved-permissions-requested).
+3. Run `@Claude connect` again. If the reinstall worked, the reply contains a pairing code (the link code the original message said it couldn't create) instead of this message.
+
+Send that pairing code to whoever runs Claude setup in the console; it expires after 15 minutes. Slack's **Manage apps** page lists the permissions the app requests, not the permissions your workspace has granted, so seeing the missing permission listed there doesn't mean it's approved. The grant happens on the consent screen. For the app's permissions in one place, see [What the Claude Slack app can access](/docs/claude-tag/admins/for-slack-admins).
+
+### Unapproved permissions requested
+
+**What you see**
+
+**Unapproved permissions requested** is a message from Slack, not a Claude reply. It appears in either of two places:
+
+* On the consent screen after **Add to Slack**, including for a workspace admin who approved the app before
+* As the pending status on the Claude entry under **Settings & administration** → **Manage apps** → **App requests**, in workspaces that require admin approval for apps
+
+**What it means**
+
+The permissions the Claude app requests have changed since your workspace approved it, and Slack requires a fresh approval for the additions. The consent screen lists each permission being added, so you can review exactly what you're granting before approving; approval applies only to the Claude app already installed in your workspace.
+
+**How to resolve**
+
+A Slack workspace admin approves the Claude app's updated permissions in either place:
+
+* In Slack, go to **Settings & administration** → **Manage apps** → **App requests** and approve the Claude request.
+* Or open [Claude for Slack](https://claude.com/claude-for-slack), click **Add to Slack**, and approve the consent screen.
+
+Both paths grant the same permissions, and neither requires uninstalling first.
+
+If the approval worked, `@Claude connect` returns a pairing code without mentioning the installation again.
+
+### Only Slack workspace admins or Grid org admins can link this workspace
+
+**What you see**
+
+Claude replies to `@Claude connect`:
+
+> Only Slack workspace admins (or Enterprise Grid org admins) can link this workspace to a Claude organization. Please ask a workspace admin to mention me with `@Claude connect`.
+
+**What it means**
+
+Slack reports that the person who ran `@Claude connect` doesn't hold the workspace admin role, so no pairing code was issued. The Claude Owner role doesn't satisfy the check; it's the Slack-side role that matters.
+
+**How to resolve**
+
+Have a Slack workspace admin run `@Claude connect` instead. On Enterprise Grid, a Grid organization admin works too. If the fix worked, their reply contains a pairing code.
+
+### Missing the required Slack permission (users:read)
+
+**What you see**
+
+Claude replies in the channel:
+
+> Claude can't check this channel for guests because it's missing the required Slack permission (users:read). A workspace admin needs to reinstall Claude to grant it.
+
+If the failure happens while Claude is posting a message rather than replying, there's no fixed message; Claude describes the problem in its own words, and the underlying error it relays reads "message not delivered: Claude can't check this channel for guests because the Slack app is missing a permission (users:read); a workspace admin must reinstall Claude to grant it."
+
+**What it means**
+
+The **How should Claude work in channels with guests** setting is set to **Restrict** or **Channel only** for this channel's [scope](/docs/claude-tag/concepts/glossary#scope), so Claude checks the channel for guests before replying, and this install predates the `users:read` permission that check needs.
+
+**How to resolve**
+
+Re-approve the app from [Claude for Slack](https://claude.com/claude-for-slack). Don't uninstall first; the re-approval installs over the existing app. If the fix worked, a mention in the affected channel gets a reply instead of the permission message.
+
+### The audit log shows Claude joining channels no one invited it to
+
+**What you see**
+
+Slack's audit log shows Claude joining a channel with no inviter recorded, and no one in the workspace remembers adding it.
+
+**What it means**
+
+Claude joined the channel through one of these paths:
+
+* A member selected **Add to channel** on a channel Claude suggested in a direct message. Claude's welcome message, the introduction it posts when a member first opens a direct message with it, suggests a few public channels, each with an **Add to channel** button.
+* A member selected **Approve and post** on a message Claude drafted in a direct message for a public channel it wasn't a member of. When the member approves, Claude posts the message in the channel the member named and joins it. [What Claude can do in other channels](/docs/claude-tag/concepts/how-it-works#what-claude-can-do-in-other-channels) covers the flow.
+* The channel's name matches an [auto-join channel pattern](/docs/claude-tag/admins/restrict-access#block-or-auto-join-channels-by-name) an admin set, and Claude joined the public channel when it was created or renamed.
+
+Claude performs that join with its own `channels:join` permission, so Slack's audit log records the join as the Claude app and shows no inviter; the member's selection is not visible in Slack's log. Outside these paths, Claude doesn't join a channel unprompted. [What the Claude Slack app can access](/docs/claude-tag/admins/for-slack-admins) covers how members add it.
+
+**How to resolve**
+
+Nothing is misconfigured. If an auto-join pattern brought Claude in, review the auto-join patterns on the **Advanced** tab of the workspace's page or of the **Slack** page. If Claude shouldn't be in the channel, remove it with `/remove @Claude`, or [turn the scope's **Enable Claude Tag in this channel** switch off](/docs/claude-tag/admins/restrict-access#quiet-or-remove-claude-tag) so it stops responding there even if it's added again. If the **Slack** page has a single [**Respond in channels** switch](/docs/claude-tag/admins/workspaces#turn-claude-tag-on-or-off-on-the-team-plan) instead of per-channel switches, remove Claude and add a [blocked channel pattern](/docs/claude-tag/admins/restrict-access#block-or-auto-join-channels-by-name) for the channel's name. If you want every join in the audit log attributed to a person, ask members to add Claude with `/invite @Claude` rather than the buttons; Slack records an invite as the inviting member's action.
+
+## Guest and shared channels
+
+Claude checks a channel for guests and for sharing across workspaces before it replies there. The messages those checks post look alike, but most are refusals and one is a notice on a reply Claude goes on to give. Match the exact message text before changing anything; each message has a different cause and a different fix.
+
+A channel created at the Enterprise Grid organization level rather than inside a single workspace counts as shared across workspaces even when it appears in only one workspace's sidebar, so a channel can hit the shared-channel messages below despite looking like an ordinary single-workspace channel.
+
+### Claude doesn't respond in channels that include guests
+
+**What you see**
+
+Claude replies in the channel:
+
+> Claude doesn't respond in channels that include guests. You can remove the guests from this channel (Channel details -> Members -> filter by "guests"), or a claude.ai organization owner can allow it in Claude Tag settings under Advanced -> "Allow Claude to work in channels with guests".
+
+In the message, the setting it names is labeled **How should Claude work in channels with guests** in the admin console, and "Claude Tag settings" is a link to the admin page where the guest setting described below lives. The role it names is a claude.ai organization owner, not a Slack admin.
+
+**What it means**
+
+The channel includes at least one Slack guest account, and **How should Claude work in channels with guests** is set to **Restrict** for this channel's scope. **Restrict** is the default.
+
+**How to resolve**
+
+Either fix works:
+
+* Remove the guests from the channel, or move the conversation to a channel with no guests; this changes no settings, so no other channel is affected.
+* Change **How should Claude work in channels with guests** for the scope covering this channel. Go to [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag), open the **Channels** tab under **Claude's access**, select the channel, its workspace, or **Slack**, and open the page's **Advanced** tab. **Channel only** restores replies with [channel-only access](/docs/claude-tag/admins/restrict-access#how-channel-only-works). **Full access** restores replies with the scope's full access, and only an organization Owner can choose it. See [restrict guest channels](/docs/claude-tag/admins/restrict-access#restrict-guest-channels) for what each value exposes.
+
+Either value applies to every guest channel that scope covers. To limit the change to one channel, set the value on the channel's own page.
+
+Claude can't search the workspace from a channel that includes guests, even under **Full access**. Removing the guests restores search as well.
+
+If the fix worked, a mention in the channel gets a reply.
+
+### Couldn't check this channel just now
+
+**What you see**
+
+Claude replies in the channel:
+
+> Couldn't check this channel just now. Please try again in a moment.
+
+**What it means**
+
+Claude couldn't complete its check for guests in this channel; either the guest-policy lookup or the Slack membership check briefly failed, so Claude declined this reply rather than risk posting where a guest might see it. This isn't a configuration error.
+
+**How to resolve**
+
+1. Mention Claude again; the retry usually clears it.
+2. If one channel hits this repeatedly, the membership check may be failing on an unusually large channel. If you set the **How should Claude work in channels with guests** setting to **Full access** on the channel's page, Claude skips the guest check in every channel that scope covers, so this message usually stops. Weigh [what Full access exposes](#claude-doesn%E2%80%99t-respond-in-channels-that-include-guests) first.
+
+### This channel is shared across multiple workspaces
+
+**What you see**
+
+Claude replies in the channel:
+
+> This channel is shared across multiple workspaces, and Claude can't verify whether it includes guests, so Claude can't respond here.
+
+When the reason Claude can't verify the membership is that the channel is shared with a workspace in your Enterprise Grid where the Claude app isn't installed, the reply reads instead:
+
+> This channel is shared with a workspace Claude hasn't been added to, so Claude can't check the channel for guests and can't respond here. A Slack org admin can add Claude to that workspace.
+
+The same check also refuses requests made from another conversation, such as asking Claude to post a message in the channel, with a message ending "shared across multiple workspaces and Claude can't verify whether it includes guests".
+
+**What it means**
+
+This message comes from the guest check, not from workspace sharing. The **How should Claude work in channels with guests** setting is set to **Restrict** for this channel's scope, and the channel's membership can't be verified, most often because the channel is shared across an Enterprise Grid organization, so Claude declines.
+
+**How to resolve**
+
+The fix depends on which reply Claude posted:
+
+* If the reply says the channel is shared with a workspace Claude hasn't been added to, have a Slack org admin [add the Claude app to that workspace](/docs/claude-tag/admins/workspaces#set-up-claude-tag-on-enterprise-grid). Once every workspace sharing the channel has the app, the membership check can run.
+* Otherwise, use a channel that belongs to a single workspace.
+
+Setting the scope's guest setting to **Full access** removes the guest check that posts this message, but a Grid-shared channel still doesn't behave like a single-workspace one:
+
+* When its workspaces connect to different Claude organizations, Claude posts the refusal in [This channel is shared among several Claude workspaces](#this-channel-is-shared-among-several-claude-workspaces) instead of replying.
+* When they all share your one Claude organization, Claude replies with only your organization's default access and settings, described in [This channel is open to more than one Slack workspace](#this-channel-is-open-to-more-than-one-slack-workspace).
+
+### This channel is shared among several Claude workspaces
+
+**What you see**
+
+Claude replies in the channel:
+
+> This channel is shared among several Claude workspaces, so Claude cannot respond here.
+
+The reply appears only when someone mentions Claude directly, or addresses it in a thread it already joined. Other messages in the channel get no reply at all.
+
+**What it means**
+
+The channel is shared across more than one Slack workspace in your Enterprise Grid, and those workspaces are paired to different Claude organizations. No single organization's settings cover the channel, so Claude declines regardless of the guest policy or any scope setting. Claude also declines when it can't confirm that the workspaces share one Claude organization.
+
+Two similar messages come from different situations. [This channel is shared across multiple workspaces](#this-channel-is-shared-across-multiple-workspaces) is the guest case, and [This channel is open to more than one Slack workspace](#this-channel-is-open-to-more-than-one-slack-workspace) is the case where every workspace belongs to your one Claude organization, so Claude replies.
+
+**How to resolve**
+
+Move the conversation to a channel that belongs to a single workspace, or to a DM.
+
+### This channel is open to more than one Slack workspace
+
+**What you see**
+
+Claude posts a notice in the thread, then answers the request:
+
+> This channel is open to more than one Slack workspace, so Claude uses your organization's default settings here, not workspace- or channel-specific ones. A Claude organization owner can change the defaults in [Claude Tag settings](https://claude.ai/admin-settings/claude-tag).
+
+**What it means**
+
+The channel is shared across more than one Slack workspace, and every one of those workspaces belongs to your Claude organization. Claude works there, but only with the access and settings on your [**Slack** page](/docs/claude-tag/admins/attach-to-scope), which apply in every workspace. Bundles, access, instructions, and memory added to a workspace or to this channel don't apply.
+
+Claude posts the notice about once a month in each such channel, not on every reply, so replies there run under the same defaults even when no notice accompanies them.
+
+**How to resolve**
+
+Nothing is broken. To use a channel's own repositories, connectors, or instructions, work in a channel that belongs to a single workspace, or add what the channel needs on the **Slack** page. In a single-workspace channel, requests use that channel's own configuration and the notice doesn't appear.
+
+### Claude isn't available in channels shared across your Enterprise Grid
+
+**What you see**
+
+You ask Claude to do something that involves a channel shared across your Enterprise Grid, and the refusal names the request it declined and ends:
+
+> Claude isn't available in channels shared across your Enterprise Grid
+
+**What it means**
+
+The request needed Claude to act in a channel that's shared across more than one workspace in your Enterprise Grid. The message appears in whichever conversation you made the request; the entries above cover the replies Claude posts in the shared channel itself.
+
+This refusal covers both sharing cases. Even when the shared channel's workspaces all belong to your one Claude organization and Claude answers direct mentions there, Claude still declines requests made from another conversation.
+
+**How to resolve**
+
+Point the request at a channel that belongs to a single workspace, or move the conversation to one.
+
+### This channel is now shared across multiple workspaces
+
+**What you see**
+
+Claude posts in the thread:
+
+> This channel is now shared across multiple workspaces, so this thread's earlier session can't continue here. Please @-mention me in a new thread.
+
+**What it means**
+
+The channel became shared after this thread's session started, so the session is still bound to one workspace's configuration and can't continue in front of every workspace that now sees the channel.
+
+**How to resolve**
+
+Mention Claude in a new thread; new threads start under the channel's current sharing.
+
+## Console errors
+
+### Couldn't load Slack scopes
+
+**What you see**
+
+A banner on the **Slack** page or on a workspace or channel page, each of which you open from the **Channels** tab under **Claude's access** at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag), reads:
+
+> Couldn't load Slack scopes. Reload the page to try again.
+
+The same failure on the **Claude's access** tabs themselves reads "Couldn't load Claude's access. Try again." with a **Retry** button.
+
+**What it means**
+
+The request that loads your scope list from Claude's backend failed; it isn't a Slack permissions problem, and your configuration is intact.
+
+**How to resolve**
+
+1. Reload the page, or select **Retry**. If it worked, the page's settings or the tab's list render. That's the usual outcome.
+2. If the banner persists across reloads, check [`status.anthropic.com`](https://status.anthropic.com) for an active incident and try again in a few minutes.
+3. If it continues with no incident posted, contact [Anthropic support](https://support.claude.com) with the time it occurred.
+
+### Already connected to a different organization
+
+**What you see**
+
+You paste a pairing code on the setup page and the console rejects it, saying the workspace is already connected to a different organization.
+
+**What it means**
+
+A Slack workspace can pair with only one Claude organization at a time, and this one is already paired elsewhere. If your company has more than one Claude organization, the existing pairing is often in a test or trial org.
+
+**How to resolve**
+
+1. Find the Claude organization that holds the pairing. Check any other organizations your company has.
+2. Have an Owner in that organization [disconnect the workspace](/docs/claude-tag/admins/workspaces#revoke-a-pairing) under **Connected workspaces** on their **Slack** page.
+3. Send `@Claude connect` again for a fresh code and redeem it here.
+
+> [!WARNING]
+>
+> Disconnecting deletes the workspace's Claude data, including its memory, channel configurations, sessions, and the routines set up in its channels. The deletion can't be undone. See [Data lifecycle and deletion](/docs/claude-tag/concepts/data-lifecycle) for the full list of what's deleted.
+
+### This workspace is connected to a different Claude organization
+
+**What you see**
+
+You select **Connect Claude account** and sign in, but the browser page refuses the connection and names the organization mismatch. Claude also DMs you:
+
+> **This workspace is connected to a different Claude organization**
+>
+> Sign in with an account from that organization and click **Connect Claude account** again. To use your organization here instead, ask a Slack workspace admin.
+>
+> Signed in to a different Claude account in your browser? Sign out at claude.ai first, then click **Connect Claude account**.
+
+If the workspace is covered by an [Enterprise Grid pairing](/docs/claude-tag/admins/workspaces#pair-an-enterprise-grid) rather than paired on its own, the DM is instead titled **This workspace isn't set up for your Claude organization yet** and adds that a Slack admin of the workspace can run `@Claude connect` to pair that one workspace with your organization.
+
+**What it means**
+
+The Claude account you signed in with belongs to a different Claude organization than the one this Slack workspace is paired with, so Claude refused the connection and left nothing connected. The connect flow uses whichever Claude account your browser is already signed in to, which may not be the account you meant to connect.
+
+If instead the console rejected a workspace pairing code during setup, see [Already connected to a different organization](#already-connected-to-a-different-organization) rather than this entry.
+
+**How to resolve**
+
+Connect a Claude account that belongs to the organization your Slack workspace is paired with:
+
+1. If your browser is signed in to a different Claude account, sign out at [claude.ai](https://claude.ai).
+2. DM `@Claude`.
+3. Select **Connect Claude account**.
+4. Sign in with an account from the paired organization.
+
+### Claim code is invalid, expired, or already used
+
+**What you see**
+
+You paste a pairing code on the setup page and the console says the claim code is invalid, expired, or already used.
+
+**What it means**
+
+Pairing codes are single-use and expire 15 minutes after Claude posts them. The code was redeemed already, timed out, or came from a different workspace. On Enterprise Grid, a Grid org admin's reply includes two codes: a workspace code (starting with `workspace_`) and a Grid-wide code (starting with `enterprise_`).
+
+**How to resolve**
+
+Ask the Slack admin to send `@Claude connect` again and paste the fresh code right away. Reinstalling the app is not required.
+
+## Nothing responds
+
+Most of the silence problems in this section span a whole workspace or channel and come down to the app's authorization or configuration. If Claude stays silent in one thread but answers everywhere else, a setting isn't the cause. Either Claude's session for that thread is stuck, or the thread is muted. See [Claude went silent in one thread, but responds elsewhere](#claude-went-silent-in-one-thread-but-responds-elsewhere).
+
+### Claude went silent in one thread, but responds elsewhere
+
+**What you see**
+
+In one thread, a working indicator appeared under a request and no reply followed, while Claude kept answering normally in other channels and threads.
+
+**What it means**
+
+First check the thread for either of two notices from Claude:
+
+* A notice that begins `:mute: Claude is muted in this thread` means the thread is muted and the session isn't stuck. Selecting the thumbs-down button under one of Claude's replies mutes the thread and posts that notice.
+* A notice that ends `stopped Claude's response in this thread. Mention @Claude to pick up again.` means someone selected **Stop** on the working indicator. The session is intact, and a mention continues it.
+
+To bring Claude back to a muted thread, send `@Claude !unmute` in the thread or @-mention Claude there, as [Thumbs-down button and muting](/docs/claude-tag/users/commands#thumbs-down-button-and-muting) describes.
+
+Without either notice, the session behind that thread is stuck: it hasn't replied and hasn't posted an error. Because Claude responds everywhere else, the problem is confined to that one session, and none of the workspace-level fixes in the entries below apply.
+
+**How to resolve**
+
+Have someone in the thread send [`@Claude !restart`](/docs/claude-tag/users/commands#restart-a-stuck-or-wrong-context-session). The command archives the stuck session and starts a fresh one that rereads the thread, so a follow-up message in the same thread gets an answer. Starting a new thread and restating the request also works.
+
+> [!WARNING]
+>
+> Restarting abandons whatever the session was midway through, and there's no way to resume it. A silent session may still be working through a long task, so treat `!restart` as a last resort.
+
+If the same request stalls again on the fresh session, send [feedback](/docs/claude-tag/users/commands#send-feedback) from that thread so Anthropic can investigate.
+
+### Claude is silent everywhere in the workspace
+
+**What you see**
+
+Mentions get no reaction and no reply in every channel and DM in the workspace, and nothing was changed on the Claude side.
+
+**What it means**
+
+Slack can revoke the Claude app's authorization for a workspace without any admin action and with no change on the Claude side.
+
+On Enterprise Grid, the organization-level install can lose its authorization the same way, and then every workspace in the Grid goes silent. See [Claude is silent everywhere on Enterprise Grid](#claude-is-silent-everywhere-on-enterprise-grid).
+
+**How to resolve**
+
+Reinstall the Claude app over the existing install to restore the lost authorization. Don't uninstall first, because uninstalling [deletes the workspace's Claude data](/docs/claude-tag/concepts/data-lifecycle#actions-in-slack).
+
+1. As a Slack workspace admin, open [Claude for Slack](https://claude.com/claude-for-slack) and select **Add to Slack**.
+2. Approve the consent screen Slack shows. If Slack shows **Unapproved permissions requested** instead of finishing the install, see [Unapproved permissions requested](#unapproved-permissions-requested).
+3. Mention `@Claude` anywhere in the workspace. If the reinstall worked, the mention gets a reaction and a reply. A reply that says the workspace isn't set up means the workspace needs to be paired with your Claude organization again; see [This workspace isn't set up for Claude Tag yet](#this-workspace-isn%E2%80%99t-set-up-for-claude-tag-yet).
+
+### Claude is silent everywhere on Enterprise Grid
+
+**What you see**
+
+Mentions get no reaction and no reply in every channel and DM across the Grid, and nothing was changed on the Claude side.
+
+**What it means**
+
+On Enterprise Grid, the Claude app's organization-level authorization can be revoked on Slack's side without anything changing in Claude. When it is, Claude never receives the mentions at all.
+
+**How to resolve**
+
+Reinstall over the existing app. Don't uninstall first; installing over the top is what carries your existing settings over.
+
+1. As a Slack org owner or org admin, sign into one of the Grid's workspaces, not the organization-level admin page. The install option only appears from inside a workspace.
+2. Open [Claude for Slack](https://claude.com/claude-for-slack), select **Add to Slack**, and choose **Install to entire organization**.
+3. Mention `@Claude` anywhere. If the reinstall worked, the mention gets a reaction and a reply. The pairing survives the reinstall, so a normal reply means you're done. A reply that says the workspace isn't set up means the pairing needs to be redone; see [This workspace isn't set up for Claude Tag yet](#this-workspace-isn%E2%80%99t-set-up-for-claude-tag-yet).
+
+### DMs never respond on Enterprise Grid
+
+**What you see**
+
+Channels in the paired workspace work normally, but some users' direct messages with Claude answer with a redirect to setup instructions, even after their account connects.
+
+**What it means**
+
+On Enterprise Grid, one-to-one direct messages follow each user's home workspace, not the workspace you paired. A user homed in a Grid workspace the pairing doesn't cover gets the setup redirect in DMs.
+
+**How to resolve**
+
+Pair the whole Grid rather than one workspace. When a Grid Org Owner or Org Admin sends `@Claude connect`, the reply includes two codes; redeem the one starting with `enterprise_` (not the `workspace_` one) in the pairing step. See [Pair on Enterprise Grid](/docs/claude-tag/admins/workspaces#pair-an-enterprise-grid).
+
+### This workspace isn't set up for Claude Tag yet
+
+**What you see**
+
+Claude replies to a mention:
+
+> This workspace isn't set up for Claude Tag yet. A workspace admin can run `@Claude connect`, or set it up here.
+
+The reply varies with the sender: someone who isn't a Slack workspace admin is told to ask their Claude workspace owner to run `@Claude connect`, without the settings link. In a channel shared across workspaces in an Enterprise Grid where none of the sharing workspaces is paired yet, the reply reads "None of the Slack workspaces this channel is shared with is set up for Claude Tag yet. A workspace admin can set one up here."
+
+**What it means**
+
+The Slack workspace hasn't been paired with a Claude organization, or, for the shared-channel form, none of the workspaces sharing the channel has.
+
+**How to resolve**
+
+Run [the pairing flow](/docs/claude-tag/admins/setup-overview#pair-your-slack-workspace). If the fix worked, a mention in the workspace gets a reply.
+
+### The legacy Claude in Slack bot is retired effective October 5, 2026
+
+**What you see**
+
+Claude replies to a mention in a channel with a notice that begins ":warning: The legacy Claude in Slack bot is retired effective October 5, 2026 and no longer responds in channels." and doesn't do what it was asked.
+
+**What it means**
+
+The workspace is paired with your Claude organization, but the channel's or workspace's **Claude Tag version** is set to **Legacy**. Since that date, the earlier app no longer answers in channels of a paired workspace.
+
+**How to resolve**
+
+Check the **Claude Tag version** on the **Advanced** tab of the channel's page, then of its workspace's page, at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag), and set it to **New**. **Inherit** works only when the workspace, or the **Slack** page above it, is set to **New**. See [Migrate from the earlier Claude in Slack](/docs/claude-tag/admins/migrate-from-earlier). The next mention in the channel gets a reply from Claude.
+
+### Using the legacy Claude in Slack bot. Ask your Claude workspace owner to enable Claude Tag.
+
+**What you see**
+
+Claude posts "Using the legacy Claude in Slack bot. Ask your Claude workspace owner to enable Claude Tag." as a short notice in the thread just before its first reply.
+
+**What it means**
+
+The earlier per-user Claude in Slack app answered a direct message instead of the new version. That happens when the Slack workspace isn't paired with a Claude organization that has Claude Tag turned on, or when the workspace's **Claude Tag version** is set to **Legacy**. In a workspace paired with your Claude organization, the earlier app no longer answers in channels; a channel set to Legacy gets the [retirement notice](#the-legacy-claude-in-slack-bot-is-retired-effective-october-5-2026) instead. Turning Claude Tag on needs an Owner of your Claude organization, not a Slack workspace owner.
+
+**How to resolve**
+
+An Owner turns on **Enable Claude Tag in Slack** at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag) and [pairs the workspace](/docs/claude-tag/admins/setup-overview#pair-your-slack-workspace). If the workspace is already paired, check the **Claude Tag version** on the **Advanced** tab of the workspace's page and set it to **New**; see [Migrate from the earlier Claude in Slack](/docs/claude-tag/admins/migrate-from-earlier). Once Claude Tag is on and the workspace is paired, the notice stops appearing.
+
+### Claude Tag is turned off for your organization
+
+**What you see**
+
+Claude replies to a mention:
+
+> Claude Tag has been turned off for your Claude organization (the one this Slack workspace is connected to). A Claude admin for that organization can turn it back on in Claude admin settings.
+
+The same reply appears on every surface: channel mentions, DMs, and `@Claude connect`. In a DM, the parenthetical instead names the organization your connected claude.ai account belongs to, because that's the organization whose setting failed the check.
+
+**What it means**
+
+The **Enable Claude Tag in Slack** switch is off in admin settings, or your organization isn't enabled for Claude Tag. The switch that matters is the one in the Claude organization the reply's parenthetical points to.
+
+An Owner may find that the switch can't be turned on, and that hovering over it shows "Your organization's policy doesn't allow changing this setting." In that case, a compliance configuration on your Claude organization is blocking Claude Tag, and an Owner can't turn it on, even though the reply says an admin can. [Plan and organization requirements](/docs/claude-tag/admins/healthcare#plan-and-organization-requirements), on the healthcare organizations page, lists the configurations under which Claude Tag isn't available.
+
+**How to resolve**
+
+If the switch can't be turned on, start at step 2. When the workspace is already paired to the intended organization, ask your account team about creating a separate Claude organization without that configuration, and connect your Slack workspace to it instead.
+
+1. An Owner turns on the **Enable Claude Tag in Slack** switch at [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag). If the switch was the problem, a mention in Slack now gets a normal reply.
+2. If the message persists, check which Claude organization the workspace is paired to. If your company has more than one (a trial organization alongside the main one, for example), an Owner in the wrong organization can [revoke the pairing](/docs/claude-tag/admins/workspaces#revoke-a-pairing) so you can pair the workspace to the right one.
+3. If the right organization has the switch on and the message persists, contact your account team to confirm Claude Tag is enabled for it.
+
+> [!WARNING]
+>
+> Revoking the pairing deletes the workspace's Claude data, including its memory, channel configurations, sessions, and the routines set up in its channels. The deletion can't be undone. See [Data lifecycle and deletion](/docs/claude-tag/concepts/data-lifecycle) for the full list of what's deleted.
+
+### Claude Tag is unavailable because Routines are not enabled
+
+**What you see**
+
+Claude replies to a mention or a DM:
+
+> Claude Tag is unavailable because Routines aren't enabled for your organization. Admins can manage Routines at claude.ai → Admin settings → Claude Code.
+
+In the message, "claude.ai → Admin settings → Claude Code" is a link to that settings page. When Claude can't check the setting in the moment, the reply reads "Couldn't verify your organization's settings right now. Please try again in a moment." instead.
+
+**What it means**
+
+Your organization doesn't have Routines enabled, which Claude Tag requires. Anyone who mentions Claude in a channel or DMs it gets this reply, and Claude does no work. The "Couldn't verify" reply means the check couldn't complete rather than that Routines is off.
+
+**How to resolve**
+
+An admin goes to [**Admin settings > Capabilities > Remote sessions**](https://claude.ai/admin-settings/capabilities) and turns on the **Routines** toggle. Once Routines is enabled for your organization, mention Claude again; a normal reply means the setting took effect. For the "Couldn't verify" reply, wait a moment and mention Claude again.
+
+### Restricted compliance settings block Claude Tag
+
+**What you see**
+
+Claude replies to a mention in a channel:
+
+> Claude isn't available for organizations with restricted compliance settings.
+
+In a DM with Claude, on the Claude app's **Home** tab, and in Slack's assistant panel, the message reads instead:
+
+> Claude in Slack is not available for your organization
+
+In a DM and in the assistant panel, that message is shown only to you and isn't kept in the conversation, while the **Home** tab continues to show it.
+
+Other Claude Tag actions in the same organization return similar messages that end with "not available for organizations with restricted compliance settings."
+
+**What it means**
+
+Your Claude organization has a restricted compliance configuration, such as Zero Data Retention (ZDR). Claude Tag retains channel memory and session transcripts, so it isn't available to organizations under that configuration; see [what Claude Tag retains](/docs/claude-tag/concepts/security-and-data).
+
+**How to resolve**
+
+1. In a channel, the message is about the organization the workspace is paired to. Check which Claude organization that is. If your company has more than one, such as a trial organization alongside the main one, the workspace may be paired to the wrong one; an Owner in that organization can [revoke the pairing](/docs/claude-tag/admins/workspaces#revoke-a-pairing) so you can pair the workspace to the right one.
+2. In a DM or on Claude's Home tab, the message is about the organization your own Claude account is connected to. If you also belong to a Claude organization without a restricted compliance configuration, click **Disconnect** on Claude's Home tab, then reconnect with that organization active.
+3. If the organization in question is the intended one, no setting lifts the restriction; Claude Tag isn't available to organizations under it. Contact your account team with questions about your organization's compliance configuration.
+
+### Claude is disabled in this channel
+
+**What you see**
+
+Claude replies in the channel:
+
+> Claude is disabled in this channel. Your admin can re-enable it here.
+
+Only the first sentence is fixed. A sender who isn't a Slack workspace admin is told to ask their Claude workspace owner to re-enable it, with a link to the Claude Tag product page instead of admin settings.
+
+**What it means**
+
+This channel's **Enable Claude Tag in this channel** switch is off, either set on the channel's page itself or inherited from its workspace, or from the **Slack** page, whose **Respond in all channels** switch is off. If the **Slack** page has a single [**Respond in channels** switch](/docs/claude-tag/admins/workspaces#turn-claude-tag-on-or-off-on-the-team-plan) instead of per-channel switches, the same notice means that switch is off, or the channel's workspace is switched off on its own.
+
+**How to resolve**
+
+An Owner or a [Claude Tag admin](/docs/claude-tag/admins/restrict-access#delegate-claude-tag-administration) turns the channel back on:
+
+1. Open [`claude.ai/admin-settings/claude-tag`](https://claude.ai/admin-settings/claude-tag).
+2. Under **Claude's access**, open the **Channels** tab and select the channel.
+3. On the **General** tab, turn on the **Enable Claude Tag in this channel** switch.
+
+If the switch is inherited from the **Slack** page, you can instead select the **Slack** row on the **Channels** tab and turn on **Respond in all channels** at the top of its **General** tab. That also turns Claude back on in every other channel that inherits the switch from the **Slack** page.
+
+If the **Slack** page has a single [**Respond in channels** switch](/docs/claude-tag/admins/workspaces#turn-claude-tag-on-or-off-on-the-team-plan) instead of per-channel switches, select the **Slack** row on the **Channels** tab and check that **Respond in channels** is on. If the fix worked, a mention in the channel gets a reply.
+
+## Access and connections
+
+Access and connection errors usually mean Claude responded but couldn't reach a connected service, a repository, or a capability the sender's seat doesn't include. A channel still set to **Legacy** replies with the [retirement notice](#the-legacy-claude-in-slack-bot-is-retired-effective-october-5-2026) rather than an access error.
+
+### Claude says a host isn't allowed or it can't reach the internet
+
+**What you see**
+
+Claude in a channel says a host isn't allowed, a network request was blocked, or it can't fetch a page, even though the request was ordinary HTTP.
+
+**What it means**
+
+A channel session's outbound network access is deny-by-default. A host is reachable when a connector or an [allowed domain](/docs/claude-tag/admins/add-connections#allow-a-host-without-a-credential) that applies to the channel allows it, or when the network access setting of the environment the scope's sessions run on allows it; anything else is blocked. Web search is separate and works regardless, so Claude can answer from search while being unable to fetch the same page; enabling web search in claude.ai admin settings doesn't open network access for channels. See [Web search vs. network requests](/docs/claude-tag/concepts/agent-identity#web-search-vs-network-requests).
+
+**How to resolve**
+
+* For specific hosts, [add each one as a domain](/docs/claude-tag/admins/add-connections#add-a-domain) that applies to the channel, for example with **Add > Domain** on the page of a bundle that applies there. A credential-bearing service belongs in a connector instead.
+* For broad access, pin an organization-scoped environment whose network access level is Full access in the **Environment** setting on the **Advanced** tab of the channel's, workspace's, or **Slack** page; see [the environment entry below](#channel-sessions-use-the-wrong-environment-or-can%E2%80%99t-find-one).
+
+Test in a new thread. If the fix worked, the fetch that failed succeeds there.
+
+### Claude started blocking actions that used to run, such as API calls from routines
+
+**What you see**
+
+Members report that in channel threads and [routine](/docs/claude-tag/users/proactivity) runs, Claude says a permission check blocked an action, and the blocked actions are ones it carried out before, such as calling an external API.
+
+**What it means**
+
+Channel sessions and routines run in [auto mode](https://code.claude.com/docs/en/permission-modes#eliminate-prompts-with-auto-mode), where Claude's permission checker reviews each action and can stop it. The checker runs on Claude Sonnet 5, even when the sessions and routines themselves run on a different model.
+
+On the Enterprise plan, an admin can turn a model off for the whole organization, and while Claude Sonnet 5 is off, the checker blocks actions it would otherwise allow. Actions that an [auto mode allow rule](/docs/claude-tag/admins/customize#auto-mode-allow-rules) names still run. For the setting and the models it affects, see [Models your organization allows](/docs/claude-tag/admins/customize#models-your-organization-allows).
+
+**How to resolve**
+
+An Owner or Admin turns Claude Sonnet 5 back on under **Model access** on the [**Models**](https://claude.ai/admin-settings/models) page. If members use [personal connectors](/docs/claude-tag/concepts/personal-connectors#admin-controls-for-personal-connectors) in channels, turn Claude Opus 5 on there too. Sessions and routines keep running on the models you chose for them, and auto mode allow rules you already added can stay.
+
+A routine picks up the change on its next run. If the fix worked, the next run of a routine that was blocked completes the API calls the checker was blocking.
+
+### A connection works in one channel but not another
+
+**What you see**
+
+Claude uses a connected service without trouble in one channel, and in another channel says it has no access to the same service.
+
+**What it means**
+
+Access is applied per place. The working channel gets the connector from its own page, its workspace, or a bundle that applies there; the failing one likely doesn't.
+
+**How to resolve**
+
+Apply the connector to the failing channel. Open the connector's page from the **Connectors** tab under **Claude's access**. Under **Assign access**, pick the credential in the **Access** column of the channel's workspace, or select **Add place** to add the channel, then select **Save changes**. See [Add a connector](/docs/claude-tag/admins/add-connections#add-a-connection). If a bundle holds the connector, add the channel to that bundle's **Where it applies** list instead. You can also move the work to a channel the connector already covers. Test in a new thread, or ask Claude to use the service by name in the existing one. If the fix worked, asking `@Claude what can you access from this channel?` in a new thread lists the service.
+
+### GitHub doesn't work in this channel
+
+**What you see**
+
+In the channel, Claude says it has no GitHub access or can't find a repository.
+
+**What it means**
+
+The cause is a repository that isn't granted to the channel, a stale thread, or a repository the GitHub App installation doesn't cover.
+
+**How to resolve**
+
+Go through these checks in order; the same checks, in the same order, apply when GitHub worked in a channel and then stopped.
+
+1. **The repository granted to this channel**: open the channel from the **Channels** tab under **Claude's access** and check that the repository is in its **Claude's access** table, whether added on the channel's page, inherited from its workspace or the **Slack** page, or held by a bundle that applies there. [Grant repository access](/docs/claude-tag/admins/configure-github#grant-repository-access) covers granting it, and [Attach the bundle to a scope](/docs/claude-tag/admins/attach-to-scope) covers how access inherits. Granting makes the repository available to clone, but the code doesn't enter a session until a request names it.
+2. **A fresh thread**: a new thread picks up every configuration change, so test in one before checking anything further. If the repository is granted, asking Claude to read a file from it works in a new thread.
+3. **The GitHub App installation covers the repository**: if Claude reports a repository isn't available, isn't configured, or returned a 403, check the installation, since the app's repository selection is upstream of the grant in Claude. At [`claude.ai/admin-settings/source-control`](https://claude.ai/admin-settings/source-control), the organization that owns the repository should show **Connected** in the **GitHub** section. If its row shows a **Needs permissions** status instead, the install is waiting on a GitHub organization owner. Click **Review permissions** to approve it on github.com. If you aren't a GitHub organization owner, click the **Not the GitHub owner? Send instructions** link on that page. In the dialog that opens, click **Copy message** to copy a request you can send to someone who is. If the organization isn't listed at all, install the app with the **Add organization** button beside the **GitHub** heading (it reads **Connect** until a GitHub account is connected); [Link your GitHub organization](/docs/claude-tag/admins/configure-github#link-your-github-organization) covers both.
+
+For GitHub Enterprise Server repositories, confirm [the GHE host is registered](/docs/claude-tag/admins/configure-github#github-enterprise-server) instead. The github.com App install doesn't cover them.
+
+### I hit an authentication error and couldn't finish this turn
+
+**What you see**
+
+Claude posts in the thread:
+
+> I hit an authentication error and couldn't finish this turn. This can be temporary (for example a GitHub rate limit) — mention me to retry in a few minutes. If it keeps happening, this session may lack access to a repository it needs, or its credentials or integration may need to be reconnected.
+
+**What it means**
+
+Claude's own request failed an authentication check partway through the turn, so it stopped, keeping the work done so far. The cause is usually temporary, such as a GitHub rate limit on the session's requests, and a retry a few minutes later clears it. When the message repeats, the session likely can't reach a repository it needs.
+
+This message doesn't point at a service you connected. When a connected service's credential fails, Claude reports that as a tool error inside its reply, not with this notice. A DM sender whose seat doesn't qualify for DMs gets [Your Claude account is connected, but it doesn't have access in this organization](#your-claude-account-is-connected-but-it-doesn%E2%80%99t-have-access-in-this-organization) instead.
+
+**How to resolve**
+
+Have the requester mention Claude in the same thread after a few minutes; the session picks up where it stopped. If the message repeats on every retry, check the repository access for that channel with the steps in [GitHub doesn't work in this channel](#github-doesn%E2%80%99t-work-in-this-channel), then start a new thread. If access checks out and the message still recurs, contact [Anthropic support](https://support.claude.com) with the channel and the time it happened.
+
+### Your Claude account is connected, but it doesn't have access in this organization
+
+**What you see**
+
+Claude replies in the DM:
+
+> Your Claude account is connected, but it doesn't have access in this organization yet, usually because it needs a seat that includes Claude Code. A Claude admin can add one in your organization's settings. Once they do, mention me here and I'll pick this back up.
+
+**What it means**
+
+One-to-one DMs run on the user's own claude.ai account and need a qualifying seat, which this user doesn't have. A seat that includes Claude Code always qualifies; on the Enterprise plan, a **Standard** or **Usage-Based Chat** seat also qualifies when the user has Cowork. Mentioning `@Claude` in a channel doesn't depend on the sender's seat.
+
+**How to resolve**
+
+Assign the user a qualifying seat on the **Members** page at [`claude.ai/admin-settings/members`](https://claude.ai/admin-settings/members), then have them mention Claude in the same DM thread. If the fix worked, the DM gets a reply instead of this message.
+
+## Session start errors
+
+Session start errors appear before any work begins. Some are transient and clear on retry; the rest point to capacity or environment configuration.
+
+### Still waiting for available capacity
+
+**What you see**
+
+Claude posts in the thread:
+
+> Still waiting for available capacity — your request is queued and will start automatically. Replies in this thread are picked up automatically.
+
+**What it means**
+
+The session was created and is still waiting for compute to run it. Why it waits differs between Anthropic-hosted and self-hosted [environments](/docs/claude-tag/admins/customize#configure-the-environment-for-a-scope).
+
+On an Anthropic-hosted environment, capacity is temporarily busy or the session is taking longer than usual to start, and the session normally starts on its own. If it never starts, Claude posts the [Session failed to start](#session-failed-to-start-the-session-container-never-connected) message instead.
+
+On a [self-hosted environment](https://code.claude.com/docs/en/self-hosted-environments), no runner has claimed the session yet. The session waits in the environment's queue until a runner claims it.
+
+**How to resolve**
+
+On an Anthropic-hosted environment, wait; no action is needed.
+
+On a self-hosted environment, use [Troubleshooting](https://code.claude.com/docs/en/self-hosted-environments-deploy#troubleshooting) in the self-hosted environments guide to find out why no runner is claiming the session. The queued session starts once a runner claims it.
+
+Either way, users should reply in the same thread if they have more to add, since starting a new thread only queues a second session behind the first.
+
+### Session failed to start: the session container never connected
+
+**What you see**
+
+Claude posts in the thread:
+
+> Session failed to start: the session container never connected — please try again
+
+**What it means**
+
+The session's compute container didn't come up in time. This is transient.
+
+**How to resolve**
+
+Mention Claude in the same thread to retry. If the retry worked, the session starts and Claude begins the task.
+
+### Something went wrong starting a session
+
+**What you see**
+
+Claude posts in the thread:
+
+> Something went wrong starting a session. Try again in a moment.
+
+When Claude can name the cause, it posts one of these instead:
+
+| Message | Cause |
+| - | - |
+| "That message didn't get through to Claude." | Requests arrived faster than Claude accepts them at that moment; wait a few seconds, then mention Claude again |
+| A message naming a specific repository that isn't available or isn't configured | The repository isn't granted for this channel; see [GitHub doesn't work in this channel](#github-doesn%E2%80%99t-work-in-this-channel) |
+| "That environment or repo isn't configured for Claude Code. Check claude.ai/code and try again." | The scope's pinned environment isn't set up; see [Channel sessions use the wrong environment](#channel-sessions-use-the-wrong-environment-or-can%E2%80%99t-find-one) |
+| "Claude is having trouble starting sessions right now. Try again in a minute." | The service that runs sessions is briefly unavailable; retry |
+| "You don't have permission to start a session here." | A permission check refused to start the session; when Claude knows which check failed, the message names it |
+| "Session failed to start: the environment's setup script exited with an error. Fix the setup script in your environment settings, then mention Claude in this thread to retry." | The setup script of the [environment the scope uses](/docs/claude-tag/admins/customize#configure-the-environment-for-a-scope) exited with an error; every session in that scope runs the same script at start, so fix the script, then mention Claude in the thread |
+
+**What it means**
+
+This is the catch-all for session-start failures that don't map to a more specific message, so the cause varies. It's usually transient.
+
+**How to resolve**
+
+Mention Claude again in the same thread before changing any configuration; the retry usually clears it. If a specific message from the table above appears instead, follow its row.
+
+### Channel sessions use the wrong environment, or can't find one
+
+**What you see**
+
+Sessions in a channel start on an environment you didn't expect, or session starts fail with the environment message from the table above.
+
+**What it means**
+
+Sessions run on the environment or runner pool set on the nearest scope above them, or on the organization's default environment when none is set; [Configure the environment for a scope](/docs/claude-tag/admins/customize#configure-the-environment-for-a-scope) covers the picker. The picker only lists environments scoped to the organization; an environment created under an individual account doesn't appear, because channel sessions run with no user account attached.
+
+**How to resolve**
+
+If the environment you want isn't in the picker, create it as an [organization-shared environment](https://code.claude.com/docs/en/cloud-environments#organization-shared-environments) from the **Cloud environments** page in [admin settings](https://claude.ai/admin-settings), then pin it on the scope. Don't create it at [`claude.ai/code`](https://claude.ai/code): environments you create there belong to your individual account, so they never appear in the picker. If the fix worked, a new thread's session runs on the pinned environment. See the [glossary entry on environments](/docs/claude-tag/concepts/glossary#environment).
+
+## Related resources
+
+* [Setup overview](/docs/claude-tag/admins/setup-overview): re-walk the setup steps if the failure points to one you skipped
+* [User troubleshooting](/docs/claude-tag/users/troubleshooting): for problems people hit in channels
+* [Give feedback](https://support.claude.com): when it's a bug, not a configuration issue

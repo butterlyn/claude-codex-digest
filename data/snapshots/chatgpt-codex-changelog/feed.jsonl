@@ -1,0 +1,153 @@
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-05-19", "published": "2025-05-19T00:00:00+00:00", "title": "Codex in the ChatGPT iOS app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-05-22", "published": "2025-05-22T00:00:00+00:00", "title": "Reworked environment page"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-06-03", "published": "2025-06-03T00:00:00+00:00", "title": "June update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-06-13", "published": "2025-06-13T00:00:00+00:00", "title": "Best of N"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-08-21", "published": "2025-08-21T00:00:00+00:00", "title": "Mid August update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-08-27", "published": "2025-08-27T00:00:00+00:00", "title": "Late August update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-09-15", "published": "2025-09-15T00:00:00+00:00", "title": "Introducing GPT-5-Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-09-23", "published": "2025-09-23T00:00:00+00:00", "title": "GPT-5-Codex in the API"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-10-06", "published": "2025-10-06T00:00:00+00:00", "title": "Codex is now GA"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-10-22", "published": "2025-10-22T00:00:00+00:00", "title": "Tag @Codex on GitHub Issues and PRs"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-10-30", "published": "2025-10-30T00:00:00+00:00", "title": "Credits on ChatGPT Pro and Plus"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-11-06", "published": "2025-11-06T00:00:00+00:00", "title": "GPT-5-Codex model update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-11-07", "published": "2025-11-07T00:00:00+00:00", "title": "Introducing GPT-5-Codex-Mini"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-11-13", "published": "2025-11-13T00:00:00+00:00", "title": "Introducing GPT-5.1-Codex and GPT-5.1-Codex-Mini"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-11-18", "published": "2025-11-18T00:00:00+00:00", "title": "Introducing GPT-5.1-Codex-Max"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-11-24", "published": "2025-11-24T00:00:00+00:00", "title": "Usage and credits fixes"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-12-04", "published": "2025-12-04T00:00:00+00:00", "title": "Introducing Codex for Linear"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-12-18", "published": "2025-12-18T00:00:00+00:00", "title": "Introducing GPT-5.2-Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2025-12-19", "published": "2025-12-19T00:00:00+00:00", "title": "Agent skills in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-01-14", "published": "2026-01-14T00:00:00+00:00", "title": "GPT-5.2-Codex API availability"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-01-22", "published": "2026-01-22T00:00:00+00:00", "title": "Custom prompts deprecated"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-01-23", "published": "2026-01-23T00:00:00+00:00", "title": "Team Config for shared configuration"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-01-28", "published": "2026-01-28T00:00:00+00:00", "title": "Web search is now enabled by default"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-02", "published": "2026-02-02T00:00:00+00:00", "title": "Introducing the Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-03-app", "published": "2026-02-03T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-04-app", "published": "2026-02-04T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-05", "published": "2026-02-05T00:00:00+00:00", "title": "Introducing GPT-5.3-Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-05-app", "published": "2026-02-05T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-06-app", "published": "2026-02-06T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-08-app", "published": "2026-02-08T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-09", "published": "2026-02-09T00:00:00+00:00", "title": "GPT-5.3-Codex in Cursor and VS Code"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-10-app", "published": "2026-02-10T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-12", "published": "2026-02-12T00:00:00+00:00", "title": "Introducing GPT-5.3-Codex-Spark"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-12-app", "published": "2026-02-12T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-17-app", "published": "2026-02-17T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-24-app", "published": "2026-02-24T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-26-app", "published": "2026-02-26T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-27-app", "published": "2026-02-27T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-02-28-app", "published": "2026-02-28T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-03-app", "published": "2026-03-03T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-04-app", "published": "2026-03-04T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-05", "published": "2026-03-05T00:00:00+00:00", "title": "Introducing GPT-5.4 in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-05-app", "published": "2026-03-05T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-11-app", "published": "2026-03-11T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-12-app", "published": "2026-03-12T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-16-app", "published": "2026-03-16T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-17", "published": "2026-03-17T00:00:00+00:00", "title": "Introducing GPT-5.4 mini in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-18-app", "published": "2026-03-18T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-19-app", "published": "2026-03-19T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-20-app", "published": "2026-03-20T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-24-app", "published": "2026-03-24T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-25", "published": "2026-03-25T00:00:00+00:00", "title": "Build and install plugins in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-03-25-app", "published": "2026-03-25T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-01-app", "published": "2026-04-01T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-07", "published": "2026-04-07T00:00:00+00:00", "title": "Codex model availability update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-09-app", "published": "2026-04-09T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-10-app", "published": "2026-04-10T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-12-app", "published": "2026-04-12T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-16-app", "published": "2026-04-16T00:00:00+00:00", "title": "Codex can now help with more of your work"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-20-app", "published": "2026-04-20T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-23", "published": "2026-04-23T00:00:00+00:00", "title": "GPT-5.5 and Codex app updates"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-04-24-app", "published": "2026-04-24T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-05", "published": "2026-05-05T00:00:00+00:00", "title": "Create Codex access tokens"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-05-app", "published": "2026-05-05T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-06", "published": "2026-05-06T00:00:00+00:00", "title": "Codex analytics governance docs update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-07", "published": "2026-05-07T00:00:00+00:00", "title": "Codex for Chrome"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-08-app", "published": "2026-05-08T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-11", "published": "2026-05-11T00:00:00+00:00", "title": "Expanded Auto-review documentation"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-13-app", "published": "2026-05-14T00:00:00+00:00", "title": "Work with Codex from anywhere"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-18-mobile", "published": "2026-05-18T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-21", "published": "2026-05-21T00:00:00+00:00", "title": "Appshots, goal mode, and more"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-25-mobile", "published": "2026-05-25T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-26", "published": "2026-05-26T00:00:00+00:00", "title": "GPT-5.3-Codex and GPT-5.2 deprecated"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-05-28-app", "published": "2026-05-29T00:00:00+00:00", "title": "Computer use and mobile access on Windows"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-01", "published": "2026-06-01T00:00:00+00:00", "title": "Use Codex with Amazon Bedrock"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-01-app", "published": "2026-06-01T00:00:00+00:00", "title": "Terminal placement controls"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-02", "published": "2026-06-02T00:00:00+00:00", "title": "Build and deploy websites with Sites"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-02-mobile", "published": "2026-06-02T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-04-app", "published": "2026-06-04T00:00:00+00:00", "title": "Codex app updates"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-09-app", "published": "2026-06-09T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-09-mobile", "published": "2026-06-09T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-11-app", "published": "2026-06-11T00:00:00+00:00", "title": "Usage resets and Browser Developer mode"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-15-mobile", "published": "2026-06-15T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-16-app", "published": "2026-06-16T00:00:00+00:00", "title": "More Codex features in the EEA, UK, and Switzerland"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-18-app", "published": "2026-06-18T00:00:00+00:00", "title": "Record & Replay and remote task handoff"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-22-mobile", "published": "2026-06-22T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-06-25", "published": "2026-06-25T00:00:00+00:00", "title": "Codex Remote reaches general availability"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-06-mobile", "published": "2026-07-06T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-09-app", "published": "2026-07-09T00:00:00+00:00", "title": "Codex joins the ChatGPT desktop app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-13-mobile", "published": "2026-07-13T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-20-mobile", "published": "2026-07-20T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-23-app", "published": "2026-07-23T00:00:00+00:00", "title": "ChatGPT Voice and multi-folder projects"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-27-mobile", "published": "2026-07-27T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-29", "published": "2026-07-29T00:00:00+00:00", "title": "Sign in with ChatGPT (beta)"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-30-app", "published": "2026-07-30T00:00:00+00:00", "title": "Browser upgrades, multi-repository review, and image editing"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-31", "published": "2026-07-31T00:00:00+00:00", "title": "GPT-5.4 and GPT-5.4 mini retire from Codex on August 31"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-07-31-app", "published": "2026-07-31T00:00:00+00:00", "title": "Record & Replay expands to the EU, UK, and Switzerland"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-03-mobile", "published": "2026-08-07T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-04-app", "published": "2026-08-04T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-06-app", "published": "2026-08-06T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-10-daybreak", "published": "2026-08-10T00:00:00+00:00", "title": "Introducing Daybreak Blue and Daybreak Red"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-11-app", "published": "2026-08-11T00:00:00+00:00", "title": "Linux desktop preview and agent imports"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-13-app", "published": "2026-08-13T00:00:00+00:00", "title": "Computer History"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-17-admin-csv", "published": "2026-08-17T00:00:00+00:00", "title": "Public plugin catalog CSV export"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-17-app", "published": "2026-08-17T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-17-mobile", "published": "2026-08-18T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-19-app", "published": "2026-08-19T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-19-gitlab", "published": "2026-08-19T00:00:00+00:00", "title": "GitLab support in Codex cloud (Beta)"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-20-app", "published": "2026-08-20T00:00:00+00:00", "title": "Codex and ChatGPT updates"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-24", "published": "2026-08-24T00:00:00+00:00", "title": "Codex MCP server command deprecated"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-25-browser", "published": "2026-08-25T00:00:00+00:00", "title": "Browser extensions, site tools, and cloud sign-in"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-25-event-triggers", "published": "2026-08-25T00:00:00+00:00", "title": "Trigger scheduled tasks from Gmail, Slack, and GitHub events"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-25-mobile", "published": "2026-08-26T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-27-app", "published": "2026-08-27T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-08-31-app", "published": "2026-08-31T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-02-app", "published": "2026-09-02T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-02-mobile", "published": "2026-09-01T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-05", "published": "2026-09-05T00:00:00+00:00", "title": "Codex MCP server removed"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-08-app", "published": "2026-09-08T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-08-mobile", "published": "2026-09-08T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-11-app", "published": "2026-09-11T00:00:00+00:00", "title": "Quick chats with Pets and Appshots on Windows"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-14-codex-spark-deprecation", "published": "2026-09-14T00:00:00+00:00", "title": "GPT-5.3-Codex-Spark deprecated"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-14-gpt-55-retirement", "published": "2026-09-14T00:00:00+00:00", "title": "GPT-5.5 retires from ChatGPT, ChatGPT Work, and Codex on October 14"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-16-app", "published": "2026-09-16T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-17-app", "published": "2026-09-17T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-18-mobile", "published": "2026-09-18T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-22-app", "published": "2026-09-22T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-22-gpt-6-sol-luna", "published": "2026-09-22T00:00:00+00:00", "title": "GPT-6 Sol and Luna in Codex and ChatGPT Work"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-23-mobile", "published": "2026-09-23T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-25-app", "published": "2026-09-25T00:00:00+00:00", "title": "macOS security update"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-29-app", "published": "2026-09-29T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-09-29-gpt-61-sol", "published": "2026-09-29T00:00:00+00:00", "title": "GPT-6.1 Sol in Codex and ChatGPT Work"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-01-app", "published": "2026-10-01T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-02-mobile", "published": "2026-10-02T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-07-app", "published": "2026-10-07T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-07-mobile", "published": "2026-10-07T00:00:00+00:00", "title": "ChatGPT for iOS"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-08-app", "published": "2026-10-08T00:00:00+00:00", "title": "Codex app"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-08-gpt-61-sol-ultrafast", "published": "2026-10-08T00:00:00+00:00", "title": "GPT-6.1 Sol Ultrafast in Codex and ChatGPT Work"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-09-composer-predictions", "published": "2026-10-09T00:00:00+00:00", "title": "Composer predictions in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#codex-2026-10-14-gpt-55-retirement", "published": "2026-10-14T00:00:00+00:00", "title": "GPT-5.5 retirement in Codex"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-396234532", "published": "2026-09-25T00:00:00+00:00", "title": "Codex CLI Release: 0.157.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-397006677", "published": "2026-09-26T00:00:00+00:00", "title": "Codex CLI Release: 0.157.1"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-397962047", "published": "2026-09-28T00:00:00+00:00", "title": "Codex CLI Release: 0.158.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-398926954", "published": "2026-09-29T00:00:00+00:00", "title": "Codex CLI Release: 0.159.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-399499631", "published": "2026-09-29T00:00:00+00:00", "title": "Codex CLI Release: 0.159.1"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-399607589", "published": "2026-09-29T00:00:00+00:00", "title": "Codex CLI Release: 0.159.2"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-400492869", "published": "2026-09-30T00:00:00+00:00", "title": "Codex CLI Release: 0.159.3"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-401312540", "published": "2026-10-01T00:00:00+00:00", "title": "Codex CLI Release: 0.160.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-404001397", "published": "2026-10-05T00:00:00+00:00", "title": "Codex CLI Release: 0.160.1"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-405921402", "published": "2026-10-07T00:00:00+00:00", "title": "Codex CLI Release: 0.161.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-407151970", "published": "2026-10-08T00:00:00+00:00", "title": "Codex CLI Release: 0.162.0"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-408271623", "published": "2026-10-09T00:00:00+00:00", "title": "Codex CLI Release: 0.162.1"}
+{"key": "https://developers.openai.com/codex/changelog/#github-release-414286110", "published": "2026-10-15T00:00:00+00:00", "title": "Codex CLI Release: 0.163.0"}

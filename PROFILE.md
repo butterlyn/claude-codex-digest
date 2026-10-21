@@ -27,13 +27,15 @@ HTTP (Markdown twins, RSS, sitemaps).
 | Claude plans | claude.com/pricing | page text, diffed | R2.1: plans and usage limits |
 | Codex docs | ~200 pages on learn.chatgpt.com/docs (developers.openai.com/codex redirects here) | page list from the Codex `llms.txt`, each page's `.md` twin, diffed | R1.2: silent docs changes |
 | ChatGPT & Codex changelog | the official changelog feed | RSS | R2.1: Codex and the ChatGPT apps |
-| Codex CLI releases | release notes for openai/codex | GitHub releases API (free; pre-releases skipped) | R2.1: Codex CLI flags and commands only appear here |
 | OpenAI news | openai.com/news | RSS | R2.1: company news and blogs |
 
 Left out, and why:
 - **help.openai.com** (ChatGPT release notes, the Codex changelog article) and **openai.com**
   pages refuse automated requests (HTTP 403). The ChatGPT & Codex changelog feed carries the
   same changes.
+- **Codex CLI GitHub releases**: a Claude session can't reach GitHub repos other than this
+  one. The ChatGPT & Codex changelog feed carries the CLI releases (0.163.0 came through it on
+  the first run), and the Codex CLI and config reference pages are diffed.
 - **Claude API docs and release notes**: not one of the surfaces I use.
 - **Communities** (GitHub issues, Reddit, HN): official sources only.
 
@@ -50,7 +52,7 @@ Left out, and why:
   Markdown formatting and link targets are removed is dropped. One-word changes are **not**
   dropped in code, because a changed default can be one word.
 - Bug-fix-only releases: a changelog version whose every bullet is a fix, or whose whole note is
-  a stock "Bug fixes and reliability improvements", is dropped. Codex CLI pre-releases are skipped.
+  a stock "Bug fixes and reliability improvements", is dropped.
 - Engagement floor: none (official sources have no votes).
 - Caps: at most 400 pages per docs site per run; more than 300 changes on one source at once
   become a single rollup item; at most 400 decision calls and 250 items read per run.

@@ -1,0 +1,121 @@
+# Code in Claude Desktop on 3P
+
+> How Claude Desktop on 3P configuration applies to the embedded Claude Code engine
+
+Code in Claude Desktop on third-party (3P) is the embedded [Claude Code](https://code.claude.com/docs/en/overview) interface. It runs the same Claude Code engine as the standalone CLI, with a graphical session manager, and it inherits your Claude Desktop on 3P configuration automatically.
+
+## How configuration propagates
+
+When the app starts a Code session, it translates your Claude Desktop on 3P [configuration keys](/docs/third-party/claude-desktop/configuration) into the equivalent Claude Code settings and passes them to the session. You configure one profile, and Cowork and Code both honor it.
+
+Each key reaches Claude Code through one of two mechanisms, and the distinction matters if you also deploy Claude Code's own managed settings (see [the next section](#interaction-with-claude-code%E2%80%99s-own-managed-settings)).
+
+### Always applied
+
+These keys are passed directly to the Claude Code process as environment variables or launch options. They take effect on every Code session and cannot be overridden by user-level Claude Code settings or by a separately deployed `managed-settings.json`.
+
+| Claude Desktop on 3P key | Effect in Code sessions |
+| - | - |
+| `inferenceProvider` and all provider credential keys (`inferenceGateway*`, `inferenceAnthropicApiKey`, `inferenceVertex*`, `inferenceBedrock*`, `inferenceFoundry*`, `inferenceCredentialHelper*`) | Selects the inference backend and supplies credentials. Code sessions use the same provider, endpoint, and credentials as Cowork sessions. |
+| `inferenceModels` | Populates the model picker. The first entry is the default for new Code sessions. |
+| `autoModeEnabled` | Controls **Auto mode**. When the key is not set, Code sessions offer Auto mode and new sessions start in it unless the user has already chosen another mode or a Claude Code `permissions.defaultMode` applies. Set it to `false` to remove Auto mode from Code and Cowork. Set it to `true` to also offer **Automatically approve** in Cowork. A separately deployed Claude Code managed-settings file that sets `disableAutoMode` to `"disable"` overrides this key and keeps Auto mode hidden; see below. |
+| `scheduledTasksEnabled` | When `false`, the routines list in Code is hidden and Code sessions start without Claude Code's in-session scheduling tools, so the `/loop` command cannot schedule recurring work. Cowork's scheduled tasks are turned off by the same key. |
+| `disabledBuiltinTools` | Removes the listed tools from Code sessions. Tools your provider does not support, such as WebSearch on Amazon Bedrock, are removed automatically in addition to your list. |
+| `builtinToolPolicy` | Tools set to `"ask"` require approval on each call in Code sessions, enforced via a PreToolUse hook and Claude Code `permissions.ask` rules. Argument-scoped rules such as `Bash(curl *)` are [applied as managed policy](#applied-as-managed-policy) instead. |
+| `disableBypassPermissionsMode` | Removes bypass permissions mode. The app stops offering the mode and starts a session that requests it in a stricter permission mode instead, independent of Claude Code managed-settings precedence. The key requires Claude Desktop 1.46388.1 or later. A separately deployed Claude Code managed-settings file that sets `permissions.disableBypassPermissionsMode` to `"disable"` removes the mode as well. |
+| `skipWebFetchPreflight` | Turns off Claude Code's Web Fetch [domain check](/docs/third-party/claude-desktop/web-tools#web-fetch) against `api.anthropic.com`. A separately deployed Claude Code managed-settings file that sets `skipWebFetchPreflight` takes precedence. |
+| `managedMcpServers` | Makes the same managed MCP servers available in Code sessions. The app handles the connection and authentication; the Code session sees only the resulting tool list. |
+| `mcpToolTimeoutSec` | Applies your per-call MCP tool timeout to Code sessions as well, taking precedence over a user-set `MCP_TOOL_TIMEOUT`. |
+| `organizationInstructions` | Appended to the Code session's system prompt after Claude Code's own. `CLAUDE.md` instructions still apply. |
+| `otlpEndpoint`, `otlpProtocol`, `otlpHeaders`, `otlpResourceAttributes` | Routes Claude Code's OpenTelemetry metrics and logs to your collector. See [Telemetry](/docs/third-party/claude-desktop/telemetry). |
+| `disableEssentialTelemetry`, `disableNonessentialTelemetry` | Disables Claude Code's crash reporting and usage telemetry to Anthropic, mirroring Cowork. |
+| `disableAutoUpdates` | The embedded Claude Code engine never self-updates regardless of this key; its version is managed by the app's own updater. |
+| `inferenceMaxTokensPerWindow`, `inferenceTokenWindowHours` | The token budget is shared across Cowork and Code sessions and enforced before each turn. |
+
+[`mcpPersistentAlwaysAllowEnabled`](/docs/third-party/claude-desktop/configuration#mcppersistentalwaysallowenabled) also applies to Code sessions. When it's `false`, the approval prompt for an MCP tool offers **Allow for this session** in place of **Always allow**, and the approval isn't saved to Claude Code's settings files. Allow rules already in those files, and hooks, keep allowing the tool until someone removes them. For scheduled tasks, see [Tool approvals on scheduled tasks](/docs/third-party/claude-desktop/configuration#tool-approvals-on-scheduled-tasks).
+
+### Applied as managed policy
+
+These keys are translated into Claude Code [managed settings](https://code.claude.com/docs/en/settings#settings-files) and supplied to the session as policy. They take precedence over user and project settings, but they participate in Claude Code's managed-settings precedence if you have also deployed a separate Claude Code policy.
+
+| Claude Desktop on 3P key | Claude Code policy it produces |
+| - | - |
+| `coworkEgressAllowedHosts` | A network sandbox restricted to your hosts, `allowManagedDomainsOnly`, and `WebFetch` allow rules for the same hosts, which [don't block other hosts](/docs/third-party/claude-desktop/web-tools#how-the-egress-allowlist-applies-in-code-sessions). Claude Code's own inference and telemetry connections run outside the sandbox. A shell command or [HTTP hook](https://code.claude.com/docs/en/hooks#http-hook-fields) that calls your inference provider, `api.anthropic.com`, or your OTLP collector needs that host in the list. |
+| `allowedWorkspaceFolders` | A filesystem sandbox for shell commands, which can then create or change files only inside your allowed roots and the session's temporary locations. The sandbox does not restrict which files those commands read unless you also set `blockReadsOutsideWorkingDirectories`. The roots are also passed as `additionalDirectories` at launch, which is always applied independent of managed-settings precedence, and the app keeps Claude's file tools inside the roots. The app also refuses to start a Code session outside an allowed root. |
+| `blockReadsOutsideWorkingDirectories` | Claude Code's `permissions.blockReadsOutsideWorkingDirectories` for Code sessions. Claude's file tools refuse to read outside the working directories (the session's folder plus your allowed roots, if any) in every permission mode. Where the sandbox from `allowedWorkspaceFolders` or `coworkEgressAllowedHosts` is running, it also hides the user's home directory and similar locations, such as other users' home folders and mounted volumes, from shell commands, so a sandboxed command that reads there fails without a prompt. Without a running sandbox, a shell command that reads outside the working directories, or that Claude Code cannot analyze, asks the user for approval first, even in bypass permissions mode. The key requires Claude Desktop 1.46388.1 or later. The block takes effect only in sessions that run Claude Code v2.1.257 or later; if the app cannot install its current Claude Code engine and a session runs one older than v2.1.257 that is still on the device, that session runs without the block and the app logs a warning. |
+| `managedMcpServers` | `strictPluginOnlyCustomization` set to `["mcp"]`, so the Code session does not load MCP servers that users define on Claude Code's side (`~/.claude.json`, a project's `.mcp.json`, or `claude mcp add`); your managed servers, which the app connects and supplies to the session itself, and MCP servers bundled in plugins still load. When [`isLocalDevMcpEnabled`](/docs/third-party/claude-desktop/configuration#islocaldevmcpenabled) is `false`, the app also sets an `allowedMcpServers` list that admits only remote servers, with `allowManagedMcpServersOnly`, so local (stdio) servers bundled in plugins from marketplaces or that users install themselves are refused, while those plugins' remote servers still connect. Per-tool `toolPolicy` values on each server are emitted as `permissions.deny` (for `blocked`) or `permissions.ask` (for `ask`) rules against the corresponding `mcp__<server>__<tool>` names. |
+| `allowedPluginMcpServers` | `strictPluginOnlyCustomization` set to `["mcp"]` together with an `allowedMcpServers` list holding your entries and `allowManagedMcpServersOnly`, whether or not `managedMcpServers` is set. MCP servers bundled in plugins from marketplaces, or in plugins users install themselves, connect only when their URL matches an entry; no such plugin's local (stdio) server is admitted, and an empty list admits none. Your managed servers and the servers from the organization plugins directory still load. |
+| `deniedPluginMcpServers` | The app sets a `deniedMcpServers` list holding your entries, whether or not `allowedPluginMcpServers` is set. When the key is unset or its list is empty, the app sets no `deniedMcpServers` list. When the value is not a list, or holds an entry that the app can't read, the app sets a list whose one entry is `*`, a pattern that matches every URL. See the [`deniedPluginMcpServers` reference](/docs/third-party/claude-desktop/configuration#deniedpluginmcpservers) for what the setting does and what an entry matches. |
+| `userPluginMarketplacesEnabled` | When `false`, a `strictKnownMarketplaces` allowlist. See [Controlling user extensions](/docs/third-party/claude-desktop/extensions#controlling-user-extensions) for what the key does. |
+| `builtinToolPolicy`, argument-scoped rules such as `Bash(curl *)` | A `permissions.ask` rule for each rule set to `"ask"`. |
+
+The network and filesystem sandboxes apply on macOS, and on Linux devices and [SSH hosts](/docs/third-party/claude-desktop/ssh-remote-sessions#managed-configuration-on-the-remote-host) with Claude Code's [sandbox dependencies](https://code.claude.com/docs/en/sandboxing) installed. Claude Code doesn't sandbox shell commands on Windows devices, and on a Linux device or SSH host without the dependencies commands run unsandboxed. In those cases, and when `coworkEgressAllowedHosts` contains `*` and `allowedWorkspaceFolders` is unset, `blockReadsOutsideWorkingDirectories` still confines Claude's file tools but can only ask the user to approve shell commands that read outside the working directories or that Claude Code can't verify. For what a remote session shows, see [Sandbox status on the remote host](/docs/third-party/claude-desktop/ssh-remote-sessions#sandbox-status-on-the-remote-host).
+
+> [!WARNING]
+>
+> Shell commands that run unsandboxed can reach hosts outside `coworkEgressAllowedHosts` and change files outside `allowedWorkspaceFolders`. Where the sandbox runs, a command that matches [`sandbox.excludedCommands`](https://code.claude.com/docs/en/sandboxing#run-commands-outside-the-sandbox-with-excludedcommands) in the user's own Claude Code settings also runs outside it, after Claude Code's regular permission flow. To keep Code off devices where the sandbox can't run, [turn off Code](#disabling-code) in the configuration you deploy to them. For SSH hosts, see [Sandbox status on the remote host](/docs/third-party/claude-desktop/ssh-remote-sessions#sandbox-status-on-the-remote-host).
+
+Under `blockReadsOutsideWorkingDirectories`, sandboxed shell commands can still read system locations such as `/usr`, the session's plugin and attachment folders (which become read-only), and the user's git configuration files (`~/.gitconfig` and the `config`, `ignore`, and `attributes` files under `~/.config/git`), which can themselves hold credentials such as tokens in remote URLs. Other files under the home folder outside the working directories are hidden from them, including `~/.ssh`, stored git credentials, included git configuration files, signing keys, and the target of a symlinked git configuration file, so git operations that need those files fail in the session until the user re-opens the paths. In a local session Claude also cannot read a file attached or `@`-mentioned from outside the working directories, so users should move such files into the session's folder or an allowed folder first.
+
+An allowed root that is or contains the home directory, such as `~` or `/Users`, leaves the home directory readable, so list folders below it. The block guards against content a session reads steering Claude into the user's files, not against the user, who can re-open any path, up to their whole home folder, with `sandbox.filesystem.allowRead` (shell commands) or `permissions.additionalDirectories` (file tools and shell commands) in their own Claude Code settings, while a settings file tracked in a git repository cannot.
+
+## Interaction with Claude Code's own managed settings
+
+Claude Code can also be configured directly by deploying a [`managed-settings.json` file](https://code.claude.com/docs/en/settings#settings-files), an OS configuration profile for Claude Code, or, with the Claude API as the inference provider, [server-managed settings](https://code.claude.com/docs/en/server-managed-settings). If a Code session has any of these, Claude Code treats it as the administrator policy and, by default, **ignores** the policy values Claude Desktop supplies from the [Applied as managed policy](#applied-as-managed-policy) table. The [Always applied](#always-applied) keys are unaffected.
+
+To have Claude Desktop's restrictions apply on top of your Claude Code policy, set `parentSettingsBehavior` to `"merge"` in the Claude Code managed settings you deploy:
+
+```json managed-settings.json theme={null}
+{
+  "parentSettingsBehavior": "merge"
+}
+```
+
+With `"merge"`, Claude Desktop's policy values are layered under your Claude Code policy. Your values win any conflict, deny and allow lists are unioned, and Claude Desktop's values are filtered so they can only tighten policy, never loosen it. See [`parentSettingsBehavior`](https://code.claude.com/docs/en/settings-reference#parentsettingsbehavior) in the Claude Code settings reference. Requires Claude Code v2.1.133 or later, which ships with Claude Desktop on 3P.
+
+With `"merge"`, two Claude Code policy keys weaken `blockReadsOutsideWorkingDirectories`. `sandbox.filesystem.allowManagedReadPathsOnly` limits the block to Claude's file tools, so a shell command that reads outside the working directories asks for approval instead of failing, and `allowManagedPermissionRulesOnly` removes the session's read access to its plugin and attachment folders, so skills that read their own files stop working. Leave both out of your Claude Code policy if you rely on the block.
+
+> [!NOTE]
+>
+> With the [Claude API](/docs/third-party/claude-desktop/claude-api) as the inference provider, Code sessions ask Anthropic for the server-managed settings of [the organization that owns the credential](https://code.claude.com/docs/en/server-managed-settings#platform-availability). This holds for an API key in your configuration, an API key from a credential helper, and **Sign in with Claude Console**. If that organization has server-managed settings, set [`parentSettingsBehavior`](https://code.claude.com/docs/en/managed-settings#let-an-embedding-host-add-policy) to `"merge"` in them to keep Claude Desktop's [policy values](#applied-as-managed-policy). While server-managed settings apply, Claude Code by default [ignores most keys](https://code.claude.com/docs/en/managed-settings#how-claude-code-combines-managed-sources) in a file or OS profile on the device, and a `"merge"` set there has no effect.
+>
+> Without a Claude Code `managed-settings.json` file, OS profile, or server-managed settings, Claude Desktop's policy applies automatically and you don't need to set `parentSettingsBehavior`.
+
+## Claude Code mods
+
+Code sessions support Claude Code [mods](https://code.claude.com/docs/en/plugins/mods/overview), code that a plugin runs inside Claude Code, and users can load their own. To stop users' own mods from loading in local Code sessions, deploy this Claude Code managed-settings file on each device:
+
+```json managed-settings.json theme={null}
+{
+  "parentSettingsBehavior": "merge",
+  "pluginConfigs": {
+    "cc-plugin-sec-default@builtin": {
+      "options": {
+        "allowManagedModsOnly": true
+      }
+    }
+  }
+}
+```
+
+* **Keep `parentSettingsBehavior`.** Without it, Claude Code ignores the sandbox and the other [managed policy](#applied-as-managed-policy) values that Claude Desktop supplies.
+* **Leave out `disableSideloadFlags`**, which a longer sample in the Claude Code docs includes. With it, Code sessions start without the skills and organization plugins that Claude Desktop delivers.
+* **Optionally, remove the `/plugin-authoring` command**, which has Claude write a mod. Add `"enabledPlugins": { "cc-plugin-plugin-authoring@builtin": false }` to the file.
+
+[Manage mods for your organization](https://code.claude.com/docs/en/plugins/mods/admin) covers the other controls. For sessions on an SSH host, see [Managed configuration on the remote host](/docs/third-party/claude-desktop/ssh-remote-sessions#managed-configuration-on-the-remote-host).
+
+## Remote sessions over SSH
+
+A Code session can run its Claude Code engine on a remote host over SSH while the session's interface stays in Claude Desktop on the user's device. In a 3P deployment this is off until you set [`sshHostAllowlist`](/docs/third-party/claude-desktop/configuration#sshhostallowlist), because the app forwards the session's inference credential to the host. [SSH remote sessions](/docs/third-party/claude-desktop/ssh-remote-sessions) lists the credential kinds that work on a remote host and which of the keys above apply there.
+
+## Further reading
+
+* [Claude Code settings reference](https://code.claude.com/docs/en/settings-reference)
+* [Claude Code sandboxing](https://code.claude.com/docs/en/sandboxing)
+* [Settings precedence](https://code.claude.com/docs/en/settings#settings-precedence)
+
+## Disabling Code
+
+To turn off Code, set `isClaudeCodeForDesktopEnabled` to `false` in your Claude Desktop on 3P configuration. Users can no longer open Code. Cowork is unaffected, and so is [Chat](/docs/third-party/claude-desktop/chat#configuration) if you have enabled it.
+
+If you set `desktopHome` to `off`, keep Code on. For what `desktopHome` does, see [Unified Claude](/docs/third-party/claude-desktop/unified-claude).

@@ -103,10 +103,6 @@ SOURCES: list[Source] = [
         "https://learn.chatgpt.com/docs/changelog/rss.xml",
     ),
     Source(
-        "codex-cli-releases", "Codex CLI", "Codex", "github_releases",
-        "https://github.com/openai/codex/releases", {"repo": "openai/codex"},
-    ),
-    Source(
         "openai-news", "OpenAI news", "News & guides", "rss",
         "https://openai.com/news/rss.xml",
     ),

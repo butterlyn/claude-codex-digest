@@ -1,0 +1,75 @@
+# Connectors and skills
+
+> Connectors give Claude access to external data sources during an analysis.
+
+Connectors give Claude access to external data sources during an analysis. Skills are written instructions Claude loads when relevant, covering how to run a method, which tools to use, and what to verify. Both are managed in Settings and apply across all projects.
+
+## Featured connectors
+
+Claude Science includes Featured connectors to public research databases, most of them in the life sciences. They're on by default and can be turned off individually in **Settings > Connectors**. On Team and Enterprise plans, your organization can also turn individual Featured connectors off for everyone, and in organizations with HIPAA compliance enabled they start off until an admin turns them on. A connector your organization has off stays listed, grayed, and Claude can't use it (see [Featured connectors and skills](/docs/claude-science/admin-controls#featured-connectors-and-skills)). Featured connectors are read-only and don't require an account or key, except that the Literature Graph needs a free OpenAlex API key to search OpenAlex (see [Available credentials](/docs/claude-science/literature-access#available-credentials)). Some underlying databases have non-commercial or attribution terms; review each source's license for your use case.
+
+| Connector | Sources |
+| - | - |
+| Genomes | Ensembl (incl. VEP) |
+| Genes & Ontologies | MyGene, UniProt, GO, Reactome, OLS |
+| Variants | gnomAD, ClinVar, dbSNP |
+| Human Genetics | GWAS Catalog, FinnGen, BioBank Japan |
+| Clinical Genomics | ClinGen, CIViC, Open Targets |
+| Expression | GTEx |
+| Regulation | JASPAR, UniBind |
+| Protein Annotation | InterPro, Pfam, Human Protein Atlas, STRING |
+| Structures & Interactions | PDB, AlphaFold, EMDB, Complex Portal, IntAct |
+| RNA | Rfam |
+| Omics Archives | GEO, ArrayExpress, PRIDE, MGnify, MetaboLights |
+| Cancer Models | cBioPortal |
+| Chemistry | PubChem, ChEBI, Rhea, BindingDB |
+| Drug Regulatory | FDA drug data, openFDA |
+| Literature Graph | OpenAlex, arXiv |
+| Research Resources | Grants.gov, Antibody Registry |
+
+Additional Featured connectors: **BioMart**, **CellGuide** (CELLxGENE cell types), **ZINC** (purchasable chemical space), and **Ketcher Chemistry** (2D molecule sketcher).
+
+Four Directory connectors are available from the [connector directory](https://claude.com/connectors) and are accessible in Claude Science and other Claude products: **PubMed**, **Clinical Trials**, **ChEMBL**, and **bioRxiv**. On Team and Enterprise plans, directory connectors appear only once they're added for your organization.
+
+By choosing to enable connectors, you represent that you have the necessary rights to access these resources and you authorize Claude to do so on your behalf. You can review their terms in Settings. On Team and Enterprise plans, an admin in your organization gives this authorization for the team when turning Claude Science on and choosing which connectors members can use, and you remain responsible for complying with those terms.
+
+## Using connectors
+
+Name a source in your request, or describe what you need and Claude chooses from available connector tools. Connector queries appear in the conversation as expandable code steps. Featured connectors you've previously enabled run without a permission card. Connectors you add yourself, and connectors that your organization's plugins add, prompt for approval per tool, with Once, This conversation, This project, or Global scope.
+
+The databases behind Featured connectors are on the network allowlist in groups under Settings > Network. Turning off a group disables the connectors that depend on it.
+
+## When the connector you need isn't listed
+
+Connectors you've added in claude.ai, and ones your organization has added for you, also appear in Claude Science under **Settings > Connectors**. If one needs a sign-in, the app opens claude.ai, where you connect it with your own account.
+
+If what you need still isn't there, try these:
+
+* **Ask Claude first.** Many public databases and tools work without a connector, because the code Claude runs can reach websites directly. The first time Claude needs a new site, a permission card asks you to allow it. If your organization manages the list of allowed sites, ask an admin to add it. See [Sandbox](/docs/claude-science/core-concepts#sandbox).
+* **Add one from the Connectors Directory.** Go to **Settings > Connectors > Add connector > Browse Connectors Directory**, which opens the directory in claude.ai. On Pro and Max plans, add the connector there and it appears in Claude Science. On Team and Enterprise plans, you may be able to add it yourself; if not, an admin can add it for your organization. On a Team plan, select **Request** on the connector's listing to ask your admins.
+* **Add one yourself.** If the tool's maker gives you a web address for its connector (sometimes called an MCP server URL), go to **Settings > Connectors > Add connector > Remote URL** and paste it in. If the maker gives you a command to run instead, choose **Local command** and enter it there. On Team and Enterprise plans, this works only if your organization allows custom connectors. See [Custom connectors](/docs/claude-science/custom-connectors).
+* **Ask the tool's maker.** If no connector exists yet, ask them to build one and [submit it to the Connectors Directory](/docs/connectors/building/submission).
+
+Admins can find the full set of options in [Add a connector your organization needs](/docs/claude-science/admin-controls#add-a-connector-your-organization-needs).
+
+## Skills
+
+**Settings > Skills** lists the skills Claude can load. Featured science skills include literature review, indication dossier, and model-specific skills for AlphaFold2, Boltz-2, Chai-1, ESMFold2, OpenFold3, ProteinMPNN (with LigandMPNN and SolubleMPNN), DiffDock, ESM-2, Evo 2, Borzoi, scGPT, and scvi-tools.
+
+The AlphaFold2, Boltz-2, Chai-1, and OpenFold3 skills can build sequence alignments on the public ColabFold server (api.colabfold.com), and AlphaFold2 and Boltz-2 do so unless you supply your own alignment files. When a skill uses that server, the job sends your protein sequences to it directly from the computer or your own compute, not through Anthropic.
+
+Claude loads a skill automatically when the work calls for it. Type **/** in the composer to open the skill picker and insert one explicitly. On Team and Enterprise plans, your organization can turn individual Featured skills off; a skill it has off stays listed, grayed, and Claude doesn't load it.
+
+**Add skill** lets you create your own via **Chat with Claude**, **Write from scratch**, **Upload a skill**, or **Import from GitHub**. You can also ask Claude to distill a workflow from an existing session into a skill. On Team and Enterprise plans, adding skills of your own is available only if your organization allows custom skills; skills you added earlier keep working either way (see [Custom skills](/docs/claude-science/admin-controls#custom-skills)).
+
+**Import from GitHub** works with private repositories too, once you add a GitHub token under **Settings > Credentials**. An import has two 100 MB limits, one on the repository's download from GitHub and one on the combined size of its skill folders.
+
+Your admin can also add skills for your organization from claude.ai. See [Organization skills](/docs/claude-science/admin-controls#organization-skills).
+
+### Update skills imported from GitHub
+
+Skills you import from GitHub don't update automatically, and Claude Science doesn't check for changes on its own. To check, go to **Settings > Skills**, scroll to **Imported**, open the three-dot menu next to the repository's name, and select **Check for updates…**. Claude Science checks the latest commit on the repository's default branch, then lists the skills that may have changed since you imported them, along with any new skills. Changed and new skills are selected by default, so clear the checkbox next to any you don't want before you select the **Update** button.
+
+If the repository no longer offers a skill you imported, Claude Science says so, and your copy stays and keeps working.
+
+On Team and Enterprise plans, you can update imported skills only if your organization allows custom skills (see [Custom skills](/docs/claude-science/admin-controls#custom-skills)).

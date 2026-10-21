@@ -1,0 +1,802 @@
+Latest news
+
+Claude Cowork is now just Claude.
+
+Rolling out to Pro and Max, with more plans to follow.
+
+[Read what changed (opens in new tab)](https://claude.com/blog/cowork-is-now-claude)
+
+# Pricing
+
+### Free
+
+Try Claude
+
+$0
+
+Free for everyone
+
+[Try Claude](https://claude.ai/login?plan=free)
+
+- Chat on web, desktop, and mobile
+- Search the web, create files, and run code
+- Memory across conversations
+- Connect your apps and tools
+- Create Artifacts
+- Claude Design, Slides, Docs
+
+### Pro
+
+For everyday work
+
+$17
+
+Per month with annual subscription discount ($200 billed up front). $20 if billed monthly.
+
+[Try Claude](https://claude.ai/login?plan=pro)
+
+Everything in Free, plus:
+
+- More usage\*
+- Hand off and schedule tasks
+- Claude Dashboards (beta)
+- Claude Code
+- Claude Science
+- Projects
+- More Claude models
+- Claude in Chrome and Microsoft 365
+
+### Max
+
+For people who work with Claude all day
+
+From $100
+
+Per month
+
+[Try Claude](https://claude.ai/login?plan=max)
+
+Everything in Pro, plus:
+
+- Choose 5x or 20x more usage than Pro\*
+- Higher output limits for all tasks
+- Early access to advanced Claude features
+- Priority access at high traffic times
+- $100 to $200/month in API credits to build on the Claude Platform†
+
+[Usage limits](https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices) apply. Prices shown don’t include applicable tax. Price and plans are subject to change at Anthropic's discretion.
+
+[Usage limits](https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices) apply. Price and plans are subject to change at Anthropic's discretion.
+
+## Compare features across plans
+
+Search
+
+Free
+
+[Try Claude](https://claude.ai/)
+
+Pro
+
+[Try Claude](https://claude.ai/)
+
+Max 5x
+
+[Try Claude](https://claude.ai/)
+
+Max 20x
+
+[Try Claude](https://claude.ai/)
+
+### Features and capabilities
+
+| Features | Free | Pro | Max 5x | Max 20x |
+| --- | --- | --- | --- | --- |
+| @Claude | No | No | No | No |
+| Claude Code | No | Yes | Yes | Yes |
+| Claude Science | No | Yes | Yes | Yes |
+| Claude in Chrome | No | Yes | Yes | Yes |
+| Claude for Microsoft 365 | No | Yes | Yes | Yes |
+| Claude for Microsoft Outlook | No | Yes | Yes | Yes |
+| Chat on web, iOS, Android and Desktop | Yes | Yes | Yes | Yes |
+| Claude Design | Yes | Yes | Yes | Yes |
+| Claude Slides | Yes | Yes | Yes | Yes |
+| Claude Docs | Yes | Yes | Yes | Yes |
+| Claude Dashboards (beta) | No | Yes | Yes | Yes |
+| Claude Motion (beta) | No | No | No | No |
+| Ability to search the web | Yes | Yes | Yes | Yes |
+| Create Artifacts | Yes | Yes | Yes | Yes |
+| Desktop extensions | Yes | Yes | Yes | Yes |
+| Voice mode | Yes | Yes | Yes | Yes |
+| Incognito chats | Yes | Yes | Yes | Yes |
+| User preferences | Yes | Yes | Yes | Yes |
+| Projects | Up to 5 | Yes | Yes | Yes |
+| Project sharing and collaboration | No | No | No | No |
+| Create and edit files with code execution | Yes | Yes | Yes | Yes |
+| Research | No | Yes | Yes | Yes |
+| Memory | Yes | Yes | Yes | Yes |
+| Skills | Yes | Yes | Yes | Yes |
+| Connectors | Yes | Yes | Yes | Yes |
+| Web search | Yes | Yes | Yes | Yes |
+| Enterprise search | No | No | No | No |
+
+### Security and administration
+
+| Features | Free | Pro | Max 5x | Max 20x |
+| --- | --- | --- | --- | --- |
+| Single sign-on (SSO) and domain capture | No | No | No | No |
+| Central billing and administration | No | No | No | No |
+| Admin controls for remote and local connectors | No | No | No | No |
+| Enterprise deployment for the Claude desktop app | No | No | No | No |
+| Role-based access | No | No | No | No |
+| System for Cross-domain Identity Management (SCIM) | No | No | No | No |
+| Audit logs | No | No | No | No |
+| Usage analytics | No | No | No | No |
+| Compliance API | No | No | No | No |
+| HIPAA-ready offering | No | No | No | No |
+| Custom data retention controls | No | No | No | No |
+| Organization wide skills deployment | No | No | No | No |
+
+### Payment options
+
+| Features | Free | Pro | Max 5x | Max 20x |
+| --- | --- | --- | --- | --- |
+| Credit card | n/a | Yes | Yes | Yes |
+| ACH | No | No | No | No |
+| Invoicing / net terms | No | No | No | No |
+| Billing cycle | n/a | Monthly and annual | Monthly | Monthly |
+| Adding seats midterm | n/a | n/a | n/a | n/a |
+
+### Models and usage
+
+| Features | Free | Pro | Max 5x | Max 20x |
+| --- | --- | --- | --- | --- |
+| Fable | No | Usage credits | 50% of weekly limits\* | 50% of weekly limits\* |
+| Opus | No | Yes | Yes | Yes |
+| Sonnet | Yes | Yes | Yes | Yes |
+| Haiku | Yes | Yes | Yes | Yes |
+| Context window | Up to 1Mvaries by model | Up to 1Mvaries by model | Up to 1Mvaries by model | Up to 1Mvaries by model |
+| Usage credits | No | Yes | Yes | Yes |
+| New Monthly API credits† | No | No | $100/month | $200/month |
+| Priority access at high traffic times | No | No | Yes | Yes |
+| User and organizational level spend controls | No | No | No | No |
+| Model training | Opt-out | Opt-out | Opt-out | Opt-out |
+
+### Team
+
+For teams of 2 to 150
+
+[Get Team plan](https://claude.ai/upgrade?initialPlanType=team)
+
+Standard seat
+
+All Claude features, plus more usage than Pro\*
+
+$20
+
+Per seat / month if billed annually. $25 if billed monthly.
+
+Premium seat
+
+5x more usage than standard seats\*
+
+$100
+
+Per seat / month if billed annually. $125 if billed monthly.
+
+- Claude Code and Claude Cowork
+- Claude Design, Slides, and Docs
+- Claude Motion and Dashboards (beta)
+- Claude Science
+- Microsoft 365, @Claude, and more
+- Enterprise search across your organization
+- Central billing and administration
+- Single sign-on (SSO)
+- Admin controls for remote and local connectors
+- Enterprise deployment for the Claude desktop app
+- No model training on your content by default
+- Mix and match seat types
+- Up to $500 per month in pooled API credits†
+
+### Enterprise
+
+For large businesses operating at scale
+
+[Get Enterprise plan](https://claude.ai/create/enterprise)[Chat with buying specialist](https://claude.ai/buying-specialist)
+
+Seat price + usage at API rates
+
+US$20/seat/month, billed annually, 20 seat minimum. Usage cost scales with model and task.
+
+All Team plan features, plus:
+
+- Admins set user and org spend limits
+- Role-based access with fine grained permissioning
+- System for Cross-domain Identity Management (SCIM)
+- Audit logs
+- Compliance API for observability and monitoring
+- Custom data retention controls
+- Network-level access control
+- IP allowlisting
+- HIPAA-ready offering available
+- Claude Security (beta)
+
+[Usage limits](https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices) apply. Prices shown don’t include applicable tax. Price and plans are subject to change at Anthropic's discretion.
+
+[Usage limits](https://support.anthropic.com/en/articles/9797557-usage-limit-best-practices) apply. Price and plans are subject to change at Anthropic's discretion.
+
+### Education plan
+
+Get a comprehensive university‐wide plan for an institution, including its students, faculty, and staff.
+
+[Learn more](https://claude.com/solutions/education)
+
+- Student and faculty access
+
+  Comprehensive access for all university members at discounted rates
+- Academic research and learning mode
+
+  Dedicated API credits and educational features for student learning
+- Training and enablement
+
+  Resources for successful adoption across your institution
+
+## Compare features across plans
+
+Search
+
+Team
+
+[Create plan](https://claude.ai/upgrade?initialPlanType=team)
+
+Enterprise (self-serve)
+
+[Create plan](https://claude.ai/create/enterprise)
+
+Enterprise (sales-assisted)
+
+[Contact sales](https://claude.com/contact-sales)
+
+### Features and capabilities
+
+| Features | Team | Enterprise (self-serve) | Enterprise (sales-assisted) |
+| --- | --- | --- | --- |
+| @Claude | Yes | Yes | Yes |
+| Claude Code | Yes | Yes | Yes |
+| Claude Science | Yes | Yes | Yes |
+| Claude Security | No | Yes | Yes |
+| Claude in Chrome | Yes | Yes | Yes |
+| Claude for Microsoft 365 | Yes | Yes | Yes |
+| Claude for Microsoft Outlook | Yes | Yes | Yes |
+| Chat on web, iOS, Android and Desktop | Yes | Yes | Yes |
+| Claude Design | Yes | Yes | Yes |
+| Claude Slides | Yes | Yes | Yes |
+| Claude Docs | Yes | Yes | Yes |
+| Claude Dashboards (beta) | Yes | Yes | Yes |
+| Claude Motion (beta) | Yes | Yes | Yes |
+| Ability to search the web | Yes | Yes | Yes |
+| Create Artifacts | Yes | Yes | Yes |
+| Desktop extensions | Yes | Yes | Yes |
+| Voice mode | Yes | Yes | Yes |
+| Incognito chats | Yes | Yes | Yes |
+| User preferences | Yes | Yes | Yes |
+| Projects | Yes | Yes | Yes |
+| Project sharing and collaboration | Yes | Yes | Yes |
+| Create and edit files with code execution | Yes | Yes | Yes |
+| Research | Yes | Yes | Yes |
+| Memory | Yes | Yes | Yes |
+| Skills | Yes | Yes | Yes |
+| Connectors | Yes | Yes | Yes |
+| Web search | Yes | Yes | Yes |
+| Enterprise search | Yes | Yes | Yes |
+
+### Security and administration
+
+| Features | Team | Enterprise (self-serve) | Enterprise (sales-assisted) |
+| --- | --- | --- | --- |
+| Single sign-on (SSO) | Yes | Yes | Yes |
+| Domain verification | Yes | Yes | Yes |
+| Restrict org creation | Yes | Yes | Yes |
+| Migrate accounts using your domains | No | Yes | Yes |
+| Central billing and administration | Yes | Yes | Yes |
+| Admin controls for remote and local connectors | Yes | Yes | Yes |
+| Enterprise deployment for the Claude desktop app | Yes | Yes | Yes |
+| Usage analytics | Yes | Yes | Yes |
+| Organization wide skills deployment | Yes | Yes | Yes |
+| Domain capture | No | Yes | Yes |
+| Role-based access | No | Yes | Yes |
+| System for Cross-domain Identity Management (SCIM) | No | Yes | Yes |
+| Audit logs | No | Yes | Yes |
+| Compliance API | No | Yes | Yes |
+| Custom data retention controls | No | Yes | Yes |
+| Set org instructions | Yes | Yes | Yes |
+| HIPAA-ready offering | No | Yes | Yes |
+| Inference hooks | No | Yes | Yes |
+
+### Payment options
+
+| Features | Team | Enterprise (self-serve) | Enterprise (sales-assisted) |
+| --- | --- | --- | --- |
+| Credit card | Yes | Yes | Yes |
+| ACH | No | Yes | Yes |
+| Invoicing / net terms | No | No | Yes |
+| Billing cycle | Monthly and annual | Annual | Annual |
+| Adding seats midterm | Yes | Yes | Yes |
+
+### Partnership
+
+| Features | Team | Enterprise (self-serve) | Enterprise (sales-assisted) |
+| --- | --- | --- | --- |
+| AWS Marketplace availability | No | No | Yes |
+| Consultation | No | No | Yes |
+| Tiered incentives on committed spend | No | No | Yes |
+| Trials | No | No | Yes |
+| Customer success support at certain spend thresholds | No | No | Yes |
+
+### Models and usage
+
+| Features | Team | Enterprise (self-serve) | Enterprise (sales-assisted) |
+| --- | --- | --- | --- |
+| Fable | 50% of weekly limits\*on premium seats | Yes | Yes |
+| Opus | Yes | Yes | Yes |
+| Sonnet | Yes | Yes | Yes |
+| Haiku | Yes | Yes | Yes |
+| Context window | Up to 1Mvaries by model | Up to 1Mvaries by model | Up to 1Mvaries by model |
+| Extra usage | Yes | n/a | n/a |
+| New Monthly API credits† | Up to $500/month | No | No |
+| Priority access at high traffic times | Yes | Yes | Yes |
+| User and organizational level spend controls | Yes | Yes | Yes |
+| Model training | None by default | None by default | None by default |
+
+## Latest models
+
+[Contact sales](https://claude.com/contact-sales)[Start building (opens in new tab)](https://platform.claude.com/)
+
+Save 50% with batch processing. [Learn more](https://platform.claude.com/docs/en/build-with-claude/batch-processing)
+
+Batch processing
+
+### Fable 5.1
+
+Next generation intelligence for long-running agents
+
+Prompt caching
+
+Read
+
+$0.25 / MTok
+
+Write
+
+$12.50 / MTok
+
+Input
+
+$10 / MTok
+
+Output
+
+$50 / MTok
+
+### Opus 5.5
+
+Daily driver for agentic coding and enterprise work
+
+Prompt caching
+
+Read
+
+$0.20 / MTok
+
+Write
+
+$5 / MTok
+
+Input
+
+$4 / MTok
+
+Output
+
+$20 / MTok
+
+### Sonnet 5.5
+
+High-performance model for coding and agents
+
+Prompt caching
+
+Read
+
+$0.10 / MTok
+
+Write
+
+$2.50 / MTok
+
+Input
+
+$2 / MTok
+
+Output
+
+$10 / MTok
+
+### Haiku 5.5
+
+Fastest, most cost-efficient model
+
+Prompt caching
+
+Prompts ≤ 100K tokens
+
+Read
+
+$0.01 / MTok
+
+Write
+
+$0.125 / MTok
+
+Prompts > 100K tokens
+
+Read
+
+$0.05 / MTok
+
+Write
+
+$0.625 / MTok
+
+Input
+
+Prompts ≤ 100K tokens
+
+$0.10 / MTok
+
+Prompts > 100K tokens
+
+$0.50 / MTok
+
+Output
+
+Prompts ≤ 100K tokens
+
+$0.50 / MTok
+
+Prompts > 100K tokens
+
+$2.50 / MTok
+
+For workloads that need to run in the US, US-only inference is available at 1.1x pricing for input and output tokens. [Learn more](https://platform.claude.com/docs/en/build-with-claude/data-residency).
+
+Get up to 2.5x faster speeds with fast mode for Opus 5.5 at 2x standard pricing. [Learn more](https://platform.claude.com/docs/en/about-claude/pricing#fast-mode-pricing).
+
+Prompt caching pricing reflects 5-minute TTL. Learn about [extended prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#1-hour-cache-duration).
+
+[Explore detailed pricing (opens in new tab)](https://platform.claude.com/docs/en/about-claude/pricing)
+
+## Pricing for Claude Platform features
+
+Get more out of Claude with advanced features and capabilities.
+
+[Learn more (opens in new tab)](https://platform.claude.com/docs/en/about-claude/pricing#specific-tool-pricing)
+
+### Managed Agents
+
+Build and deploy agents at scale with a suite of composable APIs. Standard token rates apply.
+
+Cost
+
+$0.08 per session-hour for active runtime
+
+### Web search
+
+Give Claude access to the latest information from the web. Doesn’t include input and output tokens required to process requests.
+
+Cost
+
+$10 / 1K searches
+
+### Code execution
+
+Run Python code in a sandboxed environment for advanced data analysis. 50 free hours of usage daily per organization.
+
+Additional hours
+
+$0.05 per hour per container
+
+### Service tiers
+
+Balance availability, performance, and predictable costs based on your needs.
+
+[Learn more (opens in new tab)](https://platform.claude.com/docs/en/api/service-tiers)[Contact sales](https://claude.com/contact-sales)
+
+- Standard
+
+  Default tier for both piloting and scaling everyday use cases
+- Batch
+
+  For asynchronous workloads that can be processed together for better efficiency
+
+## Legacy models
+
+[Learn more (opens in new tab)](https://platform.claude.com/docs/en/about-claude/models/overview)[Explore detailed pricing (opens in new tab)](https://platform.claude.com/docs/en/about-claude/pricing)
+
+### Haiku 4.5
+
+Prompt caching
+
+Read
+
+$0.10 / MTok
+
+Write
+
+$1.25 / MTok
+
+Input
+
+$1 / MTok
+
+Output
+
+$5 / MTok
+
+### Sonnet 5
+
+Prompt caching
+
+Read
+
+$0.20 / MTok
+
+Write
+
+$2.50 / MTok
+
+Input
+
+$2 / MTok
+
+Output
+
+$10 / MTok
+
+Save 50% with batch processing. [Learn more](https://platform.claude.com/docs/en/build-with-claude/batch-processing)
+
+Batch processing
+
+### Opus 5
+
+Prompt caching
+
+Read
+
+$0.50 / MTok
+
+Write
+
+$6.25 / MTok
+
+Input
+
+$5 / MTok
+
+Output
+
+$25 / MTok
+
+### Fable 5
+
+Prompt caching
+
+Read
+
+$1 / MTok
+
+Write
+
+$12.50 / MTok
+
+Input
+
+$10 / MTok
+
+Output
+
+$50 / MTok
+
+### Opus 4.8
+
+Prompt caching
+
+Read
+
+$0.50 / MTok
+
+Write
+
+$6.25 / MTok
+
+Input
+
+$5 / MTok
+
+Output
+
+$25 / MTok
+
+### Sonnet 4.6
+
+Prompt caching
+
+Read
+
+$0.30 / MTok
+
+Write
+
+$3.75 / MTok
+
+Input
+
+$3 / MTok
+
+Output
+
+$15 / MTok
+
+### Opus 4.7
+
+Prompt caching
+
+Read
+
+$0.50 / MTok
+
+Write
+
+$6.25 / MTok
+
+Input
+
+$5 / MTok
+
+Output
+
+$25 / MTok
+
+### Opus 4.6
+
+Prompt caching
+
+Read
+
+$0.50 / MTok
+
+Write
+
+$6.25 / MTok
+
+Input
+
+$5 / MTok
+
+Output
+
+$25 / MTok
+
+### Sonnet 4.5
+
+Prompt caching
+
+Read
+
+$0.30 / MTok
+
+Write
+
+$3.75 / MTok
+
+Input
+
+$3 / MTok
+
+Output
+
+$15 / MTok
+
+### Opus 4.5
+
+Prompt caching
+
+Read
+
+$0.50 / MTok
+
+Write
+
+$6.25 / MTok
+
+Input
+
+$5 / MTok
+
+Output
+
+$25 / MTok
+
+Prompt caching pricing reflects 5-minute TTL. Learn about [extended prompt caching](https://platform.claude.com/docs/en/build-with-claude/prompt-caching#pricing).
+
+## FAQ
+
+### Plans and usage
+
+####
+
+The [Pro plan](https://support.claude.com/en/articles/8325606-what-is-the-pro-plan) gives you everything in a Free plan with more usage and more of Claude's capabilities. That includes Claude Code, along with projects to organize your chats and documents, access to more Claude models, and Claude for Microsoft 365. You can choose a monthly or annual subscription.
+
+####
+
+The [Max plan](https://support.claude.com/en/articles/11049741-what-is-the-max-plan) is built for people who work with Claude throughout the day and want longer, uninterrupted sessions. You get everything in Pro, plus more usage: choose from 5x or 20x the usage of Pro per 5-hour session. Max also gives you higher output limits. Both options are billed monthly. See the cards above for current pricing.
+
+####
+
+Every plan has [usage limits](https://support.claude.com/en/articles/9797557-usage-limit-best-practices) that reset on a rolling five-hour session window, and paid plans add weekly limits on top. Your activity across Claude on web, desktop, mobile, and Claude Code all draws from the same pool. How much you can do depends on the length and complexity of your conversations, the model you choose, and the features you use, so there's no fixed message count. Free covers everyday questions. Pro gives you at least 5x more usage per 5-hour session than Free. Max gives you 5x or 20x more usage per 5-hour session than Pro. On Team plans, Standard seats give more than Pro and Premium seats give 5x more than Standard. To manage capacity and make sure all users have fair access, we may limit your usage in other ways, such as weekly and monthly caps or model and feature usage, at our discretion. When you reach a limit, you can wait for it to reset, move to a higher plan, or, on paid plans, turn on [usage credits](https://support.claude.com/en/articles/12429409-manage-usage-credits-for-paid-claude-plans) to keep working at standard API rates. You can see where you stand anytime in [Settings > Usage](https://claude.ai/settings/usage).
+
+####
+
+[Claude Code](https://claude.com/product/claude-code) is included in all paid plans. It shares the same usage limits as the rest of your plan, so your work in the terminal and your chats draw from one pool. For heavy coding sessions, you can also switch to pay-as-you-go API credits through a [Console account](https://platform.claude.com/).
+
+####
+
+The [Claude Enterprise plan](https://claude.com/solutions/enterprise) is built for large businesses operating at scale. Pricing is $20 per seat per month plus usage billed at API rates, so cost scales with the models and tasks your team runs. Enterprise is billed annually and includes everything in Team plus advanced security and admin controls, including SCIM, audit logs, custom data retention, and role-based access. You can get started self-serve or [contact sales](https://claude.com/contact-sales) for a tailored quote.
+
+### Billing and payments
+
+####
+
+Yes, annual plans are designed to cost less than monthly subscriptions. Annual subscriptions are available for Pro and Team plans. Enterprise plans are only available as annual subscriptions.
+
+When you choose to pay annually, you're billed once up front for the year. If you're already on a monthly plan, you can switch to annual in [Settings > Billing](https://claude.ai/settings/billing), and any unused time is credited toward your first annual invoice. See the steps for [Pro](https://support.claude.com/en/articles/10185996-how-to-change-your-pro-plan-from-monthly-to-annual-billing) and [Team](https://support.claude.com/en/articles/12083917-change-your-team-plan-from-monthly-to-annual-billing).
+
+####
+
+Payments are generally non-refundable, except where our [Consumer Terms of Service](https://www.anthropic.com/legal/consumer-terms) say otherwise or where local law requires it.
+
+Customers outside of Europe can follow this process to [request a refund](https://support.claude.com/en/articles/12386328-requesting-a-refund-for-a-paid-claude-plan):
+
+- Log in, open Get help from the menu, start a message, and choose Claude Refund Request to check your eligibility.
+- If you subscribed through the App Store, [Apple](https://support.apple.com/billing) handles the refund, so you'll request it from Apple.
+- If you subscribed through Google Play, [contact our Support team](https://support.claude.com/en/articles/9015913-how-to-get-support) to check eligibility for an active subscription.
+
+If you're in the European Economic Area and the United Kingdom, and within your 14-day withdrawal period, you can request a refund directly in the app.
+
+### Managing your plan
+
+####
+
+You can change your plan any time in Settings.
+
+- For individual plans, go to [Settings > Billing](https://claude.ai/settings/billing) and choose Manage subscription.
+- On Team plans, an Owner or Primary Owner manages this under Organization settings > Billing. [See more details here](https://support.claude.com/en/articles/12004354-purchase-and-manage-seats-on-team-plans).
+
+Upgrades take effect right away, and any unused time on your current plan is credited toward the new one, so you won't pay twice for the same days.
+
+Moving from monthly to annual works the same way, with your remaining time credited to the first annual invoice.
+
+In some upgrades (for example Pro Annual to Max 5x Monthly), your remaining value on your old plan is larger than the cost of one billing period of the new plan. In this case, the excess will be stored as credit, which will automatically get used for future purchases.
+
+Downgrades take effect at the end of your current billing period, and your chats, projects, and files stay with your account whichever plan you're on.
+
+####
+
+You can cancel anytime, and your plan stays active until the end of your current billing period. To avoid the next charge, cancel at least 24 hours before your renewal date.
+
+- If you signed up on the web or the desktop app, go to [Settings > Billing](https://claude.ai/settings/billing) and click Cancel.
+- If you subscribed through the App Store or Google Play, cancel from that app under Billing > Manage subscription, or directly in your [Apple](https://support.apple.com/en-us/118428) or [Google Play](https://support.google.com/googleplay/answer/7018481) account.
+- Team and self-serve Enterprise: an Owner or Primary Owner cancels under [Organization settings > Billing](https://claude.ai/admin-settings/billing).
+- Sales-assisted Enterprise: Reach out to your Anthropic Contact or our Sales team to discuss cancellation.
+
+Canceling doesn't delete your data. Your chats, projects, and files stay with your account, though some features aren't available on the Free plan. For Pro and Max, your account moves to the Free plan once the period ends. For step-by-step help, see [how to cancel a Pro or Max plan](https://support.claude.com/en/articles/8325617-how-do-i-cancel-my-paid-claude-subscription) or [cancel a Team plan](https://support.claude.com/en/articles/9267323-cancel-your-organization-s-team-plan-subscription).

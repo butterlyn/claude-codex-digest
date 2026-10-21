@@ -1,0 +1,294 @@
+# Admin controls
+
+> Organization settings for Claude Science on Team and Enterprise plans (Featured connectors and skills, custom connectors and skills, access to Claude Science work previously saved on the computer, the network allowlist, package mirror, SSH hosts, Modal, scientific model endpoints, and memory) and which other claude.ai admin controls apply to the app.
+
+Members sign in to Claude Science with their Claude account, so your identity and billing controls apply automatically. Because the app stores conversations on each member's computer, most of the data-handling controls Anthropic provides don't reach that data today. [Organization settings](#organization-settings) describes the controls on the claude.ai **Organization settings** > **Claude Science** page itself, which govern the connectors, skills, compute, network access, and memory that members can use in the Claude Science app, and whether members can access previously saved Claude Science work. [How other admin settings apply to Claude Science](#how-other-admin-settings-apply-to-claude-science) lists every other claude.ai admin setting and whether it applies to Claude Science today. Status values describe Claude Science specifically; other Claude products may differ.
+
+## Organization settings
+
+The [**Organization settings** > **Claude Science**](https://claude.ai/admin-settings/claude-science) page in claude.ai holds the controls that apply to every member of your Team or Enterprise organization who uses the app. An Owner or Primary Owner turns Claude Science on or off there (see [Enable Claude Science](/docs/claude-science/enable-claude-science)), and the other controls unlock once Claude Science is on. On the [Claude Team plan for scientists](https://claude.com/programs/team-plan-for-scientists), Claude Science starts on. On Enterprise plans, you can also limit some of the controls to certain custom roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)). Each section below covers one control: what it governs, its default, and what changes for members when you turn it off.
+
+### Defaults by plan
+
+Each control starts at a default that depends on your plan and on whether HIPAA compliance is enabled for your organization. The page always shows the value in force for your organization.
+
+| Control | Default for Team | Default for Enterprise¹ |
+| - | - | - |
+| Featured connectors and Featured skills | All on | All on |
+| Allow custom connectors | On | Off |
+| Allow custom skills | On | On |
+| Allow members to access Claude Science work previously saved on their computer | On | Off |
+| Manage network allowlist | Off (members manage their own) | Off (members manage their own) |
+| Organization package mirror | Not set | Not set |
+| Allow members to connect SSH hosts | On | On |
+| Allow members to connect to Modal | On | Off |
+| Show scientific model endpoint providers on the Compute tab | On | On |
+| Turn on memory for your team | On | On |
+
+¹ For HIPAA-eligible organizations, note that Claude Science (beta) is not covered under your Business Associate Agreement (BAA) and should not be used with protected health information (PHI). Administrators who enable Claude Science are responsible for ensuring their workforce uses it in compliance with applicable legal obligations. Featured and custom connectors, SSH hosts, Modal, scientific model endpoints, memory, and access to previously saved Claude Science work are all off by default for HIPAA-eligible organizations.
+
+### How changes reach members
+
+Changes you save reach each member's running app within a few minutes and apply on the member's next turn or request. An app that is closed picks up your changes when it next starts, and an app that can't reach claude.ai keeps applying the last settings it received.
+
+The settings apply to members running version 0.1.41 or later of the Claude Science app. A member still on an earlier version isn't governed by these settings until the member updates (see [Required updates](/docs/claude-science/manage-on-devices#required-updates)). For Team and Enterprise organizations, Claude Science enforces a minimum version of 0.1.41. A member on an older version sees a notice that the version is no longer supported, with an **Update now** button. If the update doesn't complete after a second try, [Update Claude Science](/docs/claude-science/update-claude-science) has the member's next steps for each kind of install; projects and settings on the computer are kept.
+
+Each member's app also has to reach claude.ai regularly to confirm these settings. If an app can't reach claude.ai for 72 hours, it pauses memory, custom connectors, SSH hosts, Modal, model endpoints, adding custom skills, and accessing previously saved Claude Science work until it reconnects, and keeps applying the network allowlist, package mirror, and Featured connector and skill choices it last received.
+
+Turning a control off doesn't delete anything on the members' computers. What members set up under that control (custom connectors, SSH hosts, their Modal connection, saved memories, and their own choices) stays on their computer, and that feature cannot be used inside the Claude Science app while the control is off. The setting shows grayed out in the app with a note that an admin turned it off, and everything works again as before if you turn the control back on. A control that is off by your plan's default instead shows a note that an admin can turn it on. When the **Allow custom skills** switch is off, skills a member added earlier keep working (see [Custom skills](#custom-skills)).
+
+### Capabilities in custom roles
+
+On Enterprise plans, seven of the controls on this page also have a capability in custom roles, so you can leave a control on for the organization and, among members with custom roles, limit it to certain roles. Go to [**Organization settings > Roles**](https://claude.ai/admin-settings/roles), open a custom role, and go to its **Capabilities** tab. In the **Claude Science** section, the seven are listed under the **Claude Science** capability.
+
+The table shows each capability and the control on the **Claude Science** page that it goes with.
+
+| Capability in a custom role | Control on the **Claude Science** page |
+| - | - |
+| **Access previously saved work** | [**Allow members to access Claude Science work previously saved on their computer**](#previously-saved-claude-science-work) |
+| **Connect to SSH hosts** | [**Allow members to connect SSH hosts**](#ssh-hosts) |
+| **Custom connectors** | [**Allow custom connectors**](#custom-connectors) |
+| **Custom skills** | [**Allow custom skills**](#custom-skills) |
+| **Memory** | [**Turn on memory for your team**](#memory) |
+| **Modal** | [**Allow members to connect to Modal**](#modal) |
+| **Scientific model endpoint providers** | [**Show scientific model endpoint providers on the Compute tab**](#scientific-model-endpoints) |
+
+The control on the **Claude Science** page is the upper limit, and roles narrow it:
+
+* **Control off**: the feature is off for every member, whatever their roles include. In the role, the capability's row says that it's turned off at the organization level.
+* **Control on, built-in role**: members whose role is User, Admin, Owner, or Primary Owner can use the feature, because custom roles affect only members whose role is set to **Custom**. On Team plans, which don't have custom roles, that's every member.
+* **Control on, custom roles**: a member whose role is set to **Custom** can use the feature only if at least one of their custom roles has the capability turned on.
+
+Turning on the **Claude Science** capability in a role also turns on the seven under it, and you can then turn off the ones that role shouldn't have. Any capability whose control your organization can't turn on stays off. Turning the **Claude Science** capability off turns them all off. A role whose **Capability access** setting is **All capabilities** already includes all seven. A role set to **All generally available** gets them when you turn on its **Claude Science** capability (see [Who gets access after you enable](/docs/claude-science/enable-claude-science#who-gets-access-after-you-enable)).
+
+> [!NOTE]
+>
+> Giving a custom role the **Claude Science** capability gives its members the app. For skills from claude.ai and your organization's plugins to reach those members, their custom roles also need one of the capability options listed under [Organization skills](#organization-skills).
+
+For a member whose custom roles don't include a capability, the feature behaves as it does when you turn its control off (see [How changes reach members](#how-changes-reach-members)). The setting is grayed out in the Claude Science app, and what the member set up earlier is kept. To give that member the feature, turn on the capability in one of their roles. A change to a role's capabilities can take up to 15 minutes to reach members, and then applies on the member's next turn or request.
+
+The network allowlist, the package mirror, Modal workspaces, and the switches for Featured connectors and skills aren't set by role and apply to the whole organization. To create custom roles and assign them to groups, see [Manage custom roles on Enterprise plans](https://support.claude.com/en/articles/13930452-manage-custom-roles-on-enterprise-plans).
+
+### Featured connectors and skills
+
+Featured connectors and Featured skills come with Claude Science, and admins can control whether they are enabled or disabled for your members (see [Connectors and skills](/docs/claude-science/connectors-and-skills)). The **Featured connectors** and **Featured skills** sections list them with one switch per item, so you can choose which ones members can use. Every item is on by default for Team and Enterprise organizations. In an organization with HIPAA compliance enabled, every Featured connector and skill starts disabled; turn on the ones you have reviewed.
+
+Each section shows how many items are enabled. Expand it to see the list, and select an item to see its tools or instructions, author, license, and third-party terms.
+
+Besides switching every current item in that list, **Enable all** and **Disable all** set how items added in later versions of Claude Science start: on after **Enable all**, off after **Disable all**. If you use neither, new items start on (off in an organization with HIPAA compliance enabled). The individual switches affect only that item, so to keep today's items on while new ones start off, choose **Disable all** and then turn on the items you want.
+
+In the **Featured connectors** list, the rows marked **Web** (PubMed, Clinical Trials, ChEMBL, and bioRxiv) are connectors Anthropic hosts in the Claude connector directory rather than locally as part of the app. The switches for those four add or remove the connector for your whole organization on **Organization settings** > **Connectors**, need a role that can manage your organization's connectors, and aren't changed by **Enable all** or **Disable all**. On the Claude Team plan for scientists, where Claude Science starts on, those four aren't added automatically, so turn on their switches to add them. For organizations with HIPAA compliance enabled, manage those four on the **Connectors** page instead.
+
+When you turn a connector or skill off, Claude can no longer use it for any member. A connector is no longer offered to Claude, and a skill is left out of the skills Claude can load, from the member's next turn. The item stays listed in the member's settings, grayed, with a note that it's disabled by your admin.
+
+Members can still turn off, in their own app, any item you leave on. The app remembers each member's choice, so it applies again if you turn an item off and later back on. Turning a Featured skill off doesn't stop a member from writing a skill of their own; whether members can add their own skills is governed by [Custom skills](#custom-skills).
+
+When you turn Claude Science on, the [**Turn on Claude Science** dialog](/docs/claude-science/enable-claude-science#turn-on-claude-science) notes: "By continuing, you represent that your team has the necessary rights to access these resources and you authorize Claude to do so on their behalf. You can review terms in Settings."
+
+### Connectors you add in claude.ai
+
+Connectors you add for your organization in claude.ai also work in Claude Science. Every connector on **Organization settings > Connectors**, whether you added it from the [Connectors Directory](/docs/connectors/directory) or by its web address (a custom connector), shows up in the Claude Science app under **Settings > Connectors** for the members who can use it. If you remove one in claude.ai, it disappears from the app too.
+
+If a connector needs a sign-in, each member signs in with their own account; the app opens claude.ai for them to do it. Connector permissions in Enterprise custom roles apply the same way; see [Connectors](#connectors) under How other admin settings apply to Claude Science.
+
+Two kinds of connectors are controlled on **Organization settings > Claude Science** instead: the Featured connectors that run on members' computers (see [Featured connectors and skills](#featured-connectors-and-skills)), and connectors members add in the app themselves (see [Custom connectors](#custom-connectors)). On Enterprise plans, a custom role's **Custom connectors** capability can also limit the second kind to certain roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)).
+
+### Custom connectors
+
+Custom connectors are Model Context Protocol (MCP) servers a member adds under **Settings** > **Connectors** in the Claude Science app, either a remote server at an HTTPS URL or a local command on their computer (see [Custom connectors](/docs/claude-science/custom-connectors)). The **Allow custom connectors** switch decides whether members can add and use them. It's on by default for Team organizations and off by default for Enterprise organizations. Organizations with HIPAA compliance enabled can't turn it on.
+
+When the switch is off, members can't add, change, or authorize custom connectors, and Claude no longer sees the custom connectors members may have added earlier. Those connectors stay listed in the member's settings, grayed, with a note that custom connectors are disabled by your admin. Featured connectors and the connectors you add on **Organization settings > Connectors** aren't affected by this switch.
+
+### Add a connector your organization needs
+
+Connectors are built on an open standard called the Model Context Protocol (MCP). When your organization needs a connector it doesn't have yet, what to do depends on where the data lives:
+
+* **Your own systems and data**, such as an internal database or lab system: have your developers build a connector for it, then add its web address for everyone under **Organization settings > Connectors > Add > Custom** (see [Add a connector by URL](/docs/connectors/custom/add-unlisted#add-a-connector-by-url)). Claude connects to it from Anthropic's servers, so it must be reachable from the internet. For a system that isn't, Enterprise organizations can request an MCP tunnel, a secure link from their own network to Anthropic (in research preview; see [MCP tunnels](/docs/connectors/mcp-tunnels/overview)).
+* **Another company's product**: the company that makes the product usually builds and runs its connector, not Anthropic. Check the [Connectors Directory](/docs/connectors/directory) first. If the company offers a connector that isn't listed there, add its web address under **Organization settings > Connectors > Add > Custom**; a connector doesn't need to be in the directory to work (see [Connector verification](/docs/connectors/verification)). If the company doesn't offer one, ask them to build one. They can [submit it to the Connectors Directory](/docs/connectors/building/submission) for review; if Anthropic accepts it, any Claude user can find it there.
+* **Public scientific databases and tools**: Claude may not need a connector at all. Code that Claude runs on members' computers can reach any site on Claude Science's list of allowed sites, so adding the site to that list is often enough. By default, members allow a new site themselves when Claude asks. If you turn on **Manage network allowlist** on **Organization settings > Claude Science**, you add sites for them under **Custom domains** instead (see [Network allowlist](#network-allowlist)). If a connector would still help, look for one in the [Connectors Directory](/docs/connectors/directory) and add it on **Organization settings > Connectors**.
+
+### Custom skills
+
+Skills are instructions, sometimes with helper code, that Claude loads when a task calls for them (see [Skills](/docs/claude-science/connectors-and-skills#skills)). Members add their own by writing one, uploading one, importing one from a public GitHub repository (or a private repo if a [GitHub credential](/docs/claude-science/connectors-and-skills#skills) is stored), or asking Claude to create one from a session. The **Allow custom skills** switch decides whether members can add skills of their own, including creating one from the Claude Science app so it's also available to them in claude.ai. It's on by default for Team and Enterprise organizations, including those with HIPAA compliance enabled.
+
+When the switch is off, members can't add new skills of their own or publish them, and the app notes that custom skills are disabled by your admin. Skills a member added earlier still work and can still be edited, and Featured skills aren't affected. Custom skills are how members teach Claude their own workflows and analysis pipelines, so Anthropic recommends leaving this switch on.
+
+### Organization skills
+
+To add skills for your organization, go to [**Organization settings > Plugins & skills**](https://claude.ai/admin-settings/skills?tab=inventory) in claude.ai and follow [Provision and manage skills for your organization](https://support.claude.com/en/articles/13119606-provision-and-manage-skills-for-your-organization) in the help center. Skills you add with **Upload a skill** or **Create a skill** appear in the Claude Science app under **Settings > Skills**, in the **Organization** section, for the members who have them turned on. A skill you upload is turned on for everyone by default. On Enterprise plans, if you give skills to specific groups through a plugin, the app gets them only when the plugin is **Installed by default** or **Required** for that group (see the plugins row under [Connectors](#connectors)). To update a skill, go to [**Organization settings > Plugins & skills > Inventory**](https://claude.ai/admin-settings/skills?tab=inventory), open the menu at the end of the skill's row, and select **Upload new version**.
+
+Skills from claude.ai are the ones you add on the **Plugins & skills** page, the ones members have in their own claude.ai accounts, and ones shared with them. For skills from claude.ai and your organization's plugins to reach a member's app, the **Skills** switch in the **Policy** tab of **Plugins & skills** has to be on. Members in the built-in roles (User, Admin, Owner, and Primary Owner) need nothing more, whether your organization's **Cloud code execution and file creation** setting is on or off. A member whose role is set to **Custom** also needs one of these options in their custom roles:
+
+* The **Claude Code** capability.
+* The **Cowork** capability, which counts only while Cowork is turned on for your organization.
+* The **Chat** and **Code execution and file creation** capabilities together, which count only while **Cloud code execution and file creation** is turned on. **Code execution and file creation** is the capability in the role, listed under **Chat**, and **Cloud code execution and file creation** is your organization's setting (see its row under [Capability toggles](#capability-toggles)).
+
+Without one of these options, no skills from claude.ai and none of your organization's plugins reach that member's app. To give the member one, turn it on in the **Capabilities** tab of one of their custom roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)). If your organization keeps **Cloud code execution and file creation** off, the **Chat** and **Code execution and file creation** option has no effect. Choose **Claude Code**, or **Cowork** if Cowork is turned on for your organization.
+
+To let members manage their own skills, host them in a GitHub repository. Put one `skills/<name>/SKILL.md` folder per skill in the repository and share the link. Members import them in the Claude Science app under **Settings** > **Skills** > **Add skill** > **Import from GitHub**. Claude Science records the commit each skill came from. When the repository has new commits, **Check for updates…** flags the skills whose files differ from its latest commit; each member chooses when to import again (see [Update skills imported from GitHub](/docs/claude-science/connectors-and-skills#update-skills-imported-from-github)). Private repositories work after a member adds a GitHub token in the Claude Science app under **Settings** > **Credentials**.
+
+To stop members from adding their own skills, turn off the **Allow custom skills** switch on the **Organization settings** > **Claude Science** page (see [Custom skills](#custom-skills)).
+
+### Previously saved Claude Science work
+
+A member who used Claude Science under another sign-in on the same computer (for example, a personal plan before joining your organization) can access the projects, sessions, and artifacts from that sign-in and move it into the app's folder for your organization on that computer (see [Access work from another sign-in on your computer](/docs/claude-science/multiple-computers#access-work-from-another-sign-in-on-your-computer)). The **Allow members to access Claude Science work previously saved on their computer** switch decides whether the app offers this access. It's on by default for Team organizations and off by default for Enterprise organizations, and organizations with HIPAA compliance enabled can't turn it on.
+
+The access happens on the member's computer and uploads nothing. Claude Science work the app accesses will follow your organization's settings from then on. Content your organization doesn't allow isn't copied or moved and stays in its original folder, and credentials such as API keys and connector sign-ins are never copied or moved. When the switch is off, the app doesn't offer the access, and its **Access previously saved Claude Science work on this computer** setting is grayed out with a note that it's off for your organization.
+
+### Network allowlist
+
+When Claude runs code for a member, that code can reach only the domains on the analysis sandbox's network allowlist: the package hosts, the scientific databases behind the Featured connectors, and hosts the member approved. See [Sandbox](/docs/claude-science/core-concepts#sandbox) and the domain tables in [Network requirements](/docs/claude-science/network-requirements#analysis-sandbox-domains).
+
+By default, each member manages that list on their own computer. The **Manage network allowlist** switch transfers control of the list from members to you. While it's on, every member's app uses the organization's list instead of the member's own, and members see the list in their **Network** settings read-only, apart from domains they have blocked themselves, with a note that the domain allowlist is controlled by their admin. It's off by default for Team and Enterprise organizations, and on for organizations with HIPAA compliance enabled, which can't turn it off.
+
+Turning the switch on sets aside what members allowed themselves, including the domains a deployed configuration file adds with its `[sandbox.network]` keys; those settings are kept and apply again when you turn the switch off. Domains the file denies stay denied.
+
+Your list is enforced by the app's sandbox (see [Sandbox](/docs/claude-science/core-concepts#sandbox)). On a computer where the sandbox is turned off or can't start, the app pauses new sessions and messages and tells the member the computer doesn't meet the organization's security requirements, until the member restarts the app with the sandbox on or you turn the switch off. Turning the switch off keeps your saved list, which applies again the next time you turn it on.
+
+With the switch on, **Claude Science domains** shows the Featured domains in the same groups as the app, such as **Package management**, **Literature & citations**, and **NCBI / NIH**, with one switch per domain. A group switch turns all of its domains on or off. Below it, **Custom domains** adds your own. The rules for an entry are:
+
+* An exact name such as `data.example.org`, or a wildcard such as `*.example.org`
+* A wildcard covers subdomains only, so `*.example.org` doesn't cover `example.org` itself; add both if you need both
+* No IP addresses and no single-label names such as `intranet`
+* The list holds up to 600 domains, counting built-in and custom ones together
+* There's no **Save** button: each change is saved as soon as you make it
+
+Until you change the list, members use Claude Science's Featured list, including domains added in later versions of Claude Science. Once you change it, the list is saved exactly as you left it, so a domain added in a later version stays off until you turn it on. **Reset** returns to the Featured list and removes your custom domains, for all members.
+
+You can also turn off the **Package management** domains (PyPI, conda, CRAN and Bioconductor, npm, and GitHub), with limits. The PyPI and conda domains can be turned off only while the [organization package mirror](#organization-package-mirror) covers them. Turning the CRAN and Bioconductor, npm, or GitHub domains off means members can't install packages from them, and the page asks you to confirm. The domains the sandbox always blocks (see [Network requirements](/docs/claude-science/network-requirements#domains-the-sandbox-always-blocks)) stay blocked whichever list is in force.
+
+The allowlist governs the network connections of code Claude runs in the sandbox on the member's computer, the local-command connectors that run inside it, and, while you manage it, the [model endpoints](#scientific-model-endpoints) members connect by host name. Jobs on SSH hosts use the host's own network, so the allowlist doesn't apply to them, and the [**Allow members to connect SSH hosts**](#ssh-hosts) switch is the control for those.
+
+Modal jobs run in Modal's cloud. While you manage the list, a member's Modal jobs run only if the member has set **Network restrictions** for Modal in the app to **Allowlist** or **No network**. Unrestricted Modal jobs are refused.
+
+### Organization package mirror
+
+Analysis environments install Python and conda packages from the public hosts unless a mirror is set. Members or IT can set a mirror per computer under **Settings** > **Network** > **Package mirror** or in the [configuration file](/docs/claude-science/configuration-file-reference#package-download-keys). See [Point package installs at an internal mirror](/docs/claude-science/corporate-networks#point-package-installs-at-an-internal-mirror) for the mirror layout and credentials.
+
+The **Organization package mirror** section sets the same two addresses once for every member: a **Conda channel URL** and a **Python package index URL (PyPI)**. The section applies whether or not you manage the [network allowlist](#network-allowlist), and there is no organization mirror by default.
+
+Addresses must start with `https://`, name a host rather than an IP address (an intranet name such as `https://artifactory:8443` works), use the standard port or 8443, and carry no sign-in details. To test an address before you save it, open Claude Science on a computer inside your network, go to **Settings** > **Network** > **Package mirror** > **Configure**, paste the address, and select **Check**. An address that breaks these rules is ignored for that registry, the member's own mirror setting applies instead, and the member's app notes it in its log. An address that passes them but can't be reached isn't ignored, and package installs fail with an error that names the mirror.
+
+An organization mirror takes precedence over a mirror a member set in Settings or in their configuration file. The member's values are kept but not used, and their Settings show that the package mirror is controlled by their admin. The mirror host is allowed automatically and the public hosts it replaces are removed from the allowlist, as for a member-set mirror. While you manage the network allowlist, those hosts stay removed even if they are switched on in your list.
+
+Mirror credentials stay with each member. A member signs in to your mirror once per mirror host under **Settings > Network > Package mirror > Mirror credentials**, unless you [deploy the credential as a file](/docs/claude-science/corporate-networks#deploy-the-mirror-credential-as-a-file), and the organization settings never store a credential.
+
+### SSH hosts
+
+Members can register a machine they reach over SSH, such as a lab workstation or an HPC login node, so Claude can run jobs on it (see [Remote compute clusters](/docs/claude-science/remote-compute-clusters)). The **Allow members to connect SSH hosts** switch decides whether they can. It's on by default for Team and Enterprise organizations, and off by default for organizations with HIPAA compliance enabled, which can turn it on. On Enterprise plans, you can also limit SSH hosts to certain custom roles with the **Connect to SSH hosts** capability (see [Capabilities in custom roles](#capabilities-in-custom-roles)).
+
+When the switch is off, members can't add SSH hosts, and hosts they added earlier are kept but refuse new commands and file transfers; the app shows that SSH host setup is disabled by your admin. A job that is already running can still be stopped and its results collected.
+
+Jobs on an SSH host run outside the sandbox, as the member's own user on that machine, with access to everything that account can read and write there. The app uses the member's existing SSH configuration and keys and installs nothing on the host. Job scripts and inputs travel directly from the member's computer to the host, and outputs come back the same way, without passing through Anthropic. Code on the host uses the host's network, so the [network allowlist](#network-allowlist) doesn't apply to it.
+
+### Modal
+
+[Modal](https://modal.com/) is a third-party cloud computing service. Members can connect a Modal account they own so Claude can run jobs that need a GPU or more memory than their computer has. Modal bills that account directly, and Anthropic never sees a payment method (see [Compute providers](/docs/claude-science/compute-providers#connecting-modal)). The **Allow members to connect to Modal** switch decides whether members can connect Modal in the Claude Science app in **Settings** > **Compute**. It's on by default for Team organizations, off by default for Enterprise organizations, and off by default for organizations with HIPAA compliance enabled, which can turn it on.
+
+When the switch is off, members can't set up Modal or start new Modal jobs, and the app shows that Modal setup is disabled by your admin. A job that is already running can still be stopped, and the member's Modal settings are kept.
+
+With the switch on, **Modal workspaces** lets you limit which Modal workspaces members can connect to. By default members can connect to any workspace. Select **Restrict to a workspace** and enter each workspace name as Modal shows it; capitalization doesn't matter.
+
+The app checks the workspace that Modal reports for the member's token when the member uses it, and a member on another workspace sees that their Modal workspace is not allowed by their admin. Turning the **Allow members to connect to Modal** switch off hides the workspace list, which is kept and applies again when you turn Modal back on.
+
+Modal jobs run in Modal's cloud, not on the member's computer. There is no spend ceiling in Claude Science; to limit spend, use the controls in your Modal account (see [Modal's documentation](https://modal.com/docs/guide/budgets)). Members approve jobs on a card that shows the machine and the maximum billable time, per job or for a whole conversation or project, and a job keeps running and billing after the app closes.
+
+### Scientific model endpoints
+
+Members can connect a scientific model server, such as NVIDIA BioNeMo NIM, that Claude calls directly from analyses (see [Scientific model endpoints](/docs/claude-science/compute-providers#scientific-model-endpoints)). The **Show scientific model endpoint providers on the Compute tab** switch decides whether members can connect the providers listed on the app's **Compute** tab. It's on by default for Team and Enterprise organizations, and off by default for organizations with HIPAA compliance enabled, which can turn it on.
+
+When the switch is off, members can't connect these providers or use the endpoints they set up earlier, and the app shows that scientific model endpoint setup is disabled by your admin; the settings they entered are kept. The switch governs third-party model endpoints only and has no effect on which Claude models members can use.
+
+While members manage their own network allowlist, an endpoint a member connected is reachable without being on that list. While you manage the [network allowlist](#network-allowlist), an endpoint at a public or internal host name works only if your network allowlist also includes that host, so add `health.api.nvidia.com` (NVIDIA's hosted endpoint) or your own server's name under **Custom domains** on the **Organization settings** > **Claude Science** page. Endpoints at a private IP address or on localhost aren't affected.
+
+### Memory
+
+Memory lets Claude save short facts about a member, their projects, and their files across sessions, stored in the app's local database on the member's computer (see [Memory](/docs/claude-science/core-concepts#memory)). Each member chooses whether their own memory is on, during first-time setup or later in **Settings** > **Memory**. The **Turn on memory for your team** switch decides whether members can use memory at all. It's on by default for Team and Enterprise organizations, and off by default for organizations with HIPAA compliance enabled, which can turn it on.
+
+When the switch is off, memory is off for every member, whatever they chose in their own settings; Claude neither recalls nor saves facts, first-time setup skips its memory step, and the **Memory** setting shows that memory is disabled by your admin. Facts a member saved earlier stay on their computer, the member can still review and delete them, and Claude uses them again if you turn the switch back on.
+
+When Claude recalls saved facts for a session, those facts are sent to Anthropic as part of that session's conversation and handled like the rest of the conversation (see [How Claude Science works with your data](/docs/claude-science/how-claude-science-works-with-your-data)). The **Capabilities** > **Memory** setting in claude.ai **Organization settings** doesn't control memory in Claude Science. In a custom role, the **Memory** row under **Claude Science** is the capability for the app's memory, and the **Memory** row under **Chat** is for claude.ai chat (see [Capabilities in custom roles](#capabilities-in-custom-roles)).
+
+## How other admin settings apply to Claude Science
+
+In the tables below, each setting is named by its page in claude.ai **Organization settings** and, where it has one, its label there (for example, **Capabilities** > **Web search**). Apart from the **Enable for your organization** toggle, the controls on the **Claude Science** page itself are described under [Organization settings](#organization-settings).
+
+The status column in each table shows one of four values:
+
+* **Supported in Claude Science**: you can govern this for Claude Science, through the claude.ai setting itself or through the named control on the **Claude Science** page.
+* **Partially supported in Claude Science**: you can govern only part of this for Claude Science through either place, and the note says which part.
+* **Not available in Claude Science**: the setting doesn't cover Claude Science, and Claude Science has no equivalent control.
+* **Not applicable in Claude Science**: Claude Science has nothing for the setting to govern.
+
+### Identity and access
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Organization and access > Single sign-on (SSO) | Supported in Claude Science | Members sign in to Claude Science through claude.ai, so your SSO configuration and the **Require SSO for Claude** setting apply to the app. |
+| Organization and access > User provisioning (SCIM directory sync, Enterprise) | Supported in Claude Science | Provisioning and deprovisioning act on claude.ai membership, which Anthropic checks on every request the app makes, so a deprovisioned member's app stops working. |
+| Organization and access > Domains | Supported in Claude Science | Domain verification, and the **Migrate accounts using your domains** and **Restrict organization creation** settings that build on it, act on claude.ai accounts before anyone reaches the app, so they apply unchanged. |
+| Members | Supported in Claude Science | Adding or removing members controls who can sign in to Claude Science. |
+| Roles (built-in) | Supported in Claude Science | Every built-in role (User, Admin, Owner, and Primary Owner) can use Claude Science once it's turned on for the organization. |
+| Roles > Claude Science permission in custom roles (Enterprise) | Supported in Claude Science | Add the Claude Science permission to a custom role to give the app to that role's members. Members whose custom roles don't include it can't use the app. On the role's **Capabilities** tab, seven capabilities under **Claude Science** decide which of the app's features that role's members can use (see [Capabilities in custom roles](#capabilities-in-custom-roles)). Team plans don't have custom roles, so everyone gets access when Claude Science is on. |
+| Groups (Enterprise) | Supported in Claude Science | Members get the Claude Science access of the roles their groups assign. |
+| IP allowlist (Enterprise) | Partially supported in Claude Science | The app's sign-in, its requests to Claude, and its Directory connector calls are checked against your allowlist (see [Restrict access to Claude with IP allowlisting](https://support.claude.com/en/articles/13200993-restrict-access-to-claude-with-ip-allowlisting)). Traffic that doesn't go to Anthropic isn't checked, which covers code on the member's computer, SSH hosts, or Modal account, and custom connectors members add in the app. You can turn SSH hosts, Modal, and custom connectors off under [Organization settings](#organization-settings). |
+| Organization and access > Shortened session length (Enterprise) | Partially supported in Claude Science | Applies to the browser sign-in a member completes to connect the app. It doesn't shorten the app's own sign-in after that, so members aren't asked to sign in again on your schedule. Turning Claude Science off for the organization or removing a member still stops their app within a few minutes. |
+
+### Capability toggles
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Claude Science > Enable for your organization | Supported in Claude Science | Off by default for Team and Enterprise, and on by default for the Claude Team plan for scientists. An Owner or Primary Owner turns it on or off under **Organization settings** > **Claude Science** (see [Enable Claude Science](/docs/claude-science/enable-claude-science)). Assigning seats doesn't turn it on. |
+| Data and privacy > Rate chats | Supported in Claude Science | When you turn this off, the app hides the **Send feedback** link on the [**Chat paused**](/docs/claude-science/safeguards#when-safeguards-flag-a-message) card. If your organization uses customer-managed encryption keys (CMEK), you can't turn this setting on and the app doesn't show that link. |
+| Organization and access > Organization instructions | Supported in Claude Science | Anthropic adds your organization instructions to the app's requests to Claude, as it does for claude.ai chat, so members don't need to update the app for a change to apply. |
+| Plugins & skills > skills you add for your organization, and the Policy tab | Supported in Claude Science | The **Skills** switch in the **Policy** tab has to be on for Claude Science to get your organization's plugins and to get skills from claude.ai. Skills from claude.ai include the ones you add for your organization. A member whose role is set to **Custom** also needs one of the capability options listed under [Organization skills](#organization-skills). **User-created skills**, on the same tab, decides whether a member can publish a skill from the app to their own claude.ai account. Publishing one also needs **Cloud code execution and file creation** to be on (see its row under [Capability toggles](#capability-toggles)). The skills that come with the app and the skills members add in it are controlled on the **Claude Science** page: one switch per Featured skill, and **Allow custom skills** for skills members add themselves (see [Featured connectors and skills](#featured-connectors-and-skills) and [Custom skills](#custom-skills)). |
+| Capabilities > Web search | Not applicable in Claude Science | This setting governs claude.ai chat. Claude Science can search the web regardless of it, and the **Claude Science** page has no switch for web search. |
+| Capabilities > Cloud code execution and file creation | Partially supported in Claude Science | This setting governs the code sandbox Anthropic hosts for claude.ai chat. Running code on the member's computer, or on compute the member connects, is the core of Claude Science and can't be turned off; you govern what that code can reach with the [network allowlist](#network-allowlist), [SSH hosts](#ssh-hosts), and [Modal](#modal) controls. In the app, a member needs this setting turned on to publish a skill to their claude.ai account or to delete a published one. For a member whose role is set to **Custom**, this setting is also part of one capability option for getting skills from claude.ai and your organization's plugins (see [Organization skills](#organization-skills)). |
+| Capabilities > Allow network egress and Domain allowlist | Supported in Claude Science | These settings govern the hosted sandbox for claude.ai chat. Claude Science's sandbox has its own allowlist: manage it for the whole organization with the **Manage network allowlist** switch on the **Claude Science** page (see [Network allowlist](#network-allowlist)), or leave it off and let members manage their own. Administrators can also extend a member's list per device with the sandbox network keys in the [configuration file reference](/docs/claude-science/configuration-file-reference). |
+| Data and privacy > Location metadata | Not applicable in Claude Science | Claude Science doesn't send location data with requests to Claude, so there is nothing for this setting to govern. |
+| Capabilities > Memory (Enable memory for your team) | Supported in Claude Science | This setting governs memory in claude.ai chat. Claude Science keeps a separate memory on each member's computer, which you turn on or off with the **Turn on memory for your team** switch on the **Claude Science** page (see [Memory](#memory)). On Enterprise plans, a custom role's **Memory** capability under **Claude Science** can limit it to certain roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)). |
+| Settings for claude.ai projects (Public projects, Retention period for projects) | Not applicable in Claude Science | Claude Science doesn't use claude.ai projects. Its projects are folders on the member's computer. |
+
+### Connectors
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Connectors > connectors you add for your organization | Supported in Claude Science | Connectors you add on the **Connectors** page, from the directory or by web address (custom connectors), are available to members in the app, as in claude.ai. Claude connects to them from Anthropic's servers, and members sign in with their own accounts where needed. |
+| Roles > connector permissions in custom roles (Enterprise) | Partially supported in Claude Science | Apply to the connectors on your **Connectors** page, which the app reaches through Anthropic. They don't apply to the Featured connectors that run on members' computers or to custom connectors members add in the Claude Science app. The **Claude Science** page controls those Featured connectors for every member. The **Allow custom connectors** switch there decides whether members can add and use custom connectors, and a separate capability in custom roles, **Custom connectors**, can limit that to certain roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)). |
+| Plugins & skills > plugins you add for your organization | Partially supported in Claude Science | Plugins you set to **Installed by default** or **Required** are synced to members' Claude Science app, which loads their skills and connectors. The **Skills** switch in the **Policy** tab has to be on for this sync. A member whose role is set to **Custom** also needs one of the capability options listed under [Organization skills](#organization-skills). A plugin's connector prompts each member for approval per tool, and its interactive output doesn't open in the app. Plugins left as **Available to install** aren't offered in the app, and plugin commands don't apply there. Which Featured connectors and skills members can use, and whether they can add their own, are separate controls on the **Claude Science** page (see [Featured connectors and skills](#featured-connectors-and-skills), [Custom connectors](#custom-connectors), and [Custom skills](#custom-skills)). |
+| Connectors > Tunnels API (Enterprise) | Partially supported in Claude Science | A connector your organization serves through a tunnel works in the app the same way it does in claude.ai, because the app reaches the connectors on your **Connectors** page through Anthropic's hosted connector service. Custom connectors a member adds in the Claude Science app connect directly from the member's computer and never use a tunnel (admins can restrict this in [Custom connectors](#custom-connectors)). |
+| Connectors > connectors members add themselves | Supported in Claude Science | In claude.ai, members use only the connectors on your **Connectors** page. In Claude Science, members can also add custom connectors (a server URL or a local command) while the **Allow custom connectors** switch is on, which it is by default for Team and not for Enterprise, and the **Connectors** page and its restrictions don't apply to those. Turn off the **Allow custom connectors** switch under **Organization settings** > **Claude Science** to limit members to Featured connectors and the connectors you add on your **Connectors** page (see [Custom connectors](#custom-connectors)). On Enterprise plans, you can also leave the switch on and limit custom connectors to certain custom roles (see [Capabilities in custom roles](#capabilities-in-custom-roles)). |
+| Connectors > Desktop extension allowlist | Not applicable in Claude Science | Claude Science doesn't install desktop extensions, so there is nothing for this setting to govern. |
+
+### Data and privacy
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Data and privacy > Encryption keys (customer-managed keys) | Supported in Claude Science | The content Anthropic stores from Claude Science (model-call logs, skills members publish, and, where the Compliance API is enabled, session transcripts) is encrypted under your key. Data stored on the member's computer isn't hosted by Anthropic, and work members send to their own SSH hosts, Modal account, or scientific model endpoints doesn't pass through Anthropic, so neither is under your key. In organizations that use customer-managed encryption keys, the app also hides the **Send feedback** link on the [**Chat paused**](/docs/claude-science/safeguards#when-safeguards-flag-a-message) card. See [Customer-managed encryption keys](/docs/claude-science/how-claude-science-works-with-your-data#customer-managed-encryption-keys). |
+| Data and privacy > Data residency (US-only inference), or the regional processing terms in your contract | Supported in Claude Science | Governs where Anthropic processes Claude Science requests to Claude, as for your other Claude products. It doesn't cover code that runs on the member's computer, SSH hosts, or Modal account (the same boundary as Claude Code). |
+| Data and privacy > HIPAA Compliance | Not applicable in Claude Science | Organizations with HIPAA compliance enabled can turn Claude Science on, but its use isn't covered under your BAA and members must keep protected health information out of it. These organizations start from stricter defaults, listed under [Defaults by plan](#defaults-by-plan). |
+| Data and privacy > Retention period for chats and projects (Enterprise) | Partially supported in Claude Science | The window doesn't reach data stored on members' computers. For Enterprise organizations with the Compliance API enabled, Anthropic keeps each Claude Science session transcript it captures for the window in effect at the time of capture, or for 6 years when no window is set. See [How Claude Science works with your data](/docs/claude-science/how-claude-science-works-with-your-data) for what Anthropic keeps and for how long. |
+
+### Audit and compliance
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Data and privacy > Export audit logs | Not available in Claude Science | Claude Science doesn't write events to the audit log. For Enterprise organizations with the Compliance API enabled, changes to your Claude Science organization settings are recorded in its Activity Feed instead. |
+| Data and privacy > Compliance API | Supported in Claude Science | Enterprise plans only. The [Compliance API](https://platform.claude.com/docs/en/manage-claude/compliance-api) returns read-only transcripts of members' Claude Science sessions (this coverage is in beta) and records changes to your Claude Science organization settings in its Activity Feed. Sessions in organizations with HIPAA compliance enabled aren't captured. See [Compliance API coverage](/docs/claude-science/how-claude-science-works-with-your-data#compliance-api-coverage). |
+| Data and privacy > Export data | Not available in Claude Science | The organization export doesn't include Claude Science conversations and files, which are stored on members' computers (the same as Claude Code). |
+
+### Usage, models, and billing
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Usage > Extra usage and Spend limits | Supported in Claude Science | Claude Science usage counts the same way as Claude Code and Cowork usage. See [Plans and usage](/docs/claude-science/overview#plans-and-usage). |
+| Billing | Supported in Claude Science | Claude Science uses the same seat as the rest of claude.ai, so there is nothing separate to purchase. |
+| Models > Model access and Default model (Enterprise) | Supported in Claude Science | Claude Science follows your **Models** page. Turning a model off, for the whole organization or for a custom role, removes it from those members' model picker in the app within a few minutes, and requests for that model are refused. Your **Default model** setting applies in the app as it does in claude.ai. Team plans don't have the **Models** page. |
+| Analytics (from the user menu) | Supported in Claude Science | Analytics has a **Claude Science** tab with adoption and session metrics, and the spend charts on the **Overview** tab can be filtered to Claude Science (see [Monitor usage](/docs/claude-science/monitor-usage)). |
+
+### Offboarding and local data
+
+| Setting in claude.ai | Status for Claude Science | Note |
+| - | - | - |
+| Removing a member (local data) | Not available in Claude Science | Removing a member ends their access to Claude Science but doesn't delete data already on their computer. Use your device management software for that (see [Manage on devices](/docs/claude-science/manage-on-devices)). |
+| Deleting local data | Not available in Claude Science | When a member deletes Claude Science data on their computer, nothing Anthropic holds is deleted: the model-call logs and, where captured, Compliance API session transcripts remain until their own retention periods end (see [How Claude Science works with your data](/docs/claude-science/how-claude-science-works-with-your-data)). |
