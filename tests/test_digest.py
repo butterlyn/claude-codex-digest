@@ -41,3 +41,20 @@ def test_issue_title_and_body_split_the_digest():
     md = "# 2026-10-22 - One default changed\n\n## Claude Code\n\n- [ ] x\n"
     assert issue_title(md) == "2026-10-22 - One default changed"
     assert issue_body(md).startswith("## Claude Code")
+
+
+def test_age_cutoff_is_a_week_on_the_first_run_and_relative_to_the_last_run_after():
+    from datetime import datetime, timezone
+    from engine.filters import age_cutoff
+    now = datetime(2026, 11, 20, tzinfo=timezone.utc)
+    assert age_cutoff(now, None) == datetime(2026, 11, 13, tzinfo=timezone.utc)
+    last = datetime(2026, 10, 21, tzinfo=timezone.utc)  # a month without a run loses nothing
+    assert age_cutoff(now, last) == datetime(2026, 9, 21, tzinfo=timezone.utc)
+
+
+def test_since_line_names_the_last_run_in_perth_time():
+    from datetime import datetime, timezone
+    from engine.digest import _since_line, local_stamp
+    last = datetime(2026, 10, 21, 22, 47, tzinfo=timezone.utc)
+    assert _since_line(last) == "Changes since the last run, 2026-10-22 06:47 Perth time."
+    assert local_stamp(last) == "2026-10-22-0647"

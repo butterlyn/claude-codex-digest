@@ -96,8 +96,10 @@ def run_all(paths: Paths, now: datetime, log: Log, send: bool = False) -> int:
     run_id = now.strftime("%Y%m%dT%H%M%SZ")
     started = time.monotonic()
     store = Store(paths.db)
+    last_run = store.last_run_started(now)  # this run picks up from there
     store.start_run(run_id, now)
     store.close()
+    log(f"last run: {last_run.isoformat() if last_run else 'none (first run)'}")
 
     log("fetch:")
     report = run_fetch(paths, list(SOURCES), now, run_id, log)
@@ -105,12 +107,12 @@ def run_all(paths: Paths, now: datetime, log: Log, send: bool = False) -> int:
 
     store = Store(paths.db)
     try:
-        dropped = filters.run_filters(store, now)
+        dropped = filters.run_filters(store, now, last_run)
         log("code filters: " + ", ".join(f"{k}={v}" for k, v in dropped.items()))
         routes = decide.run_decisions(store)
         log("decision pass: " + ", ".join(f"{k}={v}" for k, v in routes.items()))
         notes = [f"{SOURCES_BY_NAME[n].label} ({report[n]['status'].removeprefix('error: ').removeprefix('SourceError: ')[:80]})" for n in failed_sources]
-        result = digest.write_digest(store, paths.digests, now, unreadable=notes)
+        result = digest.write_digest(store, paths.digests, now, unreadable=notes, last_run=last_run)
         log(f"digest {result.path.name}: " + ", ".join(f"{k}={v}" for k, v in result.stats.items()))
 
         delivered, code = None, 0
@@ -122,7 +124,7 @@ def run_all(paths: Paths, now: datetime, log: Log, send: bool = False) -> int:
                 log(f"delivery failed (the digest file is saved): {exc}")
                 code = 2
         elif send:
-            log("nothing new today: no issue opened")
+            log("nothing new: no issue opened")
 
         stats = {
             "sources": {k: {kk: v for kk, v in r.items() if kk != "status"} | {"status": r.get("status", "ok")}

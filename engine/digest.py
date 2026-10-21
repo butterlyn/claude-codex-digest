@@ -7,22 +7,23 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
 from .config import DIGEST_CAP, GROUPS, READING_CAP, REPO_URL, SOURCES_BY_NAME, TIMEZONE
 from .decide import KIND_LABEL
 from .llm import READING_MODEL, ask_json
-from .store import Store, iso
+from .store import Store
 
 SYSTEM = f"""You write a daily digest for one person. They keep up with changes to Claude Code \
 and Codex (features, commands, flags, settings, defaults, deprecations), plus the Claude and \
 ChatGPT apps and the official guides and launch posts about them. They read the digest to \
 decide what to save to their to-try list and what to change in their setup this week.
 
-You get today's items that passed their filter, as JSON. Items with route "unsure" passed only \
-partly: include one only if it clearly reports something new and concrete that matters to them.
+You get every item that passed their filter since their last digest, as JSON. It may cover one \
+day or several weeks. Items with route "unsure" passed only partly: include one only if it \
+clearly reports something new and concrete that matters to them.
 
 Rules:
 - At most {DIGEST_CAP} entries in total, counting "also". Pick the ones that change what they \
@@ -38,7 +39,7 @@ state a detail that is not in the items.
 - Say plainly when something is a minor update, a deprecation or a removal.
 - A changelog entry is a launch only if it says something launched.
 - No hype words, no exclamation marks.
-- "headline": one plain line on what mattered today.
+- "headline": one plain line on what mattered most since the last digest.
 - For a changelog or release entry, name the version.
 - "also": up to 3 one-line mentions that matter less; each still names the specific change."""
 
@@ -81,18 +82,31 @@ def local_date(now: datetime) -> str:
     return now.astimezone(ZoneInfo(TIMEZONE)).date().isoformat()
 
 
+def local_stamp(now: datetime) -> str:
+    """File name for a run: runs are on demand, so there can be several a day."""
+    return now.astimezone(ZoneInfo(TIMEZONE)).strftime("%Y-%m-%d-%H%M")
+
+
+def _since_line(last_run: datetime | None) -> str:
+    if last_run is None:
+        return "First run: the past week's dated changes. Docs page edits show from the next run."
+    when = last_run.astimezone(ZoneInfo(TIMEZONE)).strftime("%Y-%m-%d %H:%M")
+    return f"Changes since the last run, {when} Perth time."
+
+
 def _rank(row) -> tuple:
     d = json.loads(row["decision"]) if row["decision"] else {}
     return (row["route"] != "keep", -(d.get("relevance") or 0), row["published_at"] or "")
 
 
-def candidates(store: Store, now: datetime, ignore_decisions: bool = False) -> list:
-    """Items not yet read, first seen in the last 3 days (so a failed run catches up)."""
+def candidates(store: Store, ignore_decisions: bool = False) -> list:
+    """Every item not yet read: everything since the last digest, including anything a failed
+    run left behind."""
     gate = (
         "(filtered_by IS NULL OR filtered_by = 'decision:drop')"  # measuring: pretend no decision pass
         if ignore_decisions else "route IN ('keep', 'unsure')"
     )
-    rows = store.rows(f"read_on IS NULL AND first_seen_at >= ? AND {gate}", (iso(now - timedelta(days=3)),))
+    rows = store.rows(f"read_on IS NULL AND {gate}")
     return sorted(rows, key=_rank)[:READING_CAP]
 
 
@@ -142,14 +156,19 @@ def _links(ids: list[str], by_id: dict) -> str:
 def _footer(read: int, used: int, unreadable: list[str]) -> list[str]:
     lines = []
     if unreadable:
-        lines.append(f"<sub>Couldn't read today: {'; '.join(unreadable)}.</sub>")
+        lines.append(f"<sub>Couldn't read this run: {'; '.join(unreadable)}.</sub>")
         lines.append("")
     lines.append(f"<sub>{read} items read, {used} used. Reply with `missed: ...` or `noise: ...`.</sub>")
     return lines
 
 
-def render(date: str, data: dict, by_id: dict, read: int, unreadable: list[str] | None = None) -> tuple[str, list[str]]:
+def render(
+    date: str, data: dict, by_id: dict, read: int, unreadable: list[str] | None = None,
+    since: str = "",
+) -> tuple[str, list[str]]:
     lines = [f"# {date} - {data['headline'].strip()}", ""]
+    if since:
+        lines += [f"_{since}_", ""]
     used: list[str] = []
     count = 0
     for group in GROUPS:
@@ -182,15 +201,16 @@ def render(date: str, data: dict, by_id: dict, read: int, unreadable: list[str] 
 
 def write_digest(
     store: Store, digests_dir: Path, now: datetime, ignore_decisions: bool = False,
-    unreadable: list[str] | None = None,
+    unreadable: list[str] | None = None, last_run: datetime | None = None,
 ) -> DigestResult:
     date = local_date(now)
-    path = digests_dir / f"{date}.md"
-    rows = candidates(store, now, ignore_decisions)
+    path = digests_dir / f"{local_stamp(now)}.md"
+    since = _since_line(last_run)
+    rows = candidates(store, ignore_decisions)
     stats = {"read": len(rows), "tokens": 0, "seconds": 0.0, "cost_usd": 0.0}
     if not rows:
-        markdown = "\n".join([f"# {date} - Nothing new today", "", "No changes passed the filters.", "",
-                              *_footer(0, 0, unreadable or [])]) + "\n"
+        markdown = "\n".join([f"# {date} - Nothing new", "", f"_{since}_", "",
+                              "No changes passed the filters.", "", *_footer(0, 0, unreadable or [])]) + "\n"
         included: list[str] = []
     else:
         items = reading_input(rows, ignore_decisions)
@@ -203,10 +223,10 @@ def write_digest(
         )
         stats.update(tokens=ans.input_tokens + ans.output_tokens, seconds=round(time.monotonic() - started, 1),
                      cost_usd=round(ans.cost_usd, 4), model=ans.model, models=ans.models)
-        markdown, used_ids = render(date, ans.data, by_id, len(rows), unreadable)
+        markdown, used_ids = render(date, ans.data, by_id, len(rows), unreadable, since)
         included = [by_id[i]["id"] for i in used_ids]
-        store.mark_read([r["id"] for r in rows], date)
-        store.mark_in_digest(included, date)
+        store.mark_read([r["id"] for r in rows], local_stamp(now))
+        store.mark_in_digest(included, local_stamp(now))
         store.commit()
     digests_dir.mkdir(parents=True, exist_ok=True)
     path.write_text(markdown, encoding="utf-8")  # written before any delivery is tried

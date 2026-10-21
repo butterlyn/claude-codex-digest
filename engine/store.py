@@ -131,6 +131,15 @@ class Store:
         )
         self.db.commit()
 
+    def last_run_started(self, before: datetime) -> datetime | None:
+        """When the last run that finished began: the point this run picks up from."""
+        row = self.db.execute(
+            "SELECT started_at FROM runs WHERE finished_at IS NOT NULL AND started_at < ? "
+            "ORDER BY started_at DESC LIMIT 1",
+            (iso(before),),
+        ).fetchone()
+        return datetime.fromisoformat(row[0]) if row else None
+
     def start_run(self, run_id: str, now: datetime) -> None:
         self.db.execute("INSERT OR REPLACE INTO runs (id, started_at) VALUES (?, ?)", (run_id, iso(now)))
         self.db.commit()

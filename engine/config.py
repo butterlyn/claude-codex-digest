@@ -19,12 +19,15 @@ REPO_URL = (
 )
 
 # Code filters and caps (PROFILE.md -> Code filters)
-MAX_AGE_DAYS = 7
+# The engine runs on demand and picks up from the last run. Changes are found by comparing
+# with the copies the last run saved, so a gap of weeks loses nothing.
+MAX_AGE_DAYS = 7  # first read of a source: dated entries older than this are history
+AGE_GRACE_DAYS = 30  # later runs: entries dated this long before the last run are history
 MAX_PAGES_PER_SITE = 400
-MAX_ITEMS_PER_SOURCE = 100
-MAX_DECISIONS_PER_RUN = 150
+MAX_ITEMS_PER_SOURCE = 300  # more changed pages than this on one site at once -> one rollup item
+MAX_DECISIONS_PER_RUN = 400
 DIGEST_CAP = 10
-READING_CAP = 60  # most items the reading pass reads in one run
+READING_CAP = 250  # most items the reading pass reads in one run
 
 # A path segment that names a non-English locale: /ja/, /de/, /zh-CN/, /_llms/fr.txt ...
 LOCALE_SEGMENT = re.compile(

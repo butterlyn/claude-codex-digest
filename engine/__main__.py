@@ -64,7 +64,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "filter":
         store = Store(paths.db)
-        counts = filters.run_filters(store, now)
+        counts = filters.run_filters(store, now, store.last_run_started(now))
         store.close()
         _log("code filters: " + ", ".join(f"{k}={v}" for k, v in counts.items()))
         return 0
@@ -78,7 +78,8 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.cmd == "digest":
         store = Store(paths.db)
-        result = digest.write_digest(store, paths.digests, now, args.ignore_decisions)
+        result = digest.write_digest(store, paths.digests, now, args.ignore_decisions,
+                                     last_run=store.last_run_started(now))
         store.close()
         _log(f"digest -> {result.path}: " + ", ".join(f"{k}={v}" for k, v in result.stats.items()))
         return 0

@@ -42,7 +42,9 @@ Left out, and why:
 <!-- R2.4: facts only. Each one a number or a pattern. -->
 - First read of a source is a **baseline**: pages and sitemaps are recorded, not reported; dated
   entries (changelogs, release notes, feeds) from the last 7 days are reported.
-- Max age: dated entries older than **7 days** are dropped.
+- Max age: on the first run, dated entries older than **7 days** are dropped. After that every
+  run picks up from the last one: anything new since then counts, however long ago that was,
+  except entries dated more than **30 days** before the last run.
 - English only: localized paths (`/ja/`, `/de/`, `/zh-CN/`, ...) are skipped.
 - Format-only edits: a page change whose words are identical once whitespace, punctuation,
   Markdown formatting and link targets are removed is dropped. One-word changes are **not**
@@ -50,8 +52,8 @@ Left out, and why:
 - Bug-fix-only releases: a changelog version whose every bullet is a fix, or whose whole note is
   a stock "Bug fixes and reliability improvements", is dropped. Codex CLI pre-releases are skipped.
 - Engagement floor: none (official sources have no votes).
-- Caps: at most 400 pages per docs site and 100 new items per source per run; at most 150
-  decision calls per run (beyond that, one site's changes are rolled into a single item).
+- Caps: at most 400 pages per docs site per run; more than 300 changes on one source at once
+  become a single rollup item; at most 400 decision calls and 250 items read per run.
 
 ## The decision question(s)
 
@@ -98,8 +100,9 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 
 ## The digest
 
-- Where I read it: a GitHub issue in `butterlyn/claude-codex-digest`, assigned to me, every
-  morning; also committed as `digests/YYYY-MM-DD.md`
+- Where I read it: a GitHub issue in `butterlyn/claude-codex-digest`, assigned to me, each
+  time I run it; also committed as `digests/YYYY-MM-DD-HHMM.md` (Perth time). A run with
+  nothing new writes the file but opens no issue.
 - Length cap: 10 items
 - Format: grouped as Claude Code, Codex, Claude & ChatGPT apps, News & guides. Each item is
   one checkbox line for my to-try list: `- [ ] **What changed** - what to try. [page](url)`.
@@ -113,8 +116,10 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 - Decision pass: Claude Haiku 5.5, one call per item, structured output
 - Reading pass: Claude Sonnet 5.5, one call per run
 
-## Schedule
+## Runs
 
-- Full run: daily at 06:47 AWST (22:47 UTC) on GitHub Actions
-- Shadow week: the first seven scheduled runs. I reply on each issue with `missed: ...` or
+- On demand, no schedule: Actions -> digest -> Run workflow, or a comment starting with
+  `/digest` on any issue in the repo. Each run covers everything since the last run that
+  finished.
+- Shadow week: the first seven runs. I reply on each issue with `missed: ...` or
   `noise: ...`.
