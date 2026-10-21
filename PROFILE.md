@@ -123,5 +123,6 @@ relevance is 4 or more and "new" is yes; everything else goes to the reading pas
 - On demand from the Claude app: open a Claude Code session on
   `butterlyn/claude-codex-digest` and type `/digest`. No schedule, no CI. Each run covers
   everything since the last run that finished.
-- Shadow week: the first seven runs. I tell the session `missed: ...` or `noise: ...`
+- Shadow week: the first seven runs, starting with the first run on 2026-10-21. I tell the
+  session `missed: ...` or `noise: ...`
   (it goes into `data/feedback.md`), or reply on the issue.

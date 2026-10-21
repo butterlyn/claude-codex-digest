@@ -17,7 +17,9 @@ twice.
    lines of output and stop.
 4. Save the state, or the next run starts over from the previous one:
    `git add data digests && git commit -m "digest <file name>" && git push origin HEAD:main`.
-   If the push is rejected, `git pull --rebase origin main` and push again.
+   Push to `main`, not a session branch: the next run clones `main`, so state saved anywhere
+   else is lost and the same changes get reported again. The owner asked for this. If the
+   push is rejected, `git pull --rebase origin main` and push again.
 5. If the digest's first line does not end in "Nothing new", open an issue in
    `butterlyn/claude-codex-digest` with the GitHub MCP tool: title = the first line without
    "# ", body = the rest of the file, assignee `butterlyn`, label `digest`.
