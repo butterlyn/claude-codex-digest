@@ -1,0 +1,116 @@
+# Signal engine profile
+
+<!-- Written by the build-signal-engine interview. Every stage reads this file. Edit it
+     freely; the engine follows it. -->
+
+## What I keep up with
+
+Changes to **Claude Code** and **Codex** (features, commands, flags, settings, defaults,
+deprecations), plus the Claude and ChatGPT apps' features and the official guides and
+launch posts about them. When I know on the day, I **save the item to my to-try list** and
+update my setup that week. A silent edit to a docs page counts as much as an announced
+change.
+
+## Sources
+
+Data platform: none. Picked per source: every source below is free and fetched over plain
+HTTP (Markdown twins, RSS, sitemaps).
+
+| Source | What it is | How it is pulled | Why it is here |
+|---|---|---|---|
+| Claude Code docs | ~264 English pages on code.claude.com/docs | page list from `llms.txt`, each page's `.md` twin, diffed against yesterday's copy | R1.2: the thing I found out late was a silent docs change |
+| Claude Code changelog | version notes (`2.1.x`) | `code.claude.com/docs/en/changelog.md`, split on version lines; release dates from the npm registry | R2.1: Claude Code |
+| Claude app docs | ~279 pages on claude.com/docs, including the Claude Desktop changelog | same as the Claude Code docs; the Desktop changelog is split into versions | R2.1: Claude apps |
+| Claude release notes | support.claude.com release notes | HTML split on its dated headings | R2.1: Claude apps |
+| claude.com new pages | guides, articles, launch posts, product pages | `sitemap.xml`: new English URLs, with title and date read from the page | R2.3: the Code Review GA article |
+| Anthropic news | anthropic.com/news | `sitemap.xml`: new `/news/` URLs | R2.1: company news and blogs |
+| Claude plans | claude.com/pricing | page text, diffed | R2.1: plans and usage limits |
+| Codex docs | ~200 pages on learn.chatgpt.com/docs (developers.openai.com/codex redirects here) | page list from the Codex `llms.txt`, each page's `.md` twin, diffed | R1.2: silent docs changes |
+| ChatGPT & Codex changelog | the official changelog feed | RSS | R2.1: Codex and the ChatGPT apps |
+| OpenAI news | openai.com/news | RSS | R2.1: company news and blogs |
+
+Left out, and why:
+- **help.openai.com** (ChatGPT release notes, the Codex changelog article) and **openai.com**
+  pages refuse automated requests (HTTP 403). The ChatGPT & Codex changelog feed carries the
+  same changes.
+- **Claude API docs and release notes**: not one of the surfaces I use.
+- **Communities** (GitHub issues, Reddit, HN): official sources only.
+
+## Code filters
+
+<!-- R2.4: facts only. Each one a number or a pattern. -->
+- First read of a source is a **baseline**: everything is stored as seen, nothing is reported.
+- Max age: dated entries older than **7 days** are dropped.
+- English only: localized paths (`/ja/`, `/de/`, `/zh-CN/`, ...) are skipped.
+- Format-only edits: a page change whose words are identical once whitespace, punctuation,
+  Markdown formatting and link targets are removed is dropped. One-word changes are **not**
+  dropped in code, because a changed default can be one word.
+- Bug-fix-only releases: a changelog version whose every bullet is a fix is dropped.
+- Engagement floor: none (official sources have no votes).
+- Caps: at most 400 pages per docs site and 100 new items per source per run; at most 150
+  decision calls per run (beyond that, one site's changes are rolled into a single item).
+
+## The decision question(s)
+
+<!-- One thing per question. Written from the examples below. Asked per item by
+     Claude Haiku 5.5 with structured output. -->
+
+1. **Relevance (score 1-5):** How much could this change what I do with Claude Code, Codex,
+   or the Claude and ChatGPT apps?
+   1. Not about these tools: company news, policy, research, funding, customer stories,
+      enterprise- or admin-only features, ChatGPT features unrelated to Codex.
+   2. About these tools, but nothing I would do differently: rewording, reorganised pages,
+      marketing copy.
+   3. A small detail worth knowing: a clarified behaviour, a minor option, a new example.
+   4. Something I could try or should adjust: a new or changed command, flag, setting, hook
+      or integration, or a new official guide.
+   5. Changes how I work now: a changed default, a removed or deprecated option, a breaking
+      change, a major new feature.
+
+   An unfamiliar feature, model or product name is not a reason to score lower.
+2. **Reports something new and concrete (yes/no):** a new, changed or removed feature,
+   command, flag, setting, default, limit or price, or a newly published guide or launch.
+   Typo and formatting fixes, bug-fix-only notes, rewording that keeps the meaning, opinions
+   and marketing are "no".
+
+Routing: drop when relevance is 1, or "new" is no and relevance is 2 or less; keep when
+relevance is 4 or more and "new" is yes; everything else goes to the reading pass.
+<!-- R2.5: missing something big is worse than wasting time, so only sure drops are dropped. -->
+
+### Keep examples
+<!-- R2.3. Mostly kinds rather than real items, so Stage 4 also scores a sample of real
+     items sorted by me. -->
+- A changed default on a Claude Code or Codex docs page, with no announcement
+- A new slash command, CLI flag, hook or setting in a changelog or docs page
+- A post launching a new Claude Code or Codex feature
+- Real: "Code Review is now generally available", claude.com, Oct 15 2026
+  (https://claude.com/resources/articles/code-review-is-now-generally-available)
+
+### Drop examples
+- Policy, research and funding posts on anthropic.com/news and openai.com/news
+- Customer stories and case studies
+- ChatGPT features unrelated to Codex (images, voice, shopping)
+- Enterprise- or admin-only changes (SSO, admin console, compliance, org billing)
+
+## The digest
+
+- Where I read it: a GitHub issue in `butterlyn/claude-codex-digest`, assigned to me, every
+  morning; also committed as `digests/YYYY-MM-DD.md`
+- Length cap: 10 items
+- Format: grouped as Claude Code, Codex, Claude & ChatGPT apps, News & guides. Each item is
+  one checkbox line for my to-try list: `- [ ] **What changed** - what to try. [page](url)`.
+  A docs change shows before -> after when it is short.
+- Extras: none
+
+## Models
+
+- Claude subscription through Claude Code headless (`claude -p`), authenticated with a
+  token from `claude setup-token`, stored as the repo secret `CLAUDE_CODE_OAUTH_TOKEN`
+- Decision pass: Claude Haiku 5.5, one call per item, structured output
+- Reading pass: Claude Sonnet 5.5, one call per run
+
+## Schedule
+
+- Full run: daily at 06:47 AWST (22:47 UTC) on GitHub Actions
+- Shadow week: the first seven scheduled runs. I reply on each issue with `missed: ...` or
+  `noise: ...`.
