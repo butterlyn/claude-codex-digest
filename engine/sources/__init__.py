@@ -47,8 +47,9 @@ def registry() -> dict[str, Fetch]:
 
         kinds.update(
             md_changelog=changelog.fetch_md_changelog,
-            release_notes_html=changelog.fetch_release_notes_html,
+            release_notes=changelog.fetch_release_notes,
             rss=feeds.fetch_rss,
+            github_releases=feeds.fetch_github_releases,
             sitemap_new=pages.fetch_sitemap_new,
             page_text=pages.fetch_page_text,
         )

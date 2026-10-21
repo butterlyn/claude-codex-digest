@@ -24,6 +24,7 @@ class Page:
     text: str
     final_url: str
     error: str | None = None
+    content_type: str = ""
 
     @property
     def ok(self) -> bool:
@@ -73,6 +74,7 @@ class Fetcher:
                         text=resp.text if ok else "",
                         final_url=str(resp.url),
                         error=None if ok else f"HTTP {resp.status_code}",
+                        content_type=resp.headers.get("content-type", ""),
                     )
             if attempt < self.retries:
                 time.sleep(wait)

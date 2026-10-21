@@ -27,3 +27,15 @@ def test_keys_and_urls():
     url = "https://learn.chatgpt.com/docs/agent-configuration/rules.md"
     assert page_key(url) == "docs/agent-configuration/rules.md"
     assert human_url(url) == "https://learn.chatgpt.com/docs/agent-configuration/rules"
+
+
+def test_html_responses_are_not_markdown():
+    from engine.http import Page
+    from engine.sources.docs_site import is_markdown
+    assert not is_markdown(Page("u", 200, "<!DOCTYPE html><html>", "u", None, "text/html; charset=utf-8"))
+    assert is_markdown(Page("u", 200, "# Title\n", "u", None, "text/markdown; charset=utf-8"))
+
+
+def test_signed_cdn_query_strings_are_dropped():
+    md = "![x](https://mintlify.s3.mintcdn.com/a/b.png?fit=max&s=abc123)\n"
+    assert clean_page(md) == "![x](https://mintlify.s3.mintcdn.com/a/b.png)\n"

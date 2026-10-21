@@ -26,3 +26,13 @@ def test_describe_change_groups_under_heading_and_counts_lines():
     text, stats = describe_change(old, new)
     assert text.startswith("## Flags")
     assert stats["changed_lines"] == 1 and stats["added_lines"] == 1
+
+
+def test_describe_change_stays_fast_on_huge_single_line_pages():
+    import time
+    old = "<html>" + "x" * 400_000 + "</html>"
+    new = "<html>" + "x" * 399_000 + "y" * 1000 + "</html>"
+    started = time.monotonic()
+    text, stats = describe_change(old, new)
+    assert time.monotonic() - started < 2
+    assert stats["removed_lines"] == 1 and stats["added_lines"] == 1

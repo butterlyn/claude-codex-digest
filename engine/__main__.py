@@ -11,7 +11,7 @@ import json
 import sys
 from pathlib import Path
 
-from . import pipeline
+from . import filters, pipeline
 from .store import Store, utcnow
 
 
@@ -31,6 +31,8 @@ def main(argv: list[str] | None = None) -> int:
     p_fetch = sub.add_parser("fetch", help="fetch sources into the store")
     p_fetch.add_argument("--source", action="append", help="only this source (repeatable)")
 
+    sub.add_parser("filter", help="run the code filters on items not yet looked at")
+
     p_show = sub.add_parser("show", help="list stored items")
     p_show.add_argument("--source")
     p_show.add_argument("--limit", type=int, default=50)
@@ -46,6 +48,13 @@ def main(argv: list[str] | None = None) -> int:
         report = pipeline.run_fetch(paths, pipeline.select_sources(args.source), now, run_id, _log)
         total = sum(r.get("added", 0) for r in report.values())
         _log(f"new items stored: {total}")
+        return 0
+
+    if args.cmd == "filter":
+        store = Store(paths.db)
+        counts = filters.run_filters(store, now)
+        store.close()
+        _log("code filters: " + ", ".join(f"{k}={v}" for k, v in counts.items()))
         return 0
 
     if args.cmd == "show":

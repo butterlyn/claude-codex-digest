@@ -60,9 +60,19 @@ def inline_diff(old: str, new: str, context: int = 6) -> str:
     return _clip(" ".join(out), 600)
 
 
+LONG_LINE = 3000  # longer lines are compared whole, never word by word (keeps diffs fast)
+
+
 def _similar(a: str, b: str) -> float:
+    if len(a) > LONG_LINE or len(b) > LONG_LINE:
+        return 0.0
     sm = difflib.SequenceMatcher(None, a, b, autojunk=False)
     return sm.ratio() if sm.real_quick_ratio() > 0.5 and sm.quick_ratio() > 0.5 else 0.0
+
+
+def _line_key(line: str) -> str:
+    """What the line matcher compares: long lines by prefix plus a hash of the whole line."""
+    return line if len(line) <= LONG_LINE else line[:200] + "#" + content_hash(line)
 
 
 def _pair(olds: list[str], news: list[str]) -> list[tuple[str | None, str | None]]:
@@ -99,7 +109,9 @@ def describe_change(old: str, new: str, max_chars: int = 3000) -> tuple[str, dic
     out: list[str] = []
     stats = {"added_lines": 0, "removed_lines": 0, "changed_lines": 0}
     last_section: object = object()
-    for tag, i1, i2, j1, j2 in difflib.SequenceMatcher(None, a, b, autojunk=False).get_opcodes():
+    keys_a, keys_b = [_line_key(x) for x in a], [_line_key(x) for x in b]
+    matcher = difflib.SequenceMatcher(None, keys_a, keys_b, autojunk=len(a) + len(b) > 20000)
+    for tag, i1, i2, j1, j2 in matcher.get_opcodes():
         if tag == "equal":
             continue
         olds = [line for line in a[i1:i2] if line.strip()]

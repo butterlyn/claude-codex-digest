@@ -65,7 +65,7 @@ SOURCES: list[Source] = [
     ),
     Source(
         "claude-release-notes", "Claude release notes", "Claude & ChatGPT apps",
-        "release_notes_html", "https://support.claude.com/en/articles/12138966-release-notes",
+        "release_notes", "https://support.claude.com/en/articles/12138966-release-notes.md",
     ),
     Source(
         "claude-com-pages", "claude.com", "News & guides", "sitemap_new",
@@ -89,6 +89,10 @@ SOURCES: list[Source] = [
     Source(
         "chatgpt-codex-changelog", "ChatGPT & Codex changelog", "Codex", "rss",
         "https://learn.chatgpt.com/docs/changelog/rss.xml",
+    ),
+    Source(
+        "codex-cli-releases", "Codex CLI", "Codex", "github_releases",
+        "https://github.com/openai/codex/releases", {"repo": "openai/codex"},
     ),
     Source(
         "openai-news", "OpenAI news", "News & guides", "rss",

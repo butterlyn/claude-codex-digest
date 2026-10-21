@@ -21,12 +21,13 @@ HTTP (Markdown twins, RSS, sitemaps).
 | Claude Code docs | ~264 English pages on code.claude.com/docs | page list from `llms.txt`, each page's `.md` twin, diffed against yesterday's copy | R1.2: the thing I found out late was a silent docs change |
 | Claude Code changelog | version notes (`2.1.x`) | `code.claude.com/docs/en/changelog.md`, split on version lines; release dates from the npm registry | R2.1: Claude Code |
 | Claude app docs | ~279 pages on claude.com/docs, including the Claude Desktop changelog | same as the Claude Code docs; the Desktop changelog is split into versions | R2.1: Claude apps |
-| Claude release notes | support.claude.com release notes | HTML split on its dated headings | R2.1: Claude apps |
+| Claude release notes | support.claude.com release notes | the article's `.md` twin, split on its dated headings | R2.1: Claude apps |
 | claude.com new pages | guides, articles, launch posts, product pages | `sitemap.xml`: new English URLs, with title and date read from the page | R2.3: the Code Review GA article |
 | Anthropic news | anthropic.com/news | `sitemap.xml`: new `/news/` URLs | R2.1: company news and blogs |
 | Claude plans | claude.com/pricing | page text, diffed | R2.1: plans and usage limits |
 | Codex docs | ~200 pages on learn.chatgpt.com/docs (developers.openai.com/codex redirects here) | page list from the Codex `llms.txt`, each page's `.md` twin, diffed | R1.2: silent docs changes |
 | ChatGPT & Codex changelog | the official changelog feed | RSS | R2.1: Codex and the ChatGPT apps |
+| Codex CLI releases | release notes for openai/codex | GitHub releases API (free; pre-releases skipped) | R2.1: Codex CLI flags and commands only appear here |
 | OpenAI news | openai.com/news | RSS | R2.1: company news and blogs |
 
 Left out, and why:
@@ -39,13 +40,15 @@ Left out, and why:
 ## Code filters
 
 <!-- R2.4: facts only. Each one a number or a pattern. -->
-- First read of a source is a **baseline**: everything is stored as seen, nothing is reported.
+- First read of a source is a **baseline**: pages and sitemaps are recorded, not reported; dated
+  entries (changelogs, release notes, feeds) from the last 7 days are reported.
 - Max age: dated entries older than **7 days** are dropped.
 - English only: localized paths (`/ja/`, `/de/`, `/zh-CN/`, ...) are skipped.
 - Format-only edits: a page change whose words are identical once whitespace, punctuation,
   Markdown formatting and link targets are removed is dropped. One-word changes are **not**
   dropped in code, because a changed default can be one word.
-- Bug-fix-only releases: a changelog version whose every bullet is a fix is dropped.
+- Bug-fix-only releases: a changelog version whose every bullet is a fix, or whose whole note is
+  a stock "Bug fixes and reliability improvements", is dropped. Codex CLI pre-releases are skipped.
 - Engagement floor: none (official sources have no votes).
 - Caps: at most 400 pages per docs site and 100 new items per source per run; at most 150
   decision calls per run (beyond that, one site's changes are rolled into a single item).
